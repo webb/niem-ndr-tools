@@ -101,3 +101,22 @@ clean:
 distclean: clean
 	rm -rf var
 	find . -type f -name '*~' -print0 | xargs -0 rm -f
+
+##################################################################
+# tests
+
+# any file named run-test* that is executable by the current user
+TEST_SCRIPTS = $(shell find tests -type f -name 'run-test*' -perm -500)
+TEST_TOKENS = $(patsubst %,$(TOKENS_DIR)/ran-test/%,$(TEST_SCRIPTS))
+
+retest:
+	$(RM) $(TEST_TOKENS)
+	$(MAKE) test
+
+test: $(TEST_TOKENS)
+
+$(TOKENS_DIR)/ran-test/%: %
+	$<
+	mkdir -p $(dir $@)
+	touch $@
+
