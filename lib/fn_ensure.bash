@@ -1,6 +1,6 @@
 
-if [[ is-set != "${LOADED_FN_ENSURE_BASH:+is-set}" ]]
-then LOADED_FN_ENSURE_BASH=true
+if [[ is-set != "${NDR_TOOLS_LOADED_FN_ENSURE_BASH:+is-set}" ]]
+then NDR_TOOLS_LOADED_FN_ENSURE_BASH=true
 
     if test is-set != "${NDR_TOOLS_ROOT_DIR:+is-set}"
     then printf "%s\n" 'Error: $NDR_TOOLS_ROOT_DIR not set' >&2
