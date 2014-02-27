@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#HELP:COMMAND_NAME: Convert an SVRL file into a readable text report
+#HELP:COMMAND_NAME: Run the Xalan XSLT processor
 #HELP:Usage: COMMAND_NAME option* -- xalan-option* 
 #HELP:Options:
 #HELP:  --help | -h: print this help
