@@ -6,11 +6,11 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
-. "$NDR_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_ROOT_DIR"/lib/fn_fail.bash
-. "$NDR_ROOT_DIR"/lib/fn_ensure.bash
+NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
 
 #HELP:  --schematron-schema=$schema | -s $schema: validate against Schematron schema
 #HELP:  --rules=$code | -r $code: use NIEM NDR rule set for conformance target $code
@@ -29,7 +29,7 @@ opt_rules () {
     ensure "You tried to use more than one schema" test is-set != "${SCHEMA:+is-set}"
     case "$1" in 
         ext | ins | ref | set )
-            SCHEMA=$NDR_ROOT_DIR/ndr-rules-conformance-target-"$1".sch
+            SCHEMA=$NDR_TOOLS_ROOT_DIR/ndr-rules-conformance-target-"$1".sch
             ensure "File not found: $SCHEMA" test -f "$SCHEMA"
             ;;
         * )
@@ -92,16 +92,16 @@ ensure "No file to validate" test $# -gt 0
 ensure "Only can validate one file" test $# = 1
 ensure "File to test not found: $1" test -f "$1"
 
-SAXON_JAR="$NDR_ROOT_DIR"/pkg/saxon/saxon9he.jar
+SAXON_JAR="$NDR_TOOLS_ROOT_DIR"/pkg/saxon/saxon9he.jar
 ensure "Saxon jar file not found (\"$SAXON_JAR\")" test -f "$SAXON_JAR"
 
-INCLUDE_XSL="$NDR_ROOT_DIR"/pkg/iso-schematron-xslt2/iso_dsdl_include.xsl
+INCLUDE_XSL="$NDR_TOOLS_ROOT_DIR"/pkg/iso-schematron-xslt2/iso_dsdl_include.xsl
 ensure "XSLT file not found (\"$INCLUDE_XSL\")" test -f "$INCLUDE_XSL"
 
-ABSTRACT_XSL="$NDR_ROOT_DIR"/pkg/iso-schematron-xslt2/iso_abstract_expand.xsl
+ABSTRACT_XSL="$NDR_TOOLS_ROOT_DIR"/pkg/iso-schematron-xslt2/iso_abstract_expand.xsl
 ensure "XSLT file not found (\"$ABSTRACT_XSL\")" test -f "$ABSTRACT_XSL"
 
-TO_SVRL_XSL="$NDR_ROOT_DIR"/pkg/iso-schematron-xslt2/iso_svrl_for_xslt2.xsl
+TO_SVRL_XSL="$NDR_TOOLS_ROOT_DIR"/pkg/iso-schematron-xslt2/iso_svrl_for_xslt2.xsl
 ensure "XSLT file not found: $TO_SVRL_XSL" test -f "$TO_SVRL_XSL"
 
 ensure "Required option --schematron-schema not used" test is-set = "${SCHEMA:+is-set}"

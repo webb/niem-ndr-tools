@@ -2,12 +2,12 @@
 if test is-set != "${LOADED_FN_OPT_VERBOSE_BASH:+is-set}"
 then LOADED_FN_OPT_VERBOSE_BASH=true
 
-    if test is-set != "${NDR_ROOT_DIR:+is-set}"
-    then printf "%s\n" 'Error: $NDR_ROOT_DIR not set' >&2
+    if test is-set != "${NDR_TOOLS_ROOT_DIR:+is-set}"
+    then printf "%s\n" 'Error: $NDR_TOOLS_ROOT_DIR not set' >&2
         exit 1
     fi
 
-    . "$NDR_ROOT_DIR"/lib/common.bash
+    . "$NDR_TOOLS_ROOT_DIR"/lib/common.bash
 
     VERBOSE=false
     opt_verbose () {

@@ -6,11 +6,11 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
-. "$NDR_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_ROOT_DIR"/lib/fn_fail.bash
-. "$NDR_ROOT_DIR"/lib/fn_ensure.bash
+NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
 
 #HELP:  --rules=$code | -r $code: use NIEM NDR rule set for conformance target $code
 #HELP:      codes: ref, ext, ins, set
@@ -21,7 +21,7 @@ opt_rules () {
     ensure "You tried to use more than one schema" test is-set != "${SCHEMA:+is-set}"
     case "$1" in 
         ext | ins | ref | set )
-            SCHEMA=$NDR_ROOT_DIR/ndr-rules-conformance-target-"$1".sch
+            SCHEMA=$NDR_TOOLS_ROOT_DIR/ndr-rules-conformance-target-"$1".sch
             ensure "File not found: $SCHEMA" test -f "$SCHEMA"
             ;;
         * )
@@ -75,9 +75,9 @@ ensure_file_exists "$1"
 SVRL_RESULTS=$(mktemp)
 vecho "SVRL_RESULTS=\"$SVRL_RESULTS\""
 
-vrun "$NDR_ROOT_DIR"/bin/schematron --param=+xml-catalog="$XML_CATALOG" --schematron-schema="$SCHEMA" "$1" > "$SVRL_RESULTS"
+vrun "$NDR_TOOLS_ROOT_DIR"/bin/schematron --param=+xml-catalog="$XML_CATALOG" --schematron-schema="$SCHEMA" "$1" > "$SVRL_RESULTS"
 
-vrun "$NDR_ROOT_DIR"/bin/svrl-to-report "$SVRL_RESULTS"
+vrun "$NDR_TOOLS_ROOT_DIR"/bin/svrl-to-report "$SVRL_RESULTS"
 
 rm "$SVRL_RESULTS"
 

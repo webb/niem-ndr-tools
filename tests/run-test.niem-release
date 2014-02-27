@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-NDR_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
-. "$NDR_ROOT_DIR"/lib/fn_test.bash
+NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_test.bash
 
 test_set_stdout <<EOF
 2:is-ctas-conformant-document:report
@@ -13,7 +13,7 @@ test_set_stdout <<EOF
 6036:el-representation-is-abstract:report
 EOF
 
-test_run "$NDR_ROOT_DIR"/bin/get-test-report -v -r ref -c "$NDR_ROOT_DIR"/pkg/niem-release/xml-catalog.xml "$NDR_ROOT_DIR"/pkg/niem-release/niem/niem-core/3.0/niem-core.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -v -r ref -c "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/xml-catalog.xml "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/niem/niem-core/3.0/niem-core.xsd
 
 
 

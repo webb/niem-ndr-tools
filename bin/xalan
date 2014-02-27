@@ -6,10 +6,10 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
-. "$NDR_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_ROOT_DIR"/lib/fn_fail.bash
+NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
 
 #HELP:  --xalan-help: print Xalan Java's help
 opt_xalan_help () {
@@ -26,7 +26,7 @@ build_path () {
 }
 
 run_xalan_java () {
-    vrun java -classpath "$(build_path "$NDR_ROOT_DIR"/pkg/xalan/*.jar)" org.apache.xalan.xslt.Process "$@"
+    vrun java -classpath "$(build_path "$NDR_TOOLS_ROOT_DIR"/pkg/xalan/*.jar)" org.apache.xalan.xslt.Process "$@"
 }
 
 OPTIND=1

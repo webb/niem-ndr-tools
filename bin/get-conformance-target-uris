@@ -7,13 +7,13 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
-. "$NDR_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_ROOT_DIR"/lib/fn_fail.bash
-. "$NDR_ROOT_DIR"/lib/fn_ensure.bash
+NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
 
-GET_CONFORMANCE_TARGET_URIS_XSL=$NDR_ROOT_DIR/lib/get-conformance-target-uris.xsl
+GET_CONFORMANCE_TARGET_URIS_XSL=$NDR_TOOLS_ROOT_DIR/lib/get-conformance-target-uris.xsl
 ensure_file_exists "$GET_CONFORMANCE_TARGET_URIS_XSL"
 
 OPTIND=1
@@ -40,6 +40,6 @@ shift $((OPTIND-1))
 ensure "Need one argument" test $# = 1
 ensure_file_exists "$1"
 
-"$NDR_ROOT_DIR/bin/xalan" -- -XSL "$GET_CONFORMANCE_TARGET_URIS_XSL" -IN "$1"
+"$NDR_TOOLS_ROOT_DIR/bin/xalan" -- -XSL "$GET_CONFORMANCE_TARGET_URIS_XSL" -IN "$1"
 
 

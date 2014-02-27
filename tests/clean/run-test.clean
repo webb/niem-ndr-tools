@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-NDR_ROOT_DIR=$(cd "$(dirname "$0")"/../..; pwd)
-. "$NDR_ROOT_DIR"/lib/fn_test.bash
+NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/../..; pwd)
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_test.bash
 
 THIS_TEST_FILENAME="$0"
 
@@ -17,7 +17,7 @@ while read -r -d $'\n' XSD; do
             test_set_stdout <<EOF
 EOF
 
-            test_run "$NDR_ROOT_DIR"/bin/get-test-report -r ref -c xml-catalog.xml "$XSD"
+            test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref -c xml-catalog.xml "$XSD"
             ;;
         * ) test_fail "No test for XSD \"$XSD\"" ;;
     esac
