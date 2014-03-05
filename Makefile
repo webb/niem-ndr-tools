@@ -18,7 +18,22 @@ TOKEN_EXTRACTED_XALAN = $(TOKENS_DIR)/extracted-xalan
 TOKEN_EXTRACTED_NIEM = $(TOKENS_DIR)/extracted-niem
 TOKEN_PATCHED_SCHEMATRON = $(TOKENS_DIR)/patched-schematron
 
-default: $(TOKEN_CHECKSUMS_OK) $(TOKEN_EXTRACTED_SCHEMATRON) $(TOKEN_EXTRACTED_SAXON) $(TOKEN_EXTRACTED_XALAN) $(TOKEN_PATCHED_SCHEMATRON) $(TOKEN_EXTRACTED_NIEM)
+.PHONY: default
+default: help
+
+.PHONY: help
+help:
+	@ echo "Pick a target:"
+	@ echo "  all: build all the usual suspects"
+	@ echo "  clean: clean up the basics: remove tokens and redo a lot of stuff"
+	@ echo "  distclean: nuke the package distribution zips and otherwise clean everything you can"
+	@ echo "  set-shasums: reset the checksums so that the build system expects the zip files that are already on disk"
+	@ echo "  reset-patch: rebuild the patch file so that the build system recreates the ISO Schematron distribution as it is on disk"
+	@ echo "  check: identify badly-permissioned test scripts (must be at least u+rx)"
+	@ echo "  retest: clean up traces of tests and run tests again"
+	@ echo "  test: run tests, if needed"
+
+all: $(TOKEN_CHECKSUMS_OK) $(TOKEN_EXTRACTED_SCHEMATRON) $(TOKEN_EXTRACTED_SAXON) $(TOKEN_EXTRACTED_XALAN) $(TOKEN_PATCHED_SCHEMATRON) $(TOKEN_EXTRACTED_NIEM)
 
 $(ISO_SCHEMATRON_XSLT2_ZIP):
 	mkdir -p $(dir $@)
