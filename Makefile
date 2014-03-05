@@ -106,8 +106,12 @@ distclean: clean
 # tests
 
 # any file named run-test* that is executable by the current user
-TEST_SCRIPTS = $(shell find tests -type f -name 'run-test*' -perm -500)
+TEST_SCRIPTS =     $(shell find tests -type f -name 'run-test*' ! -name '*~'   -perm -500)
+BAD_TEST_SCRIPTS = $(shell find tests -type f -name 'run-test*' ! -name '*~' ! -perm -500)
 TEST_TOKENS = $(patsubst %,$(TOKENS_DIR)/ran-test/%,$(TEST_SCRIPTS))
+
+check:
+	@ for s in $(BAD_TEST_SCRIPTS); do printf "Bad permission on %s\n" "$$s"; done
 
 retest:
 	@ $(RM) $(TEST_TOKENS)
@@ -116,7 +120,7 @@ retest:
 test: $(TEST_TOKENS)
 
 $(TOKENS_DIR)/ran-test/%: %
-	@ $<
 	@ mkdir -p $(dir $@)
-	@ touch $@
+	if ! bin/run-tests $< > $@; then rm $@; fi
+
 

@@ -78,9 +78,6 @@ shift $((OPTIND-1))
 
 ensure "You must use one of --rules or --auto-rules" test is-set = "${RULES:+is-set}"
 
-ensure "Required option --xml-catalog not used" test is-set = "${XML_CATALOG:+is-set}"
-ensure_file_exists "$XML_CATALOG"
-
 ensure "No file to validate" test $# -gt 0
 ensure "Only can validate one file" test $# = 1
 ensure_file_exists "$1"
@@ -110,7 +107,13 @@ SCHEMA=$NDR_TOOLS_ROOT_DIR/ndr-rules-conformance-target-"$RULES".sch
 ensure_file_exists "$SCHEMA"
 vecho "Validating against Schematron schema \"$1\""
 
-vrun "$NDR_TOOLS_ROOT_DIR"/bin/schematron --param=+xml-catalog="$XML_CATALOG" --schematron-schema="$SCHEMA" "$1" > "$SVRL_RESULTS"
+COMMAND=("$NDR_TOOLS_ROOT_DIR"/bin/schematron --schematron-schema="$SCHEMA")
+if [[ ${XML_CATALOG:+is-set} ]]
+then COMMAND+=(--param=+xml-catalog="$XML_CATALOG")
+fi
+COMMAND+=("$1")
+
+vrun "${COMMAND[@]}"  > "$SVRL_RESULTS"
 
 temp_make_file ANNOTATED_SVRL_RESULTS
 

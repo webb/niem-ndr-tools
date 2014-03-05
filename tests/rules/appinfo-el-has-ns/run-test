@@ -1,7 +1,23 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "$0")
 . ../../../lib/fn_test.bash
+
+test_set_stdout <<EOF
+2:failed-assert:has-version
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
+2:successful-report:ns-well-formed
+2:failed-assert:req-ct
+2:failed-assert:req-ct-ref
+2:failed-assert:req-target-ns
+2:failed-assert:sch-has-dd
+2:successful-report:well-formed-xml
+3:failed-assert:el-has-dd
+3:failed-assert:el-is-nillable
+3:failed-assert:el-with-no-type-is-abstract
+3:failed-assert:rule-el-upper-camel-case
+EOF
 
 test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref -c xml-catalog.xml test1.xsd
 

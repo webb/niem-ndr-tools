@@ -19,4 +19,11 @@ then NDR_TOOLS_LOADED_COMMON_BASH=true
     NDR_TOOLS_COMMAND_DIR=$(cd "$(dirname "$NDR_TOOLS_COMMAND_REL")"; pwd)
     NDR_TOOLS_COMMAND_ABS=$NDR_TOOLS_COMMAND_DIR/$NDR_TOOLS_COMMAND_NAME
 
+    ndr_tools_common_handle_SIGINT () {
+        printf "received SIGINT\n" >&2
+        exit $((128 + 2))
+    }
+    
+    trap ndr_tools_common_handle_SIGINT SIGINT
+
 fi

@@ -2,7 +2,7 @@
 
   <import href="ndr-functions-interface.xsl"/>
 
-  <param name="xml-catalog" as="document-node()"/>
+  <param name="xml-catalog" as="document-node()?"/>
 
   <function name="impl:get-document-element" as="element()">
     <param name="context" as="element()"/>
@@ -30,19 +30,30 @@
   <function name="impl:resolve-namespace" as="element(xs:schema)?">
     <param name="context" as="element()"/>
     <param name="namespace-uri" as="xs:anyURI"/>
-    <variable name="catalog-element" as="element(catalog:catalog)?" select="$xml-catalog/catalog:catalog"/>
     <choose>
-      <when test="empty($catalog-element)">
+      <when test="empty($xml-catalog)">
         <message>
           <value-of select="impl:get-location($context)"/>
-          <text>: resolved catalog does not have document element catalog:catalog.</text>
+          <text>: parameter $xml-catalog is not set.</text>
         </message>
         <sequence select="()"/>
       </when>
       <otherwise>
-        <apply-templates select="$catalog-element" mode="impl:resolve-namespace">
-          <with-param name="namespace-uri" tunnel="yes" select="$namespace-uri"/>
-        </apply-templates>
+        <variable name="catalog-element" as="element(catalog:catalog)?" select="$xml-catalog/catalog:catalog"/>
+        <choose>
+          <when test="empty($catalog-element)">
+            <message>
+              <value-of select="impl:get-location($context)"/>
+              <text>: resolved catalog does not have document element catalog:catalog.</text>
+            </message>
+            <sequence select="()"/>
+          </when>
+          <otherwise>
+            <apply-templates select="$catalog-element" mode="impl:resolve-namespace">
+              <with-param name="namespace-uri" tunnel="yes" select="$namespace-uri"/>
+            </apply-templates>
+          </otherwise>
+        </choose>
       </otherwise>
     </choose>
   </function>

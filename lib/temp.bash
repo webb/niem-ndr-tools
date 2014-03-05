@@ -52,7 +52,7 @@ then NDR_TOOLS_LOADED_TEMPFILE_BASH=true
     }
 
     temp_remove () {
-        if [[ is-set != "${NDR_TOOLS_TEMP_KEEP:+is-set}" ]]
+        if [[ ! ${NDR_TOOLS_TEMP_KEEP:+is-set} ]]
         then
             # ICYMI, bash is evil: You get an unbound variable error
             # if you dereferece ${ARRAY[@]} after you set ARRAY=().
@@ -68,7 +68,13 @@ then NDR_TOOLS_LOADED_TEMPFILE_BASH=true
                 NDR_TOOLS_TEMP_DIRS=()
                 NDR_TOOLS_TEMP_DIR_VARS=()
             fi
-        else vecho "Keeping temp files: (${NDR_TOOLS_TEMP_FILES[*]}) dirs: (${NDR_TOOLS_TEMP_DIRS[*]})"
+        else vecho "$(printf "Keeping temp files:"
+                      for KEY in "${!NDR_TOOLS_TEMP_FILES[@]}"
+                      do printf " %q=%q" "${NDR_TOOLS_TEMP_FILE_VARS[KEY]}" "${NDR_TOOLS_TEMP_FILES[KEY]}"
+                      done
+                      for KEY in "${!NDR_TOOLS_TEMP_DIRS[@]}"
+                      do printf " %q=%q" "${NDR_TOOLS_TEMP_DIR_VARS[KEY]}" "${NDR_TOOLS_TEMP_DIRS[KEY]}"
+                      done)"
         fi
     }
 

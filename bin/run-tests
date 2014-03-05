@@ -51,7 +51,7 @@ then
     for ARG in "$@"
     do if [[ -d "$ARG" ]]
         then add_tests_in_dir "$ARG"
-        else TESTS+=("$ARG")
+        else TESTS+=( "$(cd "$(dirname "$ARG")"; pwd)/$(basename "$ARG")" )
         fi
     done
 else add_tests_in_dir "$NDR_TOOLS_ROOT_DIR"/tests
