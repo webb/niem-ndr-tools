@@ -6,7 +6,7 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$(dirname "$0")"/../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
@@ -130,6 +130,4 @@ fi
 
 vecho "Validating file \"$1\" against schema \"$SCHEMA\"" 
 vrun java -jar "$SAXON_JAR" -l:on -xsl:"$XSL" "$1" "${PARAMS[@]}"
-
-
 

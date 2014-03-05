@@ -110,13 +110,13 @@ TEST_SCRIPTS = $(shell find tests -type f -name 'run-test*' -perm -500)
 TEST_TOKENS = $(patsubst %,$(TOKENS_DIR)/ran-test/%,$(TEST_SCRIPTS))
 
 retest:
-	$(RM) $(TEST_TOKENS)
-	$(MAKE) test
+	@ $(RM) $(TEST_TOKENS)
+	@ $(MAKE) test
 
 test: $(TEST_TOKENS)
 
 $(TOKENS_DIR)/ran-test/%: %
-	$<
-	mkdir -p $(dir $@)
-	touch $@
+	@ $<
+	@ mkdir -p $(dir $@)
+	@ touch $@
 

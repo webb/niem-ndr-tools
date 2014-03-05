@@ -6,10 +6,12 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$(dirname "$0")"/../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
+
+vecho "in $0"
 
 #HELP:  --xalan-help: print Xalan Java's help
 opt_xalan_help () {

@@ -1,21 +1,17 @@
 
-if [[ is-set != "${LOADED_FN_TEST_BASH:+is-set}" ]]
-then LOADED_FN_TEST_BASH=true
+if [[ is-set != "${NDR_TOOLS_LOADED_FN_TEST_BASH:+is-set}" ]]
+then NDR_TOOLS_LOADED_FN_TEST_BASH=true
 
-    if test is-set != "${NDR_TOOLS_ROOT_DIR:+is-set}"
-    then printf "%s\n" 'Error: $NDR_TOOLS_ROOT_DIR not set' >&2
-        exit 1
-    fi
+    set -o nounset -o errexit
 
-    test_begin () {
-        TEST_EXPECTED_STDOUT=$(mktemp)
-        TEST_ACTUAL_STDOUT=$(mktemp)
-    }
+    . "$(dirname "${BASH_SOURCE[0]}")"/common.bash
+    . "$NDR_TOOLS_ROOT_DIR"/lib/temp.bash
+    . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
 
-    test_end () {
-        rm -f "$TEST_EXPECTED_STDOUT" "$TEST_ACTUAL_STDOUT"
-    }
+    temp_make_file NDR_TOOLS_TEST_EXPECTED_STDOUT NDR_TOOLS_TEST_ACTUAL_STDOUT NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN NDR_TOOLS_TEST_DIFF_OUT
 
+    NDR_TOOLS_TEST_RESULT=0
+    
     test_run () {
         local OPTIND=1 OPTION PREFIX=""
         while getopts p: OPTION
@@ -26,26 +22,38 @@ then LOADED_FN_TEST_BASH=true
         done
         shift $((OPTIND-1))
         local n=${#BASH_SOURCE[@]}
-        printf "# test_run\n"
-        printf "#   called from %s:%d\n" "${BASH_SOURCE[n - 1]}" "${BASH_LINENO[n - 2]}"
-        printf "# "
-        printf " %q" "$@"
-        printf "\n"
-        "$@" > "$TEST_ACTUAL_STDOUT" || true
-        diff "$TEST_EXPECTED_STDOUT" "$TEST_ACTUAL_STDOUT" || true
+        if is_verbose; then
+            printf "# test_run\n"
+            printf "#   called from %s:%d\n" "${BASH_SOURCE[n - 1]}" "${BASH_LINENO[n - 2]}"
+            printf "# "
+            printf " %q" "$@"
+            printf "\n"
+        fi
+        if ! "$@" > "$NDR_TOOLS_TEST_ACTUAL_STDOUT"
+        then NDR_TOOLS_TEST_RESULT=1
+            return
+        fi
+        cut -d : -f 1,2,3 "$NDR_TOOLS_TEST_ACTUAL_STDOUT" \
+            | sort -t : -k 1n,1 -k 3,3 -k 2,2 > "$NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN"
+        if ! diff "$NDR_TOOLS_TEST_EXPECTED_STDOUT" "$NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN" > "$NDR_TOOLS_TEST_DIFF_OUT"
+        then NDR_TOOLS_TEST_RESULT=1
+            printf "Diff result:\n  command: %s\n" "$*"
+            cat "$NDR_TOOLS_TEST_DIFF_OUT"
+        fi
     }
 
     test_set_stdout () {
-        cat > "$TEST_EXPECTED_STDOUT"
+        cat > "$NDR_TOOLS_TEST_EXPECTED_STDOUT"
     }
 
     test_fail () {
         printf "Test failed: %s\n" "$*"
+        NDR_TOOLS_TEST_RESULT=1
     }
 
-    test_begin
+    test_exit () {
+        exit "$NDR_TOOLS_TEST_RESULT"
+    }
     
-    trap test_end 0
-
 fi
 

@@ -14,43 +14,40 @@
 
   <variable name="map" select="document($ndr-id-map)/map:map"/>
 
-  <template match="/">
-    <results:results>
-      <apply-templates/>
-    </results:results>
+  <template match="@*|node()" priority="-1">
+    <copy>
+      <apply-templates select="@*|node()"/>
+    </copy>
   </template>
 
-  <template match="svrl:successful-report">
-    <results:successful-report>
-      <call-template name="get-details"/>
-    </results:successful-report>
+  <template match="*">
+    <copy>
+      <if test="@location">
+        <call-template name="put-line-number"/>
+      </if>
+      <if test="@id">
+        <call-template name="put-descriptive-id"/>
+      </if>
+      <apply-templates select="@*|node()"/>
+    </copy>
   </template>
 
-  <template match="svrl:failed-assert">
-    <results:failed-assert>
-      <call-template name="get-details"/>
-    </results:failed-assert>
-  </template>
-
-  <template name="get-details">
+  <template name="put-line-number">
     <variable name="location-string" select="@location"/>
     <variable name="active-pattern" select="preceding-sibling::svrl:active-pattern[1]"/>
     <variable name="document-file-name" select="$active-pattern/@document"/>
-    <variable name="rule-id" select="$active-pattern/@id"/>
-    <variable name="rule-descriptive-id" select="$map/map:rule[@ruleID = $rule-id]/@descriptiveID"/>
-    <variable name="line-number">
+    <attribute name="lineNumber">
       <for-each select="document($document-file-name)">
         <value-of select="xalan-nodeinfo:lineNumber( exslt-dyn:evaluate( $location-string ) )"/>
       </for-each>
-    </variable>
-    <attribute name="descriptiveID">
-      <value-of select="$rule-descriptive-id"/>
-    </attribute>
-    <attribute name="lineNumber">
-      <value-of select="$line-number"/>
     </attribute>
   </template>
 
-  <template match="text()"/>
+  <template name="put-descriptive-id">
+    <variable name="id" select="@id"/>
+    <attribute name="descriptiveID">
+      <value-of select="$map/map:rule[@ruleID = $id]/@descriptiveID"/>
+    </attribute>
+  </template>
 
 </stylesheet>

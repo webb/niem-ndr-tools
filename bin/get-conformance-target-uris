@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
 #HELP:COMMAND_NAME: Get a list of conformance target URIs for an XML file
-
-#HELP:Options:
 #HELP:Usage: COMMAND_NAME option* $file.xml
+#HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$(dirname "$0")"/../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash

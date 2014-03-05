@@ -1,20 +1,36 @@
 #!/usr/bin/env bash
 
-NDR_TOOLS_ROOT_DIR=$(cd "$(dirname "$0")"/..; pwd)
+. "$(dirname "$0")"/../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_test.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
+
+cd "$(dirname "$0")"
+
+vecho_location
 
 test_set_stdout <<EOF
-2:is-ctas-conformant-document:report
-2:is-schema-doc:report
-2:ns-valid:report
-2:ns-well-formed:report
-2:target-ns-is-rfc3986:report
-2:well-formed-xml:report
-6036:el-representation-is-abstract:report
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
+2:successful-report:ns-well-formed
+2:successful-report:target-ns-is-rfc3986
+2:successful-report:well-formed-xml
 EOF
 
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -v -r ref -c "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/xml-catalog.xml "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/niem/niem-core/3.0/niem-core.xsd
+while read -rd ''
+do 
+    case "$REPLY" in
+        ../pkg/niem-release/niem/appinfo/3.0/appinfo.xsd \
+            | ../pkg/niem-release/niem/conformanceTargets/3.0/conformanceTargets.xsd \
+            | ../pkg/niem-release/niem/localTerminology/3.0/localTerminology.xsd \
+            | ../pkg/niem-release/niem/structures/3.0/structures.xsd \
+            | ../pkg/niem-release/niem/external/* ) true ;;
+        ../pkg/niem-release/niem/niem-core/3.0/niem-core.xsd)
+            test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report \
+                --auto-rules \
+                -c "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/xml-catalog.xml \
+                "$REPLY";;
+    esac
+done < <(find ../pkg/niem-release/niem -type f -name '*.xsd' -print0)
 
-
-
-
+test_exit
