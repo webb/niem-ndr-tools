@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-. ../../../lib/fn_test.bash
+. "$(dirname "$0")"/../../../lib/fn_test.bash
+
+cd "$NDR_TOOLS_COMMAND_DIR"
 
 test_set_stdout <<EOF
 2:failed-assert:has-version
