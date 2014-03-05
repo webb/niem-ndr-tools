@@ -25,7 +25,7 @@ do
             | ../pkg/niem-release/niem/localTerminology/3.0/localTerminology.xsd \
             | ../pkg/niem-release/niem/structures/3.0/structures.xsd \
             | ../pkg/niem-release/niem/external/* ) true ;;
-        ../pkg/niem-release/niem/niem-core/3.0/niem-core.xsd)
+        * )
             test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report \
                 --auto-rules \
                 -c "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/xml-catalog.xml \
