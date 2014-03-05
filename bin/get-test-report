@@ -116,7 +116,7 @@ then COMMAND+=(--param=+xml-catalog="$XML_CATALOG")
 fi
 COMMAND+=("$1")
 
-vrun "${COMMAND[@]}"  > "$SVRL_RESULTS"
+vrun "${COMMAND[@]}" > "$SVRL_RESULTS"
 
 temp_make_file ANNOTATED_SVRL_RESULTS
 
