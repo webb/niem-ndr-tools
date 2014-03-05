@@ -10,7 +10,7 @@ then NDR_TOOLS_LOADED_TEMPFILE_BASH=true
     . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
     . "$NDR_TOOLS_ROOT_DIR"/lib/exit_hook.bash
 
-    #HELP:  --keep-temps: Don't delete temporary files
+    #HELP:  --keep-temps | -k: Don't delete temporary files
     opt_keep_temps () {
         # we don't initialize this variable, because we want
         # temporary-file-keeping to persist into subprocesses

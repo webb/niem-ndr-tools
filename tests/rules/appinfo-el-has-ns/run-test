@@ -19,7 +19,7 @@ test_set_stdout <<EOF
 3:failed-assert:rule-el-upper-camel-case
 EOF
 
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref -c xml-catalog.xml test1.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref test1.xsd
 
 test_exit
 

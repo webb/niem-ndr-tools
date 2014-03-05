@@ -22,6 +22,7 @@ ensure_file_exists "$ANNOTATED_SVRL_TO_TEXT_XSL"
 #HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
+#HELP:  --keep-temps | -k: Don't delete temporary files
 
 #HELP:  --rules=$code | -r $code: use NIEM NDR rule set for conformance target $code
 #HELP:      codes: ref, ext, ins, set
@@ -49,23 +50,25 @@ opt_xml_catalog () {
 }
 
 OPTIND=1
-while getopts :ac:hr:v-: OPTION
+while getopts :ac:hkr:v-: OPTION
 do
     case "$OPTION" in
         a ) opt_auto_rules;;
         c ) opt_xml_catalog "$OPTARG";;
         h ) opt_help;;
+        k ) opt_keep_temps;;
         r ) opt_rules "$OPTARG";;
         v ) opt_verbose;;
         - )
             case "$OPTARG" in
                 auto-rules ) opt_auto_rules;;
                 help ) opt_help;;
+                keep-temps ) opt_keep_temps;;
                 rules=* ) opt_rules "${OPTARG#*=}";;
                 verbose ) opt_verbose;;
                 xml-catalog=* ) opt_xml_catalog "${OPTARG#*=}";;
                 rules | xml-catalog ) fail "Missing required argument for long option \"$OPTARG\"";;
-                help=* | verbose=* | auto-rules=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+                help=* | verbose=* | auto-rules=* | keep-temps=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
                 *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
                 * ) fail "Unexpected long option \"$OPTARG\"";;
             esac;;
