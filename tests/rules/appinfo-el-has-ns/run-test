@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . "$(dirname "$0")"/../../../lib/fn_test.bash
+test_process_args "$@"
 
 cd "$NDR_TOOLS_COMMAND_DIR"
 
@@ -22,6 +23,31 @@ test_set_stdout <<EOF
 EOF
 
 test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref test1.xsd
+
+test_set_stdout <<EOF
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
+2:successful-report:ns-well-formed
+2:successful-report:target-ns-is-rfc3986
+2:successful-report:well-formed-xml
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -a ok.niem-core.xsd
+
+test_set_stdout <<EOF
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
+2:successful-report:ns-well-formed
+2:successful-report:target-ns-is-rfc3986
+2:successful-report:well-formed-xml
+11:failed-assert:appinfo-el-has-ns
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -a error1.niem-core.xsd
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -a error2.niem-core.xsd
 
 test_exit
 
