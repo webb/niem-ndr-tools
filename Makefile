@@ -8,7 +8,13 @@ ISO_SCHEMATRON_XSLT2_ZIP = $(CACHE_DIR)/iso-schematron-xslt2.zip
 SAXON_HE_ZIP = $(CACHE_DIR)/SaxonHE9-5-1-4J.zip
 XALAN_ZIP = $(CACHE_DIR)/xalan-j_2_7_1-bin.zip
 NIEM_REL_ZIP = $(CACHE_DIR)/niem-3.0.rel.zip
-CACHED_FILES = $(ISO_SCHEMATRON_XSLT2_ZIP) $(SAXON_HE_ZIP) $(XALAN_ZIP) $(NIEM_REL_ZIP)
+CATALOG_DTD_CACHE = $(CACHE_DIR)/www.oasis-open.org/committees/entity/release/1.0/catalog.dtd
+
+RESOLVER_HREF = http://www.gtlib.gatech.edu/pub/apache/xerces/xml-commons/xml-commons-resolver-1.2.zip
+RESOLVER_ZIP = $(CACHE_DIR)/xml-commons-resolver-1.2.zip
+TOKEN_EXTRACTED_RESOLVER = $(TOKENS_DIR)/extracted-resolver
+
+CACHED_FILES = $(ISO_SCHEMATRON_XSLT2_ZIP) $(SAXON_HE_ZIP) $(XALAN_ZIP) $(NIEM_REL_ZIP) $(CATALOG_DTD_CACHE) $(RESOLVER_ZIP)
 
 TOKENS_DIR = tmp/tokens
 TOKEN_CHECKSUMS_OK = $(TOKENS_DIR)/checksums-ok
@@ -32,8 +38,28 @@ help:
 	@ echo "  check: identify badly-permissioned test scripts (must be at least u+rx)"
 	@ echo "  retest: clean up traces of tests and run tests again"
 	@ echo "  test: run tests, if needed"
+	@ echo "  cache: download cached files"
 
-all: $(TOKEN_CHECKSUMS_OK) $(TOKEN_EXTRACTED_SCHEMATRON) $(TOKEN_EXTRACTED_SAXON) $(TOKEN_EXTRACTED_XALAN) $(TOKEN_PATCHED_SCHEMATRON) $(TOKEN_EXTRACTED_NIEM)
+all: $(TOKEN_CHECKSUMS_OK) $(TOKEN_EXTRACTED_SCHEMATRON) $(TOKEN_EXTRACTED_SAXON) $(TOKEN_EXTRACTED_XALAN) $(TOKEN_PATCHED_SCHEMATRON) $(TOKEN_EXTRACTED_NIEM) pkg/oasis/catalog.dtd $(TOKEN_EXTRACTED_RESOLVER)
+
+.PHONY: cache
+cache: $(CACHED_FILES)
+
+##################################################################
+# resolver
+
+$(RESOLVER_ZIP):
+	mkdir -p $(dir $@)
+	curl --location -o $@ $(RESOLVER_HREF)
+
+$(TOKEN_EXTRACTED_RESOLVER): $(RESOLVER_ZIP) $(TOKEN_CHECKSUMS_OK)
+	rm -rf pkg/xml-commons-resolver
+	mkdir -p pkg/xml-commons-resolver
+	unzip -j -d pkg/xml-commons-resolver $< xml-commons-resolver-1.2/resolver.jar
+	mkdir -p $(dir $@)
+	touch $@
+
+##################################################################
 
 $(ISO_SCHEMATRON_XSLT2_ZIP):
 	mkdir -p $(dir $@)
@@ -79,6 +105,19 @@ $(TOKEN_EXTRACTED_NIEM): $(NIEM_REL_ZIP)
 	unzip -d pkg/niem-release $(NIEM_REL_ZIP)
 	mkdir -p $(dir $@)
 	touch $@
+
+##################################################################
+# DTDs
+
+dtd: pkg/oasis/catalog.dtd
+
+pkg/oasis/catalog.dtd: $(CACHE_DIR)/www.oasis-open.org/committees/entity/release/1.0/catalog.dtd
+	mkdir -p $(dir $@)
+	cp $< $@
+
+$(CACHE_DIR)/www.oasis-open.org/committees/entity/release/1.0/catalog.dtd:
+	mkdir -p $(dir $@)
+	curl --location -o $@ http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd
 
 ##################################################################
 # checksums

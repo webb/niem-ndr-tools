@@ -114,22 +114,22 @@ ABSTRACT=$SCHEMA_DIR/tmp.$SCHEMA_BASE.abstract.xml
 XSL=$SCHEMA_DIR/tmp.$SCHEMA_BASE.xsl
 
 if [[ "$FORCE_REBUILD" = true || "$INCLUDE" -ot "$SCHEMA" ]]
-then vrun java -jar "$SAXON_JAR" -o:"$INCLUDE" -xsl:"$INCLUDE_XSL" "$SCHEMA"
+then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- -o:"$INCLUDE" -xsl:"$INCLUDE_XSL" "$SCHEMA"
 else vecho "No need to rebuild \"$INCLUDE\""
 fi
 
 if [[ "$FORCE_REBUILD" = true || "$ABSTRACT" -ot "$INCLUDE" ]]
-then vrun java -jar "$SAXON_JAR" -o:"$ABSTRACT" -xsl:"$ABSTRACT_XSL" "$INCLUDE"
+then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- -o:"$ABSTRACT" -xsl:"$ABSTRACT_XSL" "$INCLUDE"
 else vecho "No need to rebuild \"$ABSTRACT\""
 fi
 
 if [[ "$FORCE_REBUILD" = true || "$XSL" -ot "$ABSTRACT" ]]
-then vrun java -jar "$SAXON_JAR" -o:"$XSL" -xsl:"$TO_SVRL_XSL" "$ABSTRACT" allow-foreign=true full-path-notation=4
+then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- -o:"$XSL" -xsl:"$TO_SVRL_XSL" "$ABSTRACT" allow-foreign=true full-path-notation=4
 else vecho "No need to rebuild \"$XSL\""
 fi
 
 vecho "Validating file \"$1\" against schema \"$SCHEMA\"" 
-COMMAND=(vrun java -jar "$SAXON_JAR" -l:on -xsl:"$XSL" "$1")
+COMMAND=("$NDR_TOOLS_ROOT_DIR"/bin/saxon --catalog="$NDR_TOOLS_ROOT_DIR/xml-catalog.xml" -- -l:on -xsl:"$XSL" "$1")
 if (( ${#PARAMS[@]} > 0 ))
 then COMMAND+=("${PARAMS[@]}")
 fi
