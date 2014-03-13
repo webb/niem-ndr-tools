@@ -5,7 +5,7 @@
 #HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
-#HELP:  --keep-temps: Don't delete temporary files
+#HELP:  --keep-temps | -k: Don't delete temporary files
 
 . "$(dirname "$0")"/../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
@@ -15,10 +15,11 @@
 . "$NDR_TOOLS_ROOT_DIR"/lib/temp.bash
 
 OPTIND=1
-while getopts :hv-: OPTION
+while getopts :hkv-: OPTION
 do
     case "$OPTION" in
         h ) opt_help;;
+        k ) opt_keep_temps;;
         v ) opt_verbose;;
         - )
             case "$OPTARG" in
