@@ -122,7 +122,7 @@ $(CACHE_DIR)/www.oasis-open.org/committees/entity/release/1.0/catalog.dtd:
 ##################################################################
 # checksums
 
-$(TOKEN_CHECKSUMS_OK): $(ISO_SCHEMATRON_XSLT2_ZIP) $(SAXON_HE_ZIP) $(XALAN_ZIP) $(NIEM_REL_ZIP) $(CHECKSUM_FILE) 
+$(TOKEN_CHECKSUMS_OK): $(CHECKSUM_FILE) $(CACHED_FILES)
 	shasum -c $(CHECKSUM_FILE)
 	mkdir -p $(dir $@)
 	touch $@
