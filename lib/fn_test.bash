@@ -11,16 +11,32 @@ then NDR_TOOLS_LOADED_FN_TEST_BASH=true
     temp_make_file NDR_TOOLS_TEST_EXPECTED_STDOUT NDR_TOOLS_TEST_ACTUAL_STDOUT NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN NDR_TOOLS_TEST_DIFF_OUT
 
     NDR_TOOLS_TEST_RESULT=0
-    
-    test_run () {
-        local OPTIND=1 OPTION PREFIX=""
-        while getopts p: OPTION
+
+    test_process_args () {
+        local OPTIND=1
+        while getopts :kv-: OPTION
         do
             case "$OPTION" in
-                p ) PREFIX="$OPTARG"
+                k ) opt_keep_temps;;
+                v ) opt_verbose;;
+                - )
+                    case "$OPTARG" in
+                        verbose ) opt_verbose;;
+                        keep-temps ) opt_keep_temps;;
+                        verbose=* | keep-temps=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+                        *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
+                        * ) fail "Unexpected long option \"$OPTARG\"";;
+                    esac;;
+                '?' ) fail "Unknown short option \"$OPTARG\"";;
+                : ) fail "Short option \"$OPTARG\" missing argument";;
+                * ) fail "bad state OPTARG=\"$OPTARG\"";;
             esac
         done
         shift $((OPTIND-1))
+        TEST_ARGS=("$@")
+    }
+    
+    test_run () {
         local n=${#BASH_SOURCE[@]}
         if is_verbose; then
             printf "# test_run\n"
@@ -44,6 +60,10 @@ then NDR_TOOLS_LOADED_FN_TEST_BASH=true
 
     test_set_stdout () {
         cat > "$NDR_TOOLS_TEST_EXPECTED_STDOUT"
+    }
+
+    test_reset_stdout () {
+        > "$NDR_TOOLS_TEST_EXPECTED_STDOUT"
     }
 
     test_fail () {
