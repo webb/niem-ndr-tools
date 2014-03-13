@@ -30,13 +30,14 @@
   <function name="impl:resolve-namespace" as="element(xs:schema)?">
     <param name="context" as="element()"/>
     <param name="namespace-uri" as="xs:anyURI"/>
+    <variable name="context-target-namespace-uri" as="xs:anyURI?" select="impl:get-target-namespace($context)"/>
     <choose>
+      <!-- this SHOULD work for target namespace = xs:anyURI('') -->
+      <when test="exists($context-target-namespace-uri)                    and exactly-one($context-target-namespace-uri) = $namespace-uri">
+        <sequence select="root($context)/xs:schema"/>
+      </when>
       <when test="empty($xml-catalog)">
-        <message>
-          <value-of select="impl:get-location($context)"/>
-          <text>: parameter $xml-catalog is not set.</text>
-        </message>
-        <sequence select="()"/>
+        <sequence select="error(xs:QName('impl:xml-catalog-not-set'), 'Error: $xml-catalog is not set')"/>
       </when>
       <otherwise>
         <variable name="catalog-element" as="element(catalog:catalog)?" select="$xml-catalog/catalog:catalog"/>
@@ -65,7 +66,6 @@
     <variable name="schema" as="element(xs:schema)?" select="impl:resolve-namespace($context, $namespace-uri)"/>
     <choose>
       <when test="empty($schema)">
-        <!-- message has already been dispatched by the catalog resolver -->
         <sequence select="()"/>
       </when>
       <otherwise>
