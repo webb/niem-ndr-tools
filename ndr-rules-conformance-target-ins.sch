@@ -48,13 +48,13 @@
         
 <sch:pattern id="rule_12-16"><sch:title>Attribute structures:metadata references a metadata element</sch:title>
   <sch:rule context="*[exists(@structures:metadata)]">
-    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata)) satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-16: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
+    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-16: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         
 <sch:pattern id="rule_12-17"><sch:title>Attribute structures:relationshipMetadata references a metadata element</sch:title>
   <sch:rule context="*[exists(@structures:relationshipMetadata)]">
-    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata)) satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-17: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
+    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-17: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         </sch:schema>
