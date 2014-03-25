@@ -22,6 +22,6 @@ do rule_dir=rules/$REPLY
         fi
     else test_fail "Fail: No rule dir for rule \"$REPLY\""
     fi
-done < <("$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -IN "$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml -XSL "$NDR_TOOLS_ROOT_DIR"/lib/get-descriptive-ids.xsl)
+done < <("$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -IN "$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml -XSL "$NDR_TOOLS_ROOT_DIR"/lib/get-rule-descriptive-ids.xsl)
 
 test_exit
