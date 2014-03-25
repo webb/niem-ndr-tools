@@ -11,7 +11,8 @@ while read -r -d $'\n' XSD; do
         niem/structures/3.0/structures.xsd ) true;;
         niem/conformanceTargets/3.0/conformanceTargets.xsd ) true;;
         niem/localTerminology/3.0/localTerminology.xsd ) true ;;
-        niem/niem-core/3.0/niem-core.xsd )
+        niem/niem-core/3.0/niem-core.xsd \
+            | niem/proxy/xsd/3.0/xs.xsd )
             test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
