@@ -1587,26 +1587,40 @@ Status
 
    This rule ensures that the definition of a complex type with simple content will use XML Schema extension. This allows for the above cases while disallowing more complicated syntactic options available in XML Schema. The above rule allows for use of xs:restriction within xs:simpleContent in extension schemas.
 
-9.1.3.6.2. Complex types with simple content have structures:SimpleObjectAttributeGroup
+9.1.3.6.2. A complex type with simple content has structures:SimpleObjectAttributeGroup
 
-   [Rule 9-27] (REF)
+   There are two implementations of this rule; the REF rule only covers cases that are detectable within a single schema document, while the SET rule covers all cases.
+
+   [Rule 9-27] (SET)
 
       <sch:pattern>
         <sch:rule context="xs:simpleContent/xs:extension[
             for $base in resolve-QName(@base, .), 
-                $base-qname in namespace-uri-from-QName($base) return
-              (namespace-uri-from-QName($base) = 'http://www.w3.org/2001/XMLSchema'
-               or (some $type in nf:resolve-type(., $base) satisfies 
-                    node-name($type) = xs:QName('xs:simpleType')
-                  )
-              )
-           ]">
-          <sch:assert test="exists(
-                              xs:attributeGroup[
-                                exists(@ref)
-                                and resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')
-                              ]
-                            )"
+                $base-namespace in namespace-uri-from-QName($base),
+                $target-namespace in nf:get-target-namespace(.) return (
+              $base-namespace = 'http://www.w3.org/2001/XMLSchema'
+              or some $type in nf:resolve-type(., $base) satisfies
+                   node-name($type) = xs:QName('xs:simpleType'))]">
+          <sch:assert test="exists(xs:attributeGroup[
+                              some $ref in @ref satisfies
+                                resolve-QName($ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])"
+            >A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+
+   [Rule 9-28] (REF)
+
+      <sch:pattern>
+        <sch:rule context="xs:simpleContent/xs:extension[
+            for $base in resolve-QName(@base, .), 
+                $base-namespace in namespace-uri-from-QName($base),
+                $target-namespace in nf:get-target-namespace(.) return
+              $base-namespace = 'http://www.w3.org/2001/XMLSchema'
+              or ($base-namespace = $target-namespace
+                  and some $type in nf:resolve-type(., $base) satisfies 
+                        node-name($type) = xs:QName('xs:simpleType'))]">
+          <sch:assert test="exists(xs:attributeGroup[exists(@ref)
+                              and resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])"
             >A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
         </sch:rule>
       </sch:pattern>
@@ -1628,7 +1642,7 @@ Status
 
 9.1.3.7. No complex type disallowed substitutions
 
-   [Rule 9-28] (REF)
+   [Rule 9-29] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -1639,7 +1653,7 @@ Status
 
 9.1.3.8. No complex type disallowed derivation
 
-   [Rule 9-29] (REF)
+   [Rule 9-30] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -1654,13 +1668,13 @@ Status
 
    Every element declaration in a NIEM-conformant schema document is a top-level element; rules prohibit the declaration of local elements.
 
-   Within a NIEM-conformant schema document, an element may be declared as abstract. Elements may be defined without a type, but any element declaration that has no type must be declared abstract, as specified by [Rule 9-33], below.
+   Within a NIEM-conformant schema document, an element may be declared as abstract. Elements may be defined without a type, but any element declaration that has no type must be declared abstract, as specified by [Rule 9-34], below.
 
-   Within an element declaration, the attributes fixed, nillable, and substitutionGroup may be used as per the XML Schema specification. The attribute form is irrelevant to NIEM, as NIEM-conformant schemas may not contain local element definitions, as specified by [Rule 9-30], below.
+   Within an element declaration, the attributes fixed, nillable, and substitutionGroup may be used as per the XML Schema specification. The attribute form is irrelevant to NIEM, as NIEM-conformant schemas may not contain local element definitions, as specified by [Rule 9-31], below.
 
 9.2.1.1. Element declaration is top-level
 
-   [Rule 9-30] (REF, EXT)
+   [Rule 9-31] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -1675,7 +1689,7 @@ Status
 
 9.2.1.2.1. Element declaration has data definition
 
-   [Rule 9-31] (REF, EXT)
+   [Rule 9-32] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -1686,7 +1700,7 @@ Status
 
 9.2.1.2.2. Element declaration data definition is not empty
 
-   [Rule 9-32] (REF, EXT)
+   [Rule 9-33] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]/xs:annotation/xs:documentation[
@@ -1698,7 +1712,7 @@ Status
 
 9.2.1.3. Untyped element is abstract
 
-   [Rule 9-33] (REF, EXT)
+   [Rule 9-34] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema/xs:element[empty(@type)]">
@@ -1714,7 +1728,7 @@ Status
 
    The type xs:anySimpleType does not have any concrete semantics; The use of xs:anySimpleType is limited to the case where an abstract element is of type xs:anySimpleType, to act as a base for concrete implementations of the element.
 
-   [Rule 9-34] (REF, EXT)
+   [Rule 9-35] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@type)
@@ -1727,7 +1741,7 @@ Status
 
 9.2.1.5. Element type not in the XML Schema namespace
 
-   [Rule 9-35] (REF, EXT)
+   [Rule 9-36] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@type)]">
@@ -1742,7 +1756,7 @@ Status
 
 9.2.1.6. Element type not in a special namespace
 
-   [Rule 9-36] (REF, EXT)
+   [Rule 9-37] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@type)]">
@@ -1756,7 +1770,7 @@ Status
 
 9.2.1.7. Element type is not a simple type
 
-   [Rule 9-37] (SET)
+   [Rule 9-38] (SET)
 
       <sch:pattern>
         <sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))
@@ -1771,7 +1785,7 @@ Status
 
 9.2.1.8. No element disallowed substitutions 
 
-   [Rule 9-38] (REF)
+   [Rule 9-39] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:element">
@@ -1782,7 +1796,7 @@ Status
 
 9.2.1.9. No element disallowed derivation
 
-   [Rule 9-39] (REF)
+   [Rule 9-40] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:element">
@@ -1795,7 +1809,7 @@ Status
 
 9.2.1.10.1. No element default values
 
-   [Rule 9-40] (REF, EXT)
+   [Rule 9-41] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element">
@@ -1806,7 +1820,7 @@ Status
 
 9.2.1.10.2. No element fixed values
 
-   [Rule 9-41] (REF, EXT)
+   [Rule 9-42] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element">
@@ -1821,7 +1835,7 @@ Status
 
    A developer may constrain the use of nil in instance by setting nillable to false in subset schemas, or by use of non-XML Schema mechanisms, such as Schematron.
 
-   [Rule 9-42] (REF)
+   [Rule 9-43] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)
@@ -1845,7 +1859,7 @@ Status
 
 9.2.3.1. Attribute declarations are top-level
 
-   [Rule 9-43] (REF, EXT)
+   [Rule 9-44] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@name)]">
@@ -1860,7 +1874,7 @@ Status
 
 9.2.3.2.1. Attribute declaration has data definition
 
-   [Rule 9-44] (REF, EXT)
+   [Rule 9-45] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@name)]">
@@ -1871,7 +1885,7 @@ Status
 
 9.2.3.2.2. Attribute declaration data definition is not empty
 
-   [Rule 9-45] (REF, EXT)
+   [Rule 9-46] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@name)]/xs:annotation/xs:documentation[
@@ -1883,7 +1897,7 @@ Status
 
 9.2.3.3. Attribute declaration has type
 
-   [Rule 9-46] (REF, EXT)
+   [Rule 9-47] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@name)]">
@@ -1902,7 +1916,7 @@ Status
 
 9.2.3.4.1. No attribute type of xs:ID
 
-   [Rule 9-47] (REF, EXT)
+   [Rule 9-48] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@type)]">
@@ -1913,7 +1927,7 @@ Status
 
 9.2.3.4.2. No attribute type of xs:IDREF
 
-   [Rule 9-48] (REF, EXT)
+   [Rule 9-49] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@type)]">
@@ -1926,7 +1940,7 @@ Status
 
 9.2.3.5.1. No attribute default values
 
-   [Rule 9-49] (REF, EXT)
+   [Rule 9-50] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute">
@@ -1937,7 +1951,7 @@ Status
 
 9.2.3.5.2. No attribute fixed values
 
-   [Rule 9-50] (REF, EXT)
+   [Rule 9-51] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute">
@@ -1952,7 +1966,7 @@ Status
 
 9.2.4.1. No use of element xs:notation
 
-   [Rule 9-51] (REF, EXT)
+   [Rule 9-52] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:notation">
@@ -1973,13 +1987,13 @@ Status
 
 9.3.1.1. Model group does not affect meaning
 
-   [Rule 9-52] (EXT)
+   [Rule 9-53] (EXT)
 
       The use of model groups xs:all, xs:sequence, and xs:choice SHALL NOT define the semantics of an instance. The meaning of an element occurrance within an element occurrence SHALL be identical, regardless of the model group used to define a [schema component].
 
 9.3.1.2. No xs:all
 
-   [Rule 9-53] (REF, EXT)
+   [Rule 9-54] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:all">
@@ -1996,7 +2010,7 @@ Status
 
 9.3.1.3.1. xs:sequence must be child of xs:extension
 
-   [Rule 9-54] (REF)
+   [Rule 9-55] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:sequence">
@@ -2007,7 +2021,7 @@ Status
 
 9.3.1.3.2. xs:sequence must be child of xs:extension or xs:restriction
 
-   [Rule 9-55] (EXT)
+   [Rule 9-56] (EXT)
 
       <sch:pattern>
         <sch:rule context="xs:sequence">
@@ -2020,7 +2034,7 @@ Status
 
 9.3.1.4.1. No xs:choice
 
-   [Rule 9-56] (REF)
+   [Rule 9-57] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:choice">
@@ -2035,7 +2049,7 @@ Status
 
 9.3.1.4.2. xs:choice must be child of xs:sequence
 
-   [Rule 9-57] (EXT)
+   [Rule 9-58] (EXT)
 
       <sch:pattern>
         <sch:rule context="xs:choice">
@@ -2058,7 +2072,7 @@ Status
 
 9.3.2.1.1. Sequence minimum cardinality
 
-   [Rule 9-58] (REF, EXT)
+   [Rule 9-59] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:sequence">
@@ -2069,7 +2083,7 @@ Status
 
 9.3.2.1.2. Sequence maximum cardinality
 
-   [Rule 9-59] (REF, EXT)
+   [Rule 9-60] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:sequence">
@@ -2083,7 +2097,7 @@ Status
 
 9.3.2.2.1. Choice minimum cardinality
 
-   [Rule 9-60] (EXT)
+   [Rule 9-61] (EXT)
 
       <sch:pattern>
         <sch:rule context="xs:choice">
@@ -2094,7 +2108,7 @@ Status
 
 9.3.2.2.2. Choice maximum cardinality
 
-   [Rule 9-61] (EXT)
+   [Rule 9-62] (EXT)
 
       <sch:pattern>
         <sch:rule context="xs:choice">
@@ -2108,7 +2122,7 @@ Status
 
 9.3.3.1. Attribute ref defined by conformant schemas
 
-   [Rule 9-62] (REF, EXT)
+   [Rule 9-63] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attribute[exists(@ref)]">
@@ -2127,7 +2141,7 @@ Status
 
    In NIEM-conformant schemas, use of attribute groups is restricted. The only attribute group that plays a part in NIEM-conformant schemas is structures:SimpleObjectAttributeGroup. This attribute group provides the attributes necessary for IDs, references, metadata, and relationship metadata.
 
-   [Rule 9-63] (REF, EXT)
+   [Rule 9-64] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attributeGroup[exists(@ref)]">
@@ -2144,7 +2158,7 @@ Status
 
 9.3.5.1. No use of xs:any
 
-   [Rule 9-64] (REF, EXT)
+   [Rule 9-65] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:any">
@@ -2157,7 +2171,7 @@ Status
 
 9.3.5.2. No use of xs:anyAttribute
 
-   [Rule 9-65] (REF, EXT)
+   [Rule 9-66] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:anyAttribute">
@@ -2174,7 +2188,7 @@ Status
 
 9.4.1. No use of xs:unique
 
-   [Rule 9-66] (REF, EXT)
+   [Rule 9-67] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:unique">
@@ -2185,7 +2199,7 @@ Status
 
 9.4.2. No use of xs:key
 
-   [Rule 9-67] (REF, EXT)
+   [Rule 9-68] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:key">
@@ -2196,7 +2210,7 @@ Status
 
 9.4.3. No use of xs:keyref
 
-   [Rule 9-68] (REF, EXT)
+   [Rule 9-69] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:keyref">
@@ -2207,7 +2221,7 @@ Status
 
 9.4.4. No use of xs:selector
 
-   [Rule 9-69] (REF, EXT)
+   [Rule 9-70] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:selector">
@@ -2218,7 +2232,7 @@ Status
 
 9.4.5. No use of xs:field
 
-   [Rule 9-70] (REF, EXT)
+   [Rule 9-71] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:field">
@@ -2233,7 +2247,7 @@ Status
 
 9.5.1.1. No use of xs:group
 
-   [Rule 9-71] (REF, EXT)
+   [Rule 9-72] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:group">
@@ -2250,7 +2264,7 @@ Status
 
    The only attribute groups used in NIEM-conformant schemas are structures:SimpleObjectAttributeGroup and attribute groups defined by the IC-ISM and IC-NTK schemas. Therefore, NIEM-conformant schemas do not define additional attribute groups.
 
-   [Rule 9-72] (REF, EXT)
+   [Rule 9-73] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:attributeGroup[@name]">
@@ -2263,7 +2277,7 @@ Status
 
 9.6.1. Comments are not recommended
 
-   [Rule 9-73] (REF, EXT)
+   [Rule 9-74] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="comment()">
@@ -2276,7 +2290,7 @@ Status
 
 9.6.2. Documentation elements have no element children
 
-   [Rule 9-74] (REF, EXT)
+   [Rule 9-75] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:documentation/node()">
@@ -2291,7 +2305,7 @@ Status
 
 9.6.3.1. Appinfo has elements
 
-   [Rule 9-75] (REF, EXT)
+   [Rule 9-76] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:appinfo/node()">
@@ -2304,7 +2318,7 @@ Status
 
 9.6.3.2. Appinfo child elements have namespaces
 
-   [Rule 9-76] (REF, EXT)
+   [Rule 9-77] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:appinfo/*">
@@ -2317,7 +2331,7 @@ Status
 
 9.6.3.3. Appinfo descendants are not XML Schema elements
 
-   [Rule 9-77] (REF, EXT)
+   [Rule 9-78] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:appinfo//xs:*">
@@ -2336,7 +2350,7 @@ Status
 
 9.7.1.1. Schema has data definition
 
-   [Rule 9-78] (REF, EXT)
+   [Rule 9-79] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema">
@@ -2347,7 +2361,7 @@ Status
 
 9.7.1.2. Schema data definition is not empty
 
-   [Rule 9-79] (REF, EXT)
+   [Rule 9-80] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema/xs:annotation/xs:documentation[
@@ -2359,7 +2373,7 @@ Status
 
 9.7.2. Define target namespace
 
-   [Rule 9-80] (REF, EXT)
+   [Rule 9-81] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema">
@@ -2372,7 +2386,7 @@ Status
 
 9.7.3. Target namespace is absolute URI
 
-   [Rule 9-81] (REF, EXT)
+   [Rule 9-82] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema[exists(@targetNamespace)]">
@@ -2401,7 +2415,7 @@ Status
 
 9.7.4.1. Schema must have version
 
-   [Rule 9-82] (REF, EXT)
+   [Rule 9-83] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema">
@@ -2412,7 +2426,7 @@ Status
 
 9.7.4.2. Schema version must not be empty.
 
-   [Rule 9-83] (REF, EXT)
+   [Rule 9-84] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:schema[exists(@version)]">
@@ -2423,7 +2437,7 @@ Status
 
 9.7.5. No disallowed substitutions
 
-   [Rule 9-84] (REF)
+   [Rule 9-85] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:schema">
@@ -2434,7 +2448,7 @@ Status
 
 9.7.6. No disallowed derivations
 
-   [Rule 9-85] (REF)
+   [Rule 9-86] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:schema">
@@ -2447,7 +2461,7 @@ Status
 
 9.8.1. No use of xs:redefine
 
-   [Rule 9-86] (REF, EXT)
+   [Rule 9-87] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:redefine">
@@ -2460,7 +2474,7 @@ Status
 
 9.8.2. No use of xs:include
 
-   [Rule 9-87] (REF, EXT)
+   [Rule 9-88] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:include">
@@ -2475,7 +2489,7 @@ Status
 
 9.8.3. xs:import must have namespace
 
-   [Rule 9-88] (REF, EXT)
+   [Rule 9-89] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:import">
@@ -3890,8 +3904,6 @@ Status
 
 11.1.2. Name of type is in upper camel case
 
-   {Revise rule name to identify the exception for proxy types.}
-
    [Rule 11-2] (REF, EXT)
 
       <sch:pattern>
@@ -4079,13 +4091,11 @@ Status
         </sch:rule>
       </sch:pattern>
 
-   Additional prohibitions on element types are defined by [Rule 9-36], above, and [Rule 9-37], above.
+   Additional prohibitions on element types are defined by [Rule 9-37], above, and [Rule 9-38], above.
 
 11.2.1.4. Name of element that ends in "Abstract" must be abstract
 
    [Rule 11-14] (REF, EXT)
-
-      {is there more normative terminology in the rule text here?}
 
       <sch:pattern>
         <sch:rule context="xs:element[@name[ends-with(., 'Abstract')]]">

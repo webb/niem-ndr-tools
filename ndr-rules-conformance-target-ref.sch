@@ -208,340 +208,340 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-27"><sch:title>Complex types with simple content have structures:SimpleObjectAttributeGroup</sch:title>
-  <sch:rule context="xs:simpleContent/xs:extension[       for $base in resolve-QName(@base, .),            $base-qname in namespace-uri-from-QName($base) return         (namespace-uri-from-QName($base) = 'http://www.w3.org/2001/XMLSchema'          or (some $type in nf:resolve-type(., $base) satisfies                node-name($type) = xs:QName('xs:simpleType')             )         )      ]">
-    <sch:assert test="exists(                         xs:attributeGroup[                           exists(@ref)                           and resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')                         ]                       )">Rule 9-27: A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
+<sch:pattern id="rule_9-28"><sch:title>A complex type with simple content has structures:SimpleObjectAttributeGroup</sch:title>
+  <sch:rule context="xs:simpleContent/xs:extension[       for $base in resolve-QName(@base, .),            $base-namespace in namespace-uri-from-QName($base),           $target-namespace in nf:get-target-namespace(.) return         $base-namespace = 'http://www.w3.org/2001/XMLSchema'         or ($base-namespace = $target-namespace             and some $type in nf:resolve-type(., $base) satisfies                    node-name($type) = xs:QName('xs:simpleType'))]">
+    <sch:assert test="exists(xs:attributeGroup[exists(@ref)                         and resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])">Rule 9-28: A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-28"><sch:title>No complex type disallowed substitutions</sch:title>
+<sch:pattern id="rule_9-29"><sch:title>No complex type disallowed substitutions</sch:title>
   <sch:rule context="xs:complexType">
-    <sch:assert test="empty(@block)">Rule 9-28: An element xs:complexType MUST NOT have an attribute {}block.</sch:assert>
+    <sch:assert test="empty(@block)">Rule 9-29: An element xs:complexType MUST NOT have an attribute {}block.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-29"><sch:title>No complex type disallowed derivation</sch:title>
+<sch:pattern id="rule_9-30"><sch:title>No complex type disallowed derivation</sch:title>
   <sch:rule context="xs:complexType">
-    <sch:assert test="empty(@final)">Rule 9-29: An element xs:complexType MUST NOT have an attribute {}final.</sch:assert>
+    <sch:assert test="empty(@final)">Rule 9-30: An element xs:complexType MUST NOT have an attribute {}final.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-30"><sch:title>Element declaration is top-level</sch:title>
+<sch:pattern id="rule_9-31"><sch:title>Element declaration is top-level</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(parent::xs:schema)">Rule 9-30: An element declaration MUST be top-level.</sch:assert>
+    <sch:assert test="exists(parent::xs:schema)">Rule 9-31: An element declaration MUST be top-level.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-31"><sch:title>Element declaration has data definition</sch:title>
+<sch:pattern id="rule_9-32"><sch:title>Element declaration has data definition</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(xs:annotation/xs:documentation)">Rule 9-31: An element declaration MUST be a documented component.</sch:assert>
+    <sch:assert test="exists(xs:annotation/xs:documentation)">Rule 9-32: An element declaration MUST be a documented component.</sch:assert>
   </sch:rule>
 </sch:pattern>
       
-<sch:pattern id="rule_9-32"><sch:title>Element declaration data definition is not empty</sch:title>
+<sch:pattern id="rule_9-33"><sch:title>Element declaration data definition is not empty</sch:title>
   <sch:rule context="xs:element[exists(@name)]/xs:annotation/xs:documentation[                          . is (../../xs:annotation/xs:documentation)[1]]">
-    <sch:assert test="string-length(normalize-space(string-join(text(), ''))) &gt; 0">Rule 9-32: A data definition MUST NOT be empty.</sch:assert>
+    <sch:assert test="string-length(normalize-space(string-join(text(), ''))) &gt; 0">Rule 9-33: A data definition MUST NOT be empty.</sch:assert>
   </sch:rule>
 </sch:pattern>
       
-<sch:pattern id="rule_9-33"><sch:title>Untyped element is abstract</sch:title>
+<sch:pattern id="rule_9-34"><sch:title>Untyped element is abstract</sch:title>
   <sch:rule context="xs:schema/xs:element[empty(@type)]">
-    <sch:assert test="exists(@abstract)                       and xs:boolean(@abstract) = true()">Rule 9-33: A top-level element declaration that has no type MUST be abstract.</sch:assert>
+    <sch:assert test="exists(@abstract)                       and xs:boolean(@abstract) = true()">Rule 9-34: A top-level element declaration that has no type MUST be abstract.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-34"><sch:title>Element of type xs:anySimpleType is abstract</sch:title>
+<sch:pattern id="rule_9-35"><sch:title>Element of type xs:anySimpleType is abstract</sch:title>
   <sch:rule context="xs:element[exists(@type)                                 and resolve-QName(@type, .) = xs:QName('xs:anySimpleType')]">
-    <sch:assert test="exists(@abstract)                       and xs:boolean(@abstract) = true()">Rule 9-34: An element declaration that has a type xs:anySimpleType MUST be abstract.</sch:assert>
+    <sch:assert test="exists(@abstract)                       and xs:boolean(@abstract) = true()">Rule 9-35: An element declaration that has a type xs:anySimpleType MUST be abstract.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-35"><sch:title>Element type not in the XML Schema namespace</sch:title>
+<sch:pattern id="rule_9-36"><sch:title>Element type not in the XML Schema namespace</sch:title>
   <sch:rule context="xs:element[exists(@type)]">
-    <sch:assert test="for $type-qname in resolve-QName(@type, .) return                         $type-qname = xs:QName('xs:anySimpleType')                         or namespace-uri-from-QName($type-qname) != xs:anyURI('http://www.w3.org/2001/XMLSchema')">Rule 9-35: An element type that is not xs:anySimpleType MUST NOT have a namespace name <namespace-uri-for-prefix xmlns="https://iead.ittl.gtri.org/wr24/doc/2011-09-30-2258">xs</namespace-uri-for-prefix>.</sch:assert>
+    <sch:assert test="for $type-qname in resolve-QName(@type, .) return                         $type-qname = xs:QName('xs:anySimpleType')                         or namespace-uri-from-QName($type-qname) != xs:anyURI('http://www.w3.org/2001/XMLSchema')">Rule 9-36: An element type that is not xs:anySimpleType MUST NOT have a namespace name <namespace-uri-for-prefix xmlns="https://iead.ittl.gtri.org/wr24/doc/2011-09-30-2258">xs</namespace-uri-for-prefix>.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-36"><sch:title>Element type not in a special namespace</sch:title>
+<sch:pattern id="rule_9-37"><sch:title>Element type not in a special namespace</sch:title>
   <sch:rule context="xs:element[exists(@type)]">
-    <sch:assert test="not(namespace-uri-from-QName(resolve-QName(@type, .))                           = (xs:anyURI('http://www.w3.org/XML/1998/namespace'),                                xs:anyURI('urn:us:gov:ic:ism'),                                xs:anyURI('urn:us:gov:ic:ntk')))">Rule 9-36: An element type MUST NOT have a namespace name that is in a special namespace.</sch:assert>
+    <sch:assert test="not(namespace-uri-from-QName(resolve-QName(@type, .))                           = (xs:anyURI('http://www.w3.org/XML/1998/namespace'),                                xs:anyURI('urn:us:gov:ic:ism'),                                xs:anyURI('urn:us:gov:ic:ntk')))">Rule 9-37: An element type MUST NOT have a namespace name that is in a special namespace.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-38"><sch:title>No element disallowed substitutions </sch:title>
+<sch:pattern id="rule_9-39"><sch:title>No element disallowed substitutions </sch:title>
   <sch:rule context="xs:element">
-    <sch:assert test="empty(@block)">Rule 9-38: An element xs:element MUST NOT have an attribute {}block.</sch:assert>
+    <sch:assert test="empty(@block)">Rule 9-39: An element xs:element MUST NOT have an attribute {}block.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-39"><sch:title>No element disallowed derivation</sch:title>
+<sch:pattern id="rule_9-40"><sch:title>No element disallowed derivation</sch:title>
   <sch:rule context="xs:element">
-    <sch:assert test="empty(@final)">Rule 9-39: An element xs:element MUST NOT have an attribute {}final.</sch:assert>
+    <sch:assert test="empty(@final)">Rule 9-40: An element xs:element MUST NOT have an attribute {}final.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-40"><sch:title>No element default values</sch:title>
+<sch:pattern id="rule_9-41"><sch:title>No element default values</sch:title>
   <sch:rule context="xs:element">
-    <sch:assert test="empty(@default)">Rule 9-40: An element xs:element MUST NOT have an attribute {}default.</sch:assert>
+    <sch:assert test="empty(@default)">Rule 9-41: An element xs:element MUST NOT have an attribute {}default.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-41"><sch:title>No element fixed values</sch:title>
+<sch:pattern id="rule_9-42"><sch:title>No element fixed values</sch:title>
   <sch:rule context="xs:element">
-    <sch:assert test="empty(@fixed)">Rule 9-41: An element xs:element MUST NOT have an attribute {}fixed.</sch:assert>
+    <sch:assert test="empty(@fixed)">Rule 9-42: An element xs:element MUST NOT have an attribute {}fixed.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-42"><sch:title>Element declaration is nillable</sch:title>
+<sch:pattern id="rule_9-43"><sch:title>Element declaration is nillable</sch:title>
   <sch:rule context="xs:element[exists(@name)                                 and (empty(@abstract)                                      or xs:boolean(@abstract) = false())]">
-    <sch:assert test="exists(@nillable)                       and xs:boolean(@nillable) = true()">Rule 9-42: An [element declaration schema component] MUST have the nillable property with a value of true.</sch:assert>
+    <sch:assert test="exists(@nillable)                       and xs:boolean(@nillable) = true()">Rule 9-43: An [element declaration schema component] MUST have the nillable property with a value of true.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-43"><sch:title>Attribute declarations are top-level</sch:title>
+<sch:pattern id="rule_9-44"><sch:title>Attribute declarations are top-level</sch:title>
   <sch:rule context="xs:attribute[exists(@name)]">
-    <sch:assert test="exists(parent::xs:schema)">Rule 9-43: An attribute declaration MUST be top-level.</sch:assert>
+    <sch:assert test="exists(parent::xs:schema)">Rule 9-44: An attribute declaration MUST be top-level.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-44"><sch:title>Attribute declaration has data definition</sch:title>
+<sch:pattern id="rule_9-45"><sch:title>Attribute declaration has data definition</sch:title>
   <sch:rule context="xs:attribute[exists(@name)]">
-    <sch:assert test="exists(xs:annotation/xs:documentation)">Rule 9-44: An attribute declaration MUST be a documented component.</sch:assert>
+    <sch:assert test="exists(xs:annotation/xs:documentation)">Rule 9-45: An attribute declaration MUST be a documented component.</sch:assert>
   </sch:rule>
 </sch:pattern>
       
-<sch:pattern id="rule_9-45"><sch:title>Attribute declaration data definition is not empty</sch:title>
+<sch:pattern id="rule_9-46"><sch:title>Attribute declaration data definition is not empty</sch:title>
   <sch:rule context="xs:attribute[exists(@name)]/xs:annotation/xs:documentation[                          . is (../../xs:annotation/xs:documentation)[1]]">
-    <sch:assert test="string-length(normalize-space(string-join(text(), ''))) &gt; 0">Rule 9-45: A data definition MUST NOT be empty.</sch:assert>
+    <sch:assert test="string-length(normalize-space(string-join(text(), ''))) &gt; 0">Rule 9-46: A data definition MUST NOT be empty.</sch:assert>
   </sch:rule>
 </sch:pattern>
       
-<sch:pattern id="rule_9-46"><sch:title>Attribute declaration has type</sch:title>
+<sch:pattern id="rule_9-47"><sch:title>Attribute declaration has type</sch:title>
   <sch:rule context="xs:attribute[exists(@name)]">
-    <sch:assert test="exists(@type)">Rule 9-46: A top-level attribute declaration MUST have a type.</sch:assert>
+    <sch:assert test="exists(@type)">Rule 9-47: A top-level attribute declaration MUST have a type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-47"><sch:title>No attribute type of xs:ID</sch:title>
+<sch:pattern id="rule_9-48"><sch:title>No attribute type of xs:ID</sch:title>
   <sch:rule context="xs:attribute[exists(@type)]">
-    <sch:assert test="resolve-QName(@type, .) != xs:QName('xs:ID')">Rule 9-47: A schema component MUST NOT have an attribute {}type with a value of xs:ID.</sch:assert>
+    <sch:assert test="resolve-QName(@type, .) != xs:QName('xs:ID')">Rule 9-48: A schema component MUST NOT have an attribute {}type with a value of xs:ID.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-48"><sch:title>No attribute type of xs:IDREF</sch:title>
+<sch:pattern id="rule_9-49"><sch:title>No attribute type of xs:IDREF</sch:title>
   <sch:rule context="xs:attribute[exists(@type)]">
-    <sch:assert test="resolve-QName(@type, .) != xs:QName('xs:IDREF')">Rule 9-48: A schema component MUST NOT have an attribute {}type with a value of xs:IDREF.</sch:assert>
+    <sch:assert test="resolve-QName(@type, .) != xs:QName('xs:IDREF')">Rule 9-49: A schema component MUST NOT have an attribute {}type with a value of xs:IDREF.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-49"><sch:title>No attribute default values</sch:title>
+<sch:pattern id="rule_9-50"><sch:title>No attribute default values</sch:title>
   <sch:rule context="xs:attribute">
-    <sch:assert test="empty(@default)">Rule 9-49: An element xs:attribute MUST NOT have an attribute {}default.</sch:assert>
+    <sch:assert test="empty(@default)">Rule 9-50: An element xs:attribute MUST NOT have an attribute {}default.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-50"><sch:title>No attribute fixed values</sch:title>
+<sch:pattern id="rule_9-51"><sch:title>No attribute fixed values</sch:title>
   <sch:rule context="xs:attribute">
-    <sch:assert test="empty(@fixed)">Rule 9-50: An element xs:attribute MUST NOT have an attribute {}fixed.</sch:assert>
+    <sch:assert test="empty(@fixed)">Rule 9-51: An element xs:attribute MUST NOT have an attribute {}fixed.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-51"><sch:title>No use of element xs:notation</sch:title>
+<sch:pattern id="rule_9-52"><sch:title>No use of element xs:notation</sch:title>
   <sch:rule context="xs:notation">
-    <sch:assert test="false()">Rule 9-51: The schema SHALL NOT contain the element xs:notation.</sch:assert>
+    <sch:assert test="false()">Rule 9-52: The schema SHALL NOT contain the element xs:notation.</sch:assert>
   </sch:rule>
 </sch:pattern>
   
-<sch:pattern id="rule_9-53"><sch:title>No xs:all</sch:title>
+<sch:pattern id="rule_9-54"><sch:title>No xs:all</sch:title>
   <sch:rule context="xs:all">
-    <sch:assert test="false()">Rule 9-53: The schema SHALL NOT contain the element xs:all</sch:assert>
+    <sch:assert test="false()">Rule 9-54: The schema SHALL NOT contain the element xs:all</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-54"><sch:title>xs:sequence must be child of xs:extension</sch:title>
+<sch:pattern id="rule_9-55"><sch:title>xs:sequence must be child of xs:extension</sch:title>
   <sch:rule context="xs:sequence">
-    <sch:assert test="exists(parent::xs:extension)">Rule 9-54: An element xs:sequence must be a child of element xs:extension.</sch:assert>
+    <sch:assert test="exists(parent::xs:extension)">Rule 9-55: An element xs:sequence must be a child of element xs:extension.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-56"><sch:title>No xs:choice</sch:title>
+<sch:pattern id="rule_9-57"><sch:title>No xs:choice</sch:title>
   <sch:rule context="xs:choice">
-    <sch:assert test="false()">Rule 9-56: The schema SHALL NOT contain the element xs:choice</sch:assert>
+    <sch:assert test="false()">Rule 9-57: The schema SHALL NOT contain the element xs:choice</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-58"><sch:title>Sequence minimum cardinality</sch:title>
+<sch:pattern id="rule_9-59"><sch:title>Sequence minimum cardinality</sch:title>
   <sch:rule context="xs:sequence">
-    <sch:assert test="empty(@minOccurs) or xs:integer(@minOccurs) = 1">Rule 9-58: An element xs:sequence MUST either not have the attribute {}minOccurs, or that attribute MUST have a value of 1.</sch:assert>
+    <sch:assert test="empty(@minOccurs) or xs:integer(@minOccurs) = 1">Rule 9-59: An element xs:sequence MUST either not have the attribute {}minOccurs, or that attribute MUST have a value of 1.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-59"><sch:title>Sequence maximum cardinality</sch:title>
+<sch:pattern id="rule_9-60"><sch:title>Sequence maximum cardinality</sch:title>
   <sch:rule context="xs:sequence">
-    <sch:assert test="empty(@maxOccurs) or (@maxOccurs instance of xs:integer                                             and 1 = xs:integer(@maxOccurs))">Rule 9-59: An element xs:sequence MUST either not have the attribute {}maxOccurs, or that attribute MUST have a value of 1.</sch:assert>
+    <sch:assert test="empty(@maxOccurs) or (@maxOccurs instance of xs:integer                                             and 1 = xs:integer(@maxOccurs))">Rule 9-60: An element xs:sequence MUST either not have the attribute {}maxOccurs, or that attribute MUST have a value of 1.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-62"><sch:title>Attribute ref defined by conformant schemas</sch:title>
+<sch:pattern id="rule_9-63"><sch:title>Attribute ref defined by conformant schemas</sch:title>
   <sch:rule context="xs:attribute[exists(@ref)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@ref, .))"/>
-    <sch:assert test="$namespace = nf:get-target-namespace(.)                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 9-62: An attribute {}ref MUST have the target namespace or a namespace that is imported as conformant.</sch:assert>
+    <sch:assert test="$namespace = nf:get-target-namespace(.)                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 9-63: An attribute {}ref MUST have the target namespace or a namespace that is imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-63"><sch:title>Only known attribute groups</sch:title>
+<sch:pattern id="rule_9-64"><sch:title>Only known attribute groups</sch:title>
   <sch:rule context="xs:attributeGroup[exists(@ref)]">
-    <sch:assert test="for $ref in exactly-one(resolve-QName(@ref, .)) return       ($ref = xs:QName('structures:SimpleObjectAttributeGroup')        or (for $ref-namespace in exactly-one(namespace-uri-from-QName($ref)) return              $ref-namespace = (xs:anyURI('urn:us:gov:ic:ism'),                               xs:anyURI('urn:us:gov:ic:ntk'))))">Rule 9-63: An attribute group reference MUST be structures:SimpleObjectAttributeGroup or have the IC-ISM or IC-NTK namespace.</sch:assert>
+    <sch:assert test="for $ref in exactly-one(resolve-QName(@ref, .)) return       ($ref = xs:QName('structures:SimpleObjectAttributeGroup')        or (for $ref-namespace in exactly-one(namespace-uri-from-QName($ref)) return              $ref-namespace = (xs:anyURI('urn:us:gov:ic:ism'),                               xs:anyURI('urn:us:gov:ic:ntk'))))">Rule 9-64: An attribute group reference MUST be structures:SimpleObjectAttributeGroup or have the IC-ISM or IC-NTK namespace.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-64"><sch:title>No use of xs:any</sch:title>
+<sch:pattern id="rule_9-65"><sch:title>No use of xs:any</sch:title>
   <sch:rule context="xs:any">
-    <sch:assert test="false()">Rule 9-64: The schema SHALL NOT contain the element xs:any.</sch:assert>
+    <sch:assert test="false()">Rule 9-65: The schema SHALL NOT contain the element xs:any.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-65"><sch:title>No use of xs:anyAttribute</sch:title>
+<sch:pattern id="rule_9-66"><sch:title>No use of xs:anyAttribute</sch:title>
   <sch:rule context="xs:anyAttribute">
-    <sch:assert test="false()">Rule 9-65: The schema SHALL NOT contain the element xs:anyAttribute.</sch:assert>
+    <sch:assert test="false()">Rule 9-66: The schema SHALL NOT contain the element xs:anyAttribute.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-66"><sch:title>No use of xs:unique</sch:title>
+<sch:pattern id="rule_9-67"><sch:title>No use of xs:unique</sch:title>
   <sch:rule context="xs:unique">
-    <sch:assert test="false()">Rule 9-66: The schema SHALL NOT contain the element xs:unique.</sch:assert>
+    <sch:assert test="false()">Rule 9-67: The schema SHALL NOT contain the element xs:unique.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-67"><sch:title>No use of xs:key</sch:title>
+<sch:pattern id="rule_9-68"><sch:title>No use of xs:key</sch:title>
   <sch:rule context="xs:key">
-    <sch:assert test="false()">Rule 9-67: The schema SHALL NOT contain the element xs:key.</sch:assert>
+    <sch:assert test="false()">Rule 9-68: The schema SHALL NOT contain the element xs:key.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-68"><sch:title>No use of xs:keyref</sch:title>
+<sch:pattern id="rule_9-69"><sch:title>No use of xs:keyref</sch:title>
   <sch:rule context="xs:keyref">
-    <sch:assert test="false()">Rule 9-68: The schema SHALL NOT contain the element xs:keyref.</sch:assert>
+    <sch:assert test="false()">Rule 9-69: The schema SHALL NOT contain the element xs:keyref.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-69"><sch:title>No use of xs:selector</sch:title>
+<sch:pattern id="rule_9-70"><sch:title>No use of xs:selector</sch:title>
   <sch:rule context="xs:selector">
-    <sch:assert test="false()">Rule 9-69: The schema SHALL NOT contain the element xs:selector.</sch:assert>
+    <sch:assert test="false()">Rule 9-70: The schema SHALL NOT contain the element xs:selector.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-70"><sch:title>No use of xs:field</sch:title>
+<sch:pattern id="rule_9-71"><sch:title>No use of xs:field</sch:title>
   <sch:rule context="xs:field">
-    <sch:assert test="false()">Rule 9-70: The schema SHALL NOT contain the element xs:field.</sch:assert>
+    <sch:assert test="false()">Rule 9-71: The schema SHALL NOT contain the element xs:field.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-71"><sch:title>No use of xs:group</sch:title>
+<sch:pattern id="rule_9-72"><sch:title>No use of xs:group</sch:title>
   <sch:rule context="xs:group">
-    <sch:assert test="false()">Rule 9-71: The schema MUST NOT contain the element xs:group.</sch:assert>
+    <sch:assert test="false()">Rule 9-72: The schema MUST NOT contain the element xs:group.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-72"><sch:title>No definition of attribute groups</sch:title>
+<sch:pattern id="rule_9-73"><sch:title>No definition of attribute groups</sch:title>
   <sch:rule context="xs:attributeGroup[@name]">
-    <sch:assert test="false()">Rule 9-72: The schema MUST NOT contain an attribute group definition schema component.</sch:assert>
+    <sch:assert test="false()">Rule 9-73: The schema MUST NOT contain an attribute group definition schema component.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-73"><sch:title>Comments are not recommended</sch:title>
+<sch:pattern id="rule_9-74"><sch:title>Comments are not recommended</sch:title>
   <sch:rule context="comment()">
-    <sch:report test="true()">Rule 9-73: An XML Comment is not an XML Schema annotation component; XML Comments SHOULD NOT appear in the schema.</sch:report>
+    <sch:report test="true()">Rule 9-74: An XML Comment is not an XML Schema annotation component; XML Comments SHOULD NOT appear in the schema.</sch:report>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-74"><sch:title>Documentation elements have no element children</sch:title>
+<sch:pattern id="rule_9-75"><sch:title>Documentation elements have no element children</sch:title>
   <sch:rule context="xs:documentation/node()">
-    <sch:assert test="self::text() or self::comment()">Rule 9-74: A child of element xs:documentation MUST be text or an XML comment.</sch:assert>
+    <sch:assert test="self::text() or self::comment()">Rule 9-75: A child of element xs:documentation MUST be text or an XML comment.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-75"><sch:title>Appinfo has elements</sch:title>
+<sch:pattern id="rule_9-76"><sch:title>Appinfo has elements</sch:title>
   <sch:rule context="xs:appinfo/node()">
-    <sch:assert test="self::comment() or self::element()">Rule 9-75: A child of element xs:appinfo MUST be an element or an XML comment.</sch:assert>
+    <sch:assert test="self::comment() or self::element()">Rule 9-76: A child of element xs:appinfo MUST be an element or an XML comment.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-76"><sch:title>Appinfo child elements have namespaces</sch:title>
+<sch:pattern id="rule_9-77"><sch:title>Appinfo child elements have namespaces</sch:title>
   <sch:rule context="xs:appinfo/*">
-    <sch:assert test="namespace-uri() != xs:anyURI('')">Rule 9-76: An element that is a child of xs:appinfo MUST have a namespace name.</sch:assert>
+    <sch:assert test="namespace-uri() != xs:anyURI('')">Rule 9-77: An element that is a child of xs:appinfo MUST have a namespace name.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-77"><sch:title>Appinfo descendants are not XML Schema elements</sch:title>
+<sch:pattern id="rule_9-78"><sch:title>Appinfo descendants are not XML Schema elements</sch:title>
   <sch:rule context="xs:appinfo//xs:*">
-    <sch:assert test="false()">Rule 9-77: An element with a namespace name of xs: MUST NOT have an ancestor element xs:appinfo.</sch:assert>
+    <sch:assert test="false()">Rule 9-78: An element with a namespace name of xs: MUST NOT have an ancestor element xs:appinfo.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-78"><sch:title>Schema has data definition</sch:title>
+<sch:pattern id="rule_9-79"><sch:title>Schema has data definition</sch:title>
   <sch:rule context="xs:schema">
-    <sch:assert test="exists(xs:annotation/xs:documentation)">Rule 9-78: A schema document element MUST be a documented component.</sch:assert>
+    <sch:assert test="exists(xs:annotation/xs:documentation)">Rule 9-79: A schema document element MUST be a documented component.</sch:assert>
   </sch:rule>
 </sch:pattern>
       
-<sch:pattern id="rule_9-79"><sch:title>Schema data definition is not empty</sch:title>
+<sch:pattern id="rule_9-80"><sch:title>Schema data definition is not empty</sch:title>
   <sch:rule context="xs:schema/xs:annotation/xs:documentation[                          . is (../../xs:annotation/xs:documentation)[1]]">
-    <sch:assert test="string-length(normalize-space(string-join(text(), ''))) &gt; 0">Rule 9-79: A data definition MUST NOT be empty.</sch:assert>
+    <sch:assert test="string-length(normalize-space(string-join(text(), ''))) &gt; 0">Rule 9-80: A data definition MUST NOT be empty.</sch:assert>
   </sch:rule>
 </sch:pattern>
       
-<sch:pattern id="rule_9-80"><sch:title>Define target namespace</sch:title>
+<sch:pattern id="rule_9-81"><sch:title>Define target namespace</sch:title>
   <sch:rule context="xs:schema">
-    <sch:assert test="exists(@targetNamespace)">Rule 9-80: The schema MUST define a target namespace.</sch:assert>
+    <sch:assert test="exists(@targetNamespace)">Rule 9-81: The schema MUST define a target namespace.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-81"><sch:title>Target namespace is absolute URI</sch:title>
+<sch:pattern id="rule_9-82"><sch:title>Target namespace is absolute URI</sch:title>
   <sch:rule context="xs:schema[exists(@targetNamespace)]">
-    <sch:report test="true()">Rule 9-81: The value of the attribute targetNamespace MUST match the production &lt;absolute-URI&gt; as defined by RFC 3986.</sch:report>
+    <sch:report test="true()">Rule 9-82: The value of the attribute targetNamespace MUST match the production &lt;absolute-URI&gt; as defined by RFC 3986.</sch:report>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-82"><sch:title>Schema must have version</sch:title>
+<sch:pattern id="rule_9-83"><sch:title>Schema must have version</sch:title>
   <sch:rule context="xs:schema">
-    <sch:assert test="exists(@version)">Rule 9-82: An element xs:schema must have an attribute {}version.</sch:assert>
+    <sch:assert test="exists(@version)">Rule 9-83: An element xs:schema must have an attribute {}version.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-83"><sch:title>Schema version must not be empty.</sch:title>
+<sch:pattern id="rule_9-84"><sch:title>Schema version must not be empty.</sch:title>
   <sch:rule context="xs:schema[exists(@version)]">
-    <sch:assert test="string-length(normalize-space(@version)) &gt; 0">Rule 9-83: An attribute version owned by an element xs:schema must not be empty.</sch:assert>
+    <sch:assert test="string-length(normalize-space(@version)) &gt; 0">Rule 9-84: An attribute version owned by an element xs:schema must not be empty.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-84"><sch:title>No disallowed substitutions</sch:title>
+<sch:pattern id="rule_9-85"><sch:title>No disallowed substitutions</sch:title>
   <sch:rule context="xs:schema">
-    <sch:assert test="empty(@blockDefault)">Rule 9-84: An element xs:schema MUST NOT have an attribute {}blockDefault.</sch:assert>
+    <sch:assert test="empty(@blockDefault)">Rule 9-85: An element xs:schema MUST NOT have an attribute {}blockDefault.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-85"><sch:title>No disallowed derivations</sch:title>
+<sch:pattern id="rule_9-86"><sch:title>No disallowed derivations</sch:title>
   <sch:rule context="xs:schema">
-    <sch:assert test="empty(@finalDefault)">Rule 9-85: An element xs:schema MUST NOT have an attribute {}finalDefault.</sch:assert>
+    <sch:assert test="empty(@finalDefault)">Rule 9-86: An element xs:schema MUST NOT have an attribute {}finalDefault.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-86"><sch:title>No use of xs:redefine</sch:title>
+<sch:pattern id="rule_9-87"><sch:title>No use of xs:redefine</sch:title>
   <sch:rule context="xs:redefine">
-    <sch:assert test="false()">Rule 9-86: The schema MUST NOT contain the element xs:redefine.</sch:assert>
+    <sch:assert test="false()">Rule 9-87: The schema MUST NOT contain the element xs:redefine.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-87"><sch:title>No use of xs:include</sch:title>
+<sch:pattern id="rule_9-88"><sch:title>No use of xs:include</sch:title>
   <sch:rule context="xs:include">
-    <sch:assert test="false()">Rule 9-87: The schema MUST NOT contain the element xs:include.</sch:assert>
+    <sch:assert test="false()">Rule 9-88: The schema MUST NOT contain the element xs:include.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-88"><sch:title>xs:import must have namespace</sch:title>
+<sch:pattern id="rule_9-89"><sch:title>xs:import must have namespace</sch:title>
   <sch:rule context="xs:import">
-    <sch:assert test="exists(@namespace)">Rule 9-88: An element xs:import MUST have an attribute {}namespace.</sch:assert>
+    <sch:assert test="exists(@namespace)">Rule 9-89: An element xs:import MUST have an attribute {}namespace.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
