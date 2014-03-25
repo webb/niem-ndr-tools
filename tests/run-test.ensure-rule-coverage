@@ -11,17 +11,30 @@ vecho_location
 
 EXIT_STATUS=0
 
-temp_make_file TESTS
+temp_make_file RULES RULE_DIRS TESTS
+
+"$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -IN "$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml -XSL "$NDR_TOOLS_ROOT_DIR"/lib/get-rule-descriptive-ids.xsl | sort -u > "$RULES"
+
+find rules -maxdepth 1 -mindepth 1 -type d | sed -e 's%^rules/%%' | sort -u > "$RULE_DIRS"
 
 while read -r -d $'\n'
-do rule_dir=rules/$REPLY
+do test_fail "No rule test dir for rule \"$REPLY\""
+done < <(comm -23 "$RULES" "$RULE_DIRS")
+
+while read -r -d $'\n'
+do test_fail "Rule test dir exists for nonexistent rule \"$REPLY\""
+done < <(comm -13 "$RULES" "$RULE_DIRS")
+
+while read -r -d $'\n'
+do 
+    rule_dir=rules/$REPLY
     if [[ -d $rule_dir ]]
     then find "$rule_dir" -type f -name 'run-test*' ! -name '*~' -perm -500 > "$TESTS"
         if [[ ! -s $TESTS ]]
-        then test_fail "File: No tests for rule \"$REPLY\""
+        then test_fail "File: No tests in rule test dir \"$rule_dir\""
         fi
-    else test_fail "Fail: No rule dir for rule \"$REPLY\""
+    else test_fail "Fail: Didn't find expected rule dir \"$rule_dir\""
     fi
-done < <("$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -IN "$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml -XSL "$NDR_TOOLS_ROOT_DIR"/lib/get-rule-descriptive-ids.xsl)
+done < "$RULE_DIRS"
 
 test_exit
