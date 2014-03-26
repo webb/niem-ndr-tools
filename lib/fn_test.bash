@@ -51,7 +51,7 @@ then NDR_TOOLS_LOADED_FN_TEST_BASH=true
         fi
         cut -d : -f 1,2,3 "$NDR_TOOLS_TEST_ACTUAL_STDOUT" \
             | sort -t : -k 1n,1 -k 3,3 -k 2,2 > "$NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN"
-        if ! diff "$NDR_TOOLS_TEST_EXPECTED_STDOUT" "$NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN" > "$NDR_TOOLS_TEST_DIFF_OUT"
+        if ! diff -u "$NDR_TOOLS_TEST_EXPECTED_STDOUT" "$NDR_TOOLS_TEST_ACTUAL_STDOUT_CLEAN" > "$NDR_TOOLS_TEST_DIFF_OUT"
         then NDR_TOOLS_TEST_RESULT=1
             printf "Diff result:\n  command: %s\n" "$*"
             cat "$NDR_TOOLS_TEST_DIFF_OUT"
