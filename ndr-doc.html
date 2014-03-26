@@ -243,8 +243,8 @@
           $target-namespace in nf:get-target-namespace(.) return
         $base-namespace = 'http://www.w3.org/2001/XMLSchema'
         or ($base-namespace = $target-namespace
-            and some $type in nf:resolve-type(., $base) satisfies 
-                  node-name($type) = xs:QName('xs:simpleType'))]"&gt;
+            and (some $type in nf:resolve-type(., $base) satisfies 
+                   node-name($type) = xs:QName('xs:simpleType')))]"&gt;
     &lt;sch:assert test="exists(xs:attributeGroup[exists(@ref)
                         and resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])"
       &gt;A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.&lt;/sch:assert&gt;

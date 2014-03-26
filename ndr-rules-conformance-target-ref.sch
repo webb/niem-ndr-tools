@@ -209,7 +209,7 @@
 </sch:pattern>
               
 <sch:pattern id="rule_9-28"><sch:title>A complex type with simple content has structures:SimpleObjectAttributeGroup</sch:title>
-  <sch:rule context="xs:simpleContent/xs:extension[       for $base in resolve-QName(@base, .),            $base-namespace in namespace-uri-from-QName($base),           $target-namespace in nf:get-target-namespace(.) return         $base-namespace = 'http://www.w3.org/2001/XMLSchema'         or ($base-namespace = $target-namespace             and some $type in nf:resolve-type(., $base) satisfies                    node-name($type) = xs:QName('xs:simpleType'))]">
+  <sch:rule context="xs:simpleContent/xs:extension[       for $base in resolve-QName(@base, .),            $base-namespace in namespace-uri-from-QName($base),           $target-namespace in nf:get-target-namespace(.) return         $base-namespace = 'http://www.w3.org/2001/XMLSchema'         or ($base-namespace = $target-namespace             and (some $type in nf:resolve-type(., $base) satisfies                     node-name($type) = xs:QName('xs:simpleType')))]">
     <sch:assert test="exists(xs:attributeGroup[exists(@ref)                         and resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])">Rule 9-28: A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
   </sch:rule>
 </sch:pattern>
