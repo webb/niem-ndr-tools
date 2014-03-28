@@ -4110,8 +4110,8 @@ Status
 
       <sch:pattern>
         <sch:rule context="xs:element[@name[ends-with(., 'Representation')]]">
-          <sch:assert test="exists(@abstract) and xs:boolean(@abstract) = true()"
-            >An element with a name that ends in 'Representation' MUST be abstract.</sch:assert>
+          <sch:report test="empty(@abstract) or xs:boolean(@abstract) = false()"
+            >An element with a name that ends in 'Representation' SHOULD be abstract.</sch:report>
         </sch:rule>
       </sch:pattern>
 

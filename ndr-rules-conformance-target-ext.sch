@@ -716,7 +716,7 @@
 	    
 <sch:pattern id="rule_11-15"><sch:title>Name of element that ends in "Representation" must be abstract</sch:title>
   <sch:rule context="xs:element[@name[ends-with(., 'Representation')]]">
-    <sch:assert test="exists(@abstract) and xs:boolean(@abstract) = true()">Rule 11-15: An element with a name that ends in 'Representation' MUST be abstract.</sch:assert>
+    <sch:report test="empty(@abstract) or xs:boolean(@abstract) = false()">Rule 11-15: An element with a name that ends in 'Representation' SHOULD be abstract.</sch:report>
   </sch:rule>
 </sch:pattern>
 	    
