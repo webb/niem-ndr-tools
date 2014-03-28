@@ -29,9 +29,16 @@ while read -r -d $'\n'
 do 
     rule_dir=rules/$REPLY
     if [[ -d $rule_dir ]]
-    then find "$rule_dir" -type f -name 'run-test*' ! -name '*~' -perm -500 > "$TESTS"
+    then find "$rule_dir" -type f -name 'run-test*' ! -name '*~' > "$TESTS"
         if [[ ! -s $TESTS ]]
-        then test_fail "File: No tests in rule test dir \"$rule_dir\""
+        then test_fail "No tests in rule test dir \"$rule_dir\""
+        else
+            while read -r -d $'\n' test
+            do
+                if [[ ! -x "$test" ]]
+                then test_fail "candidate test \"$test\" is not executable"
+                fi
+            done < "$TESTS"
         fi
     else test_fail "Fail: Didn't find expected rule dir \"$rule_dir\""
     fi
