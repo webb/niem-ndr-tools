@@ -10,6 +10,10 @@ then NDR_TOOLS_LOADED_TEMPFILE_BASH=true
     . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
     . "$NDR_TOOLS_ROOT_DIR"/lib/exit_hook.bash
 
+    NDR_TOOLS_TEMP_DIR_V1=${TMPDIR:-/tmp}
+    NDR_TOOLS_TEMP_DIR=${NDR_TOOLS_TEMP_DIR_V1%/}
+    unset NDR_TOOLS_TEMP_DIR_V1
+
     #HELP:  --keep-temps | -k: Don't delete temporary files
     opt_keep_temps () {
         # we don't initialize this variable, because we want
@@ -25,7 +29,7 @@ then NDR_TOOLS_LOADED_TEMPFILE_BASH=true
     temp_make_file () {
         for VAR in "$@"
         do
-            local PATHNAME="$(umask 077; mktemp)"
+            local PATHNAME="$(umask 077; mktemp "$NDR_TOOLS_TEMP_DIR"/"$VAR".XXXXXX)"
             eval "$VAR"="$PATHNAME"
             # Append here; don't reset it, since this may be called multiple times.
             NDR_TOOLS_TEMP_FILE_VARS+=("$VAR")
@@ -42,7 +46,7 @@ then NDR_TOOLS_LOADED_TEMPFILE_BASH=true
     temp_make_dir () {
         for VAR in "$@"
         do
-            local PATHNAME="$(umask 077; mktemp -d)"
+            local PATHNAME="$(umask 077; mktemp -d mktemp "$NDR_TOOLS_TEMP_DIR"/"$VAR".XXXXXX)"
             eval "$VAR"="$PATHNAME"
             # Append here; don't reset it, since this may be called multiple times.
             NDR_TOOLS_TEMP_DIR_VARS+=("$VAR")
