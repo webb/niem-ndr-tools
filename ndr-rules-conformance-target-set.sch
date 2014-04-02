@@ -27,15 +27,15 @@
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-73"><sch:title>Applies to types indicates elements</sch:title>
+<sch:pattern id="rule_10-71"><sch:title>Applies to types indicates elements</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
-    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToTypes), ' ') satisfies                         exists(nf:resolve-type(., resolve-QName($item, .)))">Rule 10-73: Every item in @appinfo:appliesToTypes MUST resolve to a type.</sch:assert>
+    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToTypes), ' ') satisfies                         exists(nf:resolve-type(., resolve-QName($item, .)))">Rule 10-71: Every item in @appinfo:appliesToTypes MUST resolve to a type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-75"><sch:title>Applies to elements indicates elements</sch:title>
+<sch:pattern id="rule_10-73"><sch:title>Applies to elements indicates elements</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToElements)]">
-    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies                         count(nf:resolve-element(., resolve-QName($item, .))) = 1">Rule 10-75: Every item in @appinfo:appliesToElements must resolve to an element.</sch:assert>
+    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies                         count(nf:resolve-element(., resolve-QName($item, .))) = 1">Rule 10-73: Every item in @appinfo:appliesToElements MUST resolve to an element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             

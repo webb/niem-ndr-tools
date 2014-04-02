@@ -35,7 +35,7 @@
 <sch:pattern id="rule_12-3"><sch:title>Attribute structures:ref must reference structures:id</sch:title>
   <sch:rule context="*[@structures:ref]">
     <sch:let name="ref" value="@structures:ref"/>
-    <sch:assert test="exists(//*[@structures:id = $ref])">Rule 12-3: The value of an attribute structures:ref must match the value of an attribute structures:id of some element in the XML document.</sch:assert>
+    <sch:assert test="exists(//*[@structures:id = $ref])">Rule 12-3: The value of an attribute structures:ref MUST match the value of an attribute structures:id of some element in the XML document.</sch:assert>
   </sch:rule>
 </sch:pattern>            
           

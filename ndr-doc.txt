@@ -1,8 +1,8 @@
 National Information Exchange Model Naming and Design Rules
 
-Version 3.0alpha8
+Version 3.0alpha9
 
-February 5, 2014
+April 2, 2014
 
 NIEM Technical Architecture Committee (NTAC)
 
@@ -76,7 +76,7 @@ Status
 
 1.2. Audience
 
-   This document targets practitioners and developers who employ NIEM for information exchange and interoperability. Such information exchanges may be between or within organizations. The NIEM reference schemas provide system implementers much content on which to build specific exchanges. However, there is a need for extended and additional content. The purpose of this document is to define the rules for such new content so that it will be consistent with the NIEM reference schemas. These rules are intended to establish and, more important, enforce a degree of standardization on a national level.
+   This document targets practitioners and developers who employ NIEM for information exchange and interoperability. Such information exchanges may be between or within organizations. The NIEM reference schemas provide system implementers much content on which to build specific exchanges. However, there is a need for extended and additional content. The purpose of this document is to define the rules for such new content so that it will be consistent with the NIEM reference schemas. These rules are intended to establish and, more important, enforce a degree of standardization across a broad set of users.
 
 2. Document conventions and normative content
 
@@ -180,11 +180,11 @@ Status
 
    This document defines many normative rules using Schematron rule-based validation syntax, as defined by [Schematron]. Effort has been made to make the rules precise and unambiguous. Very detailed text descriptions of rules can introduce ambiguity, and they are not directly executable by users. Providing NDR rules that are expressed as Schematron rules ensures that the rules are precise, and that they are directly executable through commercially-available and free tools.
 
-   Many rules herein do not have executable Schematron supporting them. Some are not fit for automatic validation, and others may be difficult or cumbersome to express in Schematron. In neither case are such rules be any less normative. A rule that has no Schematron is just as normative as a rule that does have Schematron.
+   Many rules herein do not have executable Schematron supporting them. Some are not fit for automatic validation, and others may be difficult or cumbersome to express in Schematron. In neither case are such rules any less normative. A rule that has no Schematron is just as normative as a rule that does have Schematron.
 
    The Schematron rules are written using XPath2 as defined by [XPath 2]. These executable rules are normative.
 
-   An execution of a Schematron pattern that issues a failed assert represents a validation error, and signfies that the assessed artifact vioates a requirement of a conformance rule. 
+   An execution of a Schematron pattern that issues a failed assert represents a validation error, and signfies that the assessed artifact violates a requirement of a conformance rule. 
 
    An execution of a Schematron pattern that issues a report indicates cause for concern. This may be:
 
@@ -436,9 +436,9 @@ Status
 
    In this definition and the next definition below, the term XML document is as specified in [XML]. The terms document information item, document element, element information item, namespace name, and local name are as specified in [XML Infoset]. The term valid is as specified in [XML Schema Structures].
 
-   Schema-validity may be assessed against a single set of schemas or against multiple sets of schemas. Assessment against schemas is as directed by an IEPD, other instructions, or tools.
+   Schema-validity may be assessed against a single set of schemas or against multiple sets of schemas. Assessment against schemas is as directed by an MPD, other instructions, or tools.
 
-   Note that the document element (root element) of a NIEM-conformant XML document is not required to be a NIEM-conformant element information item. Other specifications, such as the IEPD specification, may add additional constraints to these to specify IEPD or exchange conformance.
+   Note that the document element (root element) of a NIEM-conformant XML document is not required to be a NIEM-conformant element information item. Other specifications, such as the MPD specification, may add additional constraints to these to specify MPD-specific or exchange-specific conformance contraints.
 
    [Definition: conformant element information item]
 
@@ -542,7 +542,7 @@ Status
 
       *  NIEM's use of the RDF model provides a basis for inferencing and reasoning about XML data that uses NIEM. That is, using the rules defined for the RDF model, programs can determine implications of relationships between NIEM-defined objects.
 
-   With the exception of Section 2, NIEM rules are explained in this document without reference to RDF or RDF concepts. Understanding RDF is not required to understand NIEM-conformant schemas or data based on NIEM. However, understanding RDF concepts may deepen understanding of NIEM.
+   With the exception of this section, NIEM rules are explained in this document without reference to RDF or RDF concepts. Understanding RDF is not required to understand NIEM-conformant schemas or data based on NIEM. However, understanding RDF concepts may deepen understanding of NIEM.
 
    The goal of this section is to clarify the meaning of XML data that is NIEM-conformant and to outline the implications of various modeling constructs in NIEM. The rules for NIEM- conformant schemas and instances are in place to ensure that a specific meaning can be derived from data. That is, the data makes specific assertions, which are well understood since they are derived from the rules for NIEM.
 
@@ -576,7 +576,7 @@ Status
 
       *  The XML Schema document that defines a NIEM object is a NIEM-conformant schema.
 
-   NIEM associations are defined as n-ary properties, as described in [N-ary], "Use Case 3: N-ary relation with no distinguished participant". NIEM defines the terms [object type], [association type]NIEM associations are defined in Section 7.4.3, Association Types. Assertions are made via NIEM-conformant XML data, described by Section 8, XML Instance Rules.
+   NIEM associations are defined as n-ary properties, as described in [N-ary], "Use Case 3: N-ary relation with no distinguished participant". NIEM associations are defined in Section 10.2.3, Associations, below. Assertions are made via NIEM-conformant XML data, described by Section 12, XML instance document rules, below.
 
    The XML Schema types that define NIEM objects and associations are related to each other via elements and attributes. That is, a type contains elements and attributes, and an element or attribute has a value that is an instance of an XML Schema type. In NIEM, these elements and attributes are XML Schema representations of RDF properties, which are described by [RDF Primer], "2.1 Basic Concepts":
 
@@ -622,7 +622,7 @@ Status
 
    A NIEM-conformant instance uses XML IDs to identify objects within an XML document; The NIEM XML ID is an attribute structures:id of type xs:ID. These IDs are not assumed by NIEM to have any universal significance; they need only be unique within the XML document. The use of an ID is required only when an object must be referenced within the document. NIEM recognizes no correlation between these local IDs and any URI.
 
-   Any given implementation, message, or IEPD may be defined to apply a URI or other universally meaningful identifier to an object or message. However, NIEM has no such requirement.
+   Any given implementation, message, or MPD may be defined to apply a URI or other universally meaningful identifier to an object or message. However, NIEM has no such requirement.
 
 5.4. NIEM data model is explicit, not implicit
 
@@ -1007,7 +1007,7 @@ Status
         <sch:rule context="*[. is nf:get-document-element(.)]">
           <sch:report test="true()">The document MUST be a schema document.</sch:report>
           <sch:assert test="self::xs:schema"
-            >The document element of the XML document must be xs:schema.</sch:assert>
+            >The document element of the XML document MUST be xs:schema.</sch:assert>
         </sch:rule>
       </sch:pattern>            
 
@@ -1093,11 +1093,11 @@ Status
 
    [Rule 7-5] (REF, EXT)
 
-      A NIEM component name SHALL be formed by applying the informative guidelines and examples detailed in Annex A of [ISO 11179-5], with exceptions as specified in this document, most notably those specified in Section 9, Naming Rules.
+      A NIEM component name MUST be formed by applying the informative guidelines and examples detailed in Annex A of [ISO 11179-5], with exceptions as specified in this document.
 
    The guidelines and examples of [ISO 11179-5] provide a simple, consistent syntax for data names that captures context and thereby imparts a reasonable degree of semantic precision.
 
-   NIEM uses the guidelines and examples of [ISO 11179-5] as a baseline for normative naming rules. However, some NIEM components require bending of these rules. Special naming rules for these classes of components are presented and discussed in Section 9. In spite of these exceptions, most NIEM component names can be disassembled into their [ISO 11179-5] constituent words or terms.
+   NIEM uses the guidelines and examples of [ISO 11179-5] as a baseline for normative naming rules. However, some NIEM components require bending of these rules. Special naming rules for these classes of components are presented and discussed in the relevant sections. In spite of these exceptions, most NIEM component names can be disassembled into their [ISO 11179-5] constituent words or terms.
 
    Example:
 
@@ -1111,13 +1111,13 @@ Status
 
       *  Representation term = "Code"
 
-   Section 9, Naming Rules, details the specific rules for each kind of term and how to construct NIEM component names from it. Exceptions for special components are also described in Section 9.
+   Section 10.4, Naming rules, below, details the specific rules for each kind of term and how to construct NIEM component names from it.
 
 8. Strategy for a NIEM profile of XML Schema
 
 8.1. Wildcards
 
-   There are many constructs within XML Schema that act as wildcards. That is, they introduce buckets that may carry arbitrary or otherwise nonvalidated content. Such constructs violate [Principle 11], and as such provide implicit workarounds for the difficult task of agreeing on the content of data models. Such workarounds should be made explicitly, outside the core data model.
+   There are many constructs within XML Schema that act as wildcards. That is, they introduce buckets that may carry arbitrary or otherwise nonvalidated content. Such constructs violate [Principle 11], above, and as such provide implicit workarounds for the difficult task of agreeing on the content of data models. Such workarounds should be made explicitly, outside the core data model.
 
    The following restrictions help to ban wildcards and arbitrary data:
 
@@ -1187,7 +1187,7 @@ Status
 
    This section establishes a profile of XML Schema for NIEM-conformant schemas. Because the XML Schema specifications are flexible, comprehensive rules are needed to achieve a balance between establishing uniform schema design and providing developers flexibility to solve novel data modeling problems.
 
-   Note that external schemas (i.e., non-NIEM-conformant schemas) do not need to obey the rules set forth in this section. So long as schema components from external schemas are adapted for use with NIEM according to the modeling rules in Section 7.7, they may be used as they appear in the external standard, even if the schema components themselves violate the rules for NIEM-conformant schemas.
+   Note that external schemas (i.e., non-NIEM-conformant schemas) do not need to obey the rules set forth in this section. So long as schema components from external schemas are adapted for use with NIEM according to the modeling rules in Section 10.2.2.3, External adapter types, below, they may be used as they appear in the external standard, even if the schema components themselves violate the rules for NIEM-conformant schemas.
 
    The following sections are broken down in the order provided by [XML Schema Structures] section 2.2, XML Schema Abstract Data Model, followed by a section on a schema document as a whole and a section on schema namespaces and assembly:
 
@@ -1442,7 +1442,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:complexType">
           <sch:assert test="exists(parent::xs:schema)"
-            >A complex type definition must be top-level.</sch:assert>
+            >A complex type definition MUST be top-level.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -1581,7 +1581,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:simpleContent">
           <sch:assert test="exists(xs:extension)"
-            >A complex type definition with simple content schema component must have a derivation method of extension.</sch:assert>
+            >A complex type definition with simple content schema component MUST have a derivation method of extension.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -1971,7 +1971,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:notation">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:notation.</sch:assert>
+            >The schema MUST NOT contain the element xs:notation.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -1989,7 +1989,7 @@ Status
 
    [Rule 9-53] (EXT)
 
-      The use of model groups xs:all, xs:sequence, and xs:choice SHALL NOT define the semantics of an instance. The meaning of an element occurrance within an element occurrence SHALL be identical, regardless of the model group used to define a [schema component].
+      The use of model groups xs:all, xs:sequence, and xs:choice MUST NOT define the semantics of an instance. The meaning of an element occurrance within an element occurrence MUST be identical, regardless of the model group used to define a [schema component].
 
 9.3.1.2. No xs:all
 
@@ -1998,7 +1998,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:all">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:all</sch:assert>
+            >The schema MUST NOT contain the element xs:all</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2015,7 +2015,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:sequence">
           <sch:assert test="exists(parent::xs:extension)"
-            >An element xs:sequence must be a child of element xs:extension.</sch:assert>
+            >An element xs:sequence MUST be a child of element xs:extension.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2026,7 +2026,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:sequence">
           <sch:assert test="exists(parent::xs:extension) or exists(parent::xs:restriction)"
-            >An element xs:sequence must be a child of element xs:extension or xs:restriction.</sch:assert>
+            >An element xs:sequence MUST be a child of element xs:extension or xs:restriction.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2039,7 +2039,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:choice">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:choice</sch:assert>
+            >The schema MUST NOT contain the element xs:choice</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2054,7 +2054,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:choice">
           <sch:assert test="exists(parent::xs:sequence)"
-            >An element xs:choice must be a child of element xs:sequence.</sch:assert>
+            >An element xs:choice MUST be a child of element xs:sequence.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2158,16 +2158,16 @@ Status
 
 9.3.5.1. No use of xs:any
 
-   [Rule 9-65] (REF, EXT)
+   [Rule 9-65] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:any">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:any.</sch:assert>
+            >The schema MUST NOT contain the element xs:any.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
-   The xs:any particle (see Model Group Restrictions for an informative definition of particle) provides a wildcard that may carry arbitrary content. The particle xs:any may appear within constraint schemas, extension schemas, and exchange schemas.
+   The xs:any particle (see Model Group Restrictions for an informative definition of particle) provides a wildcard that may carry arbitrary content. The particle xs:any may appear within schema documents other than reference schema documents.
 
 9.3.5.2. No use of xs:anyAttribute
 
@@ -2176,7 +2176,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:anyAttribute">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:anyAttribute.</sch:assert>
+            >The schema MUST NOT contain the element xs:anyAttribute.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2193,7 +2193,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:unique">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:unique.</sch:assert>
+            >The schema MUST NOT contain the element xs:unique.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2204,7 +2204,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:key">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:key.</sch:assert>
+            >The schema MUST NOT contain the element xs:key.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2215,7 +2215,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:keyref">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:keyref.</sch:assert>
+            >The schema MUST NOT contain the element xs:keyref.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2226,7 +2226,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:selector">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:selector.</sch:assert>
+            >The schema MUST NOT contain the element xs:selector.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2237,7 +2237,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:field">
           <sch:assert test="false()"
-            >The schema SHALL NOT contain the element xs:field.</sch:assert>
+            >The schema MUST NOT contain the element xs:field.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2420,7 +2420,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:schema">
           <sch:assert test="exists(@version)"
-              >An element xs:schema must have an attribute {}version.</sch:assert>
+              >An element xs:schema MUST have an attribute {}version.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2431,7 +2431,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:schema[exists(@version)]">
           <sch:assert test="string-length(normalize-space(@version)) &gt; 0"
-                      >An attribute version owned by an element xs:schema must not be empty.</sch:assert>
+                      >An attribute version owned by an element xs:schema MUST NOT be empty.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2570,7 +2570,7 @@ Status
 
    [Rule 10-2] (REF, EXT)
 
-      Within the schema, a complex type definition SHALL be one of the following:
+      Within the schema, a complex type definition MUST be one of the following:
 
          1. An object type.
 
@@ -2740,7 +2740,7 @@ Status
                               not(ends-with($type-local-name, 'AssociationType')
                                   or ends-with($type-local-name, 'MetadataType')
                                   or ends-with($type-local-name, 'AugmentationType'))"
-            >The type definition of a RoleOf element SHALL be an object type.</sch:assert>
+            >The type definition of a RoleOf element MUST be an object type.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2759,7 +2759,7 @@ Status
           <sch:assert test="not(ends-with(@name, 'AssociationType')
                                 or ends-with(@name, 'MetadataType')
                                 or ends-with(@name, 'AugmentationType'))"
-            >A complex type that includes a RoleOf element in its content model SHALL be an object type.</sch:assert>
+            >A complex type that includes a RoleOf element in its content model MUST be an object type.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2769,7 +2769,7 @@ Status
 
    [Rule 10-6] (REF, EXT)
 
-      For every [element declaration schema component] that has a local name that begins with the string "RoleOf" SHALL represent a base type, of which the containing type represents a role.
+      For every [element declaration schema component] that has a local name that begins with the string "RoleOf" MUST represent a base type, of which the containing type represents a role.
 
 10.2.2.2.4. Instance of RoleOf element indicates a role object
 
@@ -2833,7 +2833,7 @@ Status
 
    [Rule 10-10] (REF, EXT)
 
-      Within the schema, an adapter type MUST have application information appinfo:ExternalAdapterTypeIndicator with a value of true. A type that is not an adapter type SHALL NOT contain that indicator.
+      Within the schema, an adapter type MUST have application information appinfo:ExternalAdapterTypeIndicator with a value of true. A type that is not an adapter type MUST NOT contain that indicator.
 
    Rationale
 
@@ -2841,11 +2841,11 @@ Status
 
    [Rule 10-11] (REF, EXT)
 
-      Within the schema, an adapter type MUST be an immediate extension of type structures:ComplexObjectType.
+      Within the schema, an adapter type MUST be an immediate extension of type structures:ObjectType.
 
    Rationale
 
-   The adapter type must contain the content defined for any NIEM component. The type structures:ComplexObjectType provides such content.
+   The adapter type must contain the content defined for any NIEM component. The type structures:ObjectType provides such content.
 
    [Rule 10-12] (REF, EXT)
 
@@ -2884,7 +2884,7 @@ Status
       <sch:pattern>
         <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)]">
           <sch:assert test="xs:complexContent"
-            >An external adapter type definition must be a complex type definition with complex content.</sch:assert>
+            >An external adapter type definition MUST be a complex type definition with complex content.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2896,7 +2896,7 @@ Status
         <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)
                                           and exists(xs:complexContent)]">
           <sch:assert test="xs:complexContent/xs:extension"
-            >An external adapter type definition must be use the extension derivation method.</sch:assert>
+            >An external adapter type definition MUST use the extension derivation method.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2921,7 +2921,7 @@ Status
         <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)
                                           and exists(xs:complexContent/xs:extension)]">
           <sch:assert test="exists(xs:complexContent/xs:extension/xs:sequence)"
-            >An external adapter type must use sequence as its top-level compositor.</sch:assert>
+            >An external adapter type MUST use sequence as its top-level compositor.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2990,7 +2990,7 @@ Status
       <xsd:complexType name="AssociationType">
         ...
         <xsd:complexContent>
-          <xsd:extension base="s:ComplexObjectType">
+          <xsd:extension base="s:ObjectType">
           <xsd:sequence>
             <xsd:element ref="nc:AssociationBeginDate" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element ref="nc:AssociationEndDate" minOccurs="0" maxOccurs="unbounded"/>
@@ -3002,7 +3002,7 @@ Status
       <xsd:complexType name="GuardianAssociationType">
         ...
         <xsd:complexContent>
-          <xsd:extension base="nc:AssociationType">
+          <xsd:extension base="s:AssociationType">
           <xsd:sequence>
             <xsd:element ref="nc:PersonGuardianReference" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element ref="nc:PersonDependentReference" minOccurs="0" maxOccurs="unbounded"/>
@@ -3025,31 +3025,11 @@ Status
 
       In a NIEM-conformant schema, an association is an element whose type is an association type.
 
-   [Rule 10-21] (REF, EXT)
-
-      Within the schema, an association type SHALL be a complex type definition that either constitutes a NIEM-conformant component or for which there exists a NIEM-conformant component definition. The NIEM-conformant component definition SHALL have one of the following forms:
-
-         1. Has complex content, is based on the complex type structures:ComplexObjectType, and has application information appinfo:Base of structures:Association.
-
-         2. Is a complex type that is derived from an association type, which is defined according to this rule.
-
-   Rationale
-
-   Associations within reference schemas, extensions schemas, and exchange schemas are easily identifiable as such and have a commonly defined base type. For subset schemas, the NIEM-conformant definition may be located in a primary schema and then identified.
-
-   [Rule 10-22] (REF, EXT)
-
-      Given that an association type defines a relationship between a set of participants, within an association type definition, any element that represents a participant SHALL be a reference element.
-
-   Rationale
-
-   Associations are intended to relate objects defined elsewhere. They are not intended to carry content of participant objects.
-
 10.2.3.1. Association types
 
 10.2.3.1.1. Association types are derived from association types
 
-   [Rule 10-23] (REF, EXT)
+   [Rule 10-21] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3063,13 +3043,13 @@ Status
         </sch:rule>
       </sch:pattern>
 
-   Using the qualifier Association immediately identifies a type as representing an association.
+   Associations are easily identifiable as such and have a commonly defined base type. Using the qualifier Association immediately identifies a type as representing an association.
 
 10.2.3.2. Association element declarations
 
 10.2.3.2.1. Association element is an element of an association type
 
-   [Rule 10-24] (REF, EXT)
+   [Rule 10-22] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3097,45 +3077,45 @@ Status
 
    Augmentation types such as j:PersonAugmentationType, where "j" is the prefix for the NIEM Justice domain, http://release.niem.gov/niem/domains/jxdm/5.0/, exist to extend NIEM Core types such as nc:PersonType without creating a new specialized object within the model. Augmentation types are never applied within the model to the types they are designed to augment. Doing so would restrict reusing and combining these augmentations.
 
-   Instead, augmentation should be applied within IEPDs. So in an IEPD (NOT within NIEM), base nc:PersonType may be extended, for example, as my-iepd:PersonType by adding elements a:PersonAugmentation and b:PersonAugmentation. As a result, my-iepd:PersonType will contain all the properties in nc:PersonType plus the properties in both of the elements a:PersonAugmentation and b:PersonAugmentation, which, in turn, each contain their respective sets of subelements.
+   Instead, augmentation should be applied within MPDs. So in an MPD (NOT within NIEM), base nc:PersonType may be extended, for example, as my-iepd:PersonType by adding elements a:PersonAugmentation and b:PersonAugmentation. As a result, my-iepd:PersonType will contain all the properties in nc:PersonType plus the properties in both of the elements a:PersonAugmentation and b:PersonAugmentation, which, in turn, each contain their respective sets of subelements.
 
-   All NIEM augmentation types extend the abstract type structures:AugmentationType. Therefore, all augmentation types automatically contain the attributes structures:id and structures:metadata for referencing and metadata, respectively. NIEM also provides the abstract element structures:Augmentation (of type structures:AugmentationType) as the common substitution group head for all augmentation elements. An augmentation element placed into this substitution group can be used in an instance wherever structures:Augmentation occurs in the corresponding IEPD schema. The user must follow NIEM naming conventions for augmentation component names and must place new augmentation elements into the structures:Augmentation substitution group. Further, if an augmentation element cannot be applied to all types in the model, then the user must document those types that the new augmentation element can be applied to using the appinfo:AppliesTo element.
+   All NIEM augmentation types extend the abstract type structures:AugmentationType. Therefore, all augmentation types automatically contain the attributes structures:id and structures:metadata for referencing and metadata, respectively. NIEM also provides the abstract element structures:Augmentation (of type structures:AugmentationType) as the common substitution group head for all augmentation elements. An augmentation element placed into this substitution group can be used in an instance wherever structures:Augmentation occurs in the corresponding MPD schema. The user must follow NIEM naming conventions for augmentation component names and must place new augmentation elements into the structures:Augmentation substitution group. Further, if an augmentation element cannot be applied to all types in the model, then the user must document those types that the new augmentation element can be applied to using the appinfo:AppliesTo element.
 
    [Definition: augmentation]
 
       An augmentation of a NIEM-conformant object type is a block of additional data added to an object type to carry additional data beyond that of the original object definition.
 
-   [Rule 10-25] (REF, EXT)
+   [Rule 10-23] (REF, EXT)
 
       An augmentation type:
 
-         1. SHALL be transitively derived from structures:AugmentationType.
+         1. MUST be transitively derived from structures:AugmentationType.
 
-         2. SHALL contain elements that represent properties to be applied to a base type.
+         2. MUST contain elements that represent properties to be applied to a base type.
 
    Rationale
 
    A base type is the type to which an augmentation is to be applied. An augmentation may be applied to any number of types. Base types are assigned by augmentation elements.
 
-   [Rule 10-26] (REF, EXT)
+   [Rule 10-24] (REF, EXT)
 
       Within the schema, an augmentation element definition:
 
-         1. SHALL have a type that is an augmentation type.
+         1. MUST have a type that is an augmentation type.
 
-         2. SHALL use the substitutionGroup attribute such that it is transitively substitutable for the element structures:Augmentation.
+         2. MUST use the substitutionGroup attribute such that it is transitively substitutable for the element structures:Augmentation.
 
-      An element that is not an augmentation element SHALL NOT meet either of the above criteria.
+      An element that is not an augmentation element MUST NOT meet either of the above criteria.
 
    Rationale
 
    An augmentation is trivially identifiable as such. The use of the common structures:Augmentation element allows message builders to optionally delay specifying augmentations to be applied to a type until runtime.
 
-   [Rule 10-27] (REF, EXT)
+   [Rule 10-25] (REF, EXT)
 
       Within the schema, an element definition for an augmentation element MAY contain one or more instances of the element appinfo:AppliesTo as application information to specify types to which the augmentation element applies.
 
-   [Rule 10-28] (REF, EXT)
+   [Rule 10-26] (REF, EXT)
 
       Within the schema, an element definition for an augmentation element that does not contain any instances of the element appinfo:AppliesTo MAY be applied to any object or association type.
 
@@ -3161,7 +3141,7 @@ Status
 
 10.2.4.1.1. Augmentable type has augmentation point
 
-   [Rule 10-29] (REF)
+   [Rule 10-27] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[
@@ -3183,7 +3163,7 @@ Status
 
 10.2.4.2.1. An augmentation point corresponds to an augmentable type
 
-   [Rule 10-30] (REF, EXT)
+   [Rule 10-28] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3203,7 +3183,7 @@ Status
 
 10.2.4.2.2. An augmentation point has no type
 
-   [Rule 10-31] (REF, EXT)
+   [Rule 10-29] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3217,7 +3197,7 @@ Status
 
 10.2.4.2.3. An augmentation point has no substitution group
 
-   [Rule 10-32] (REF, EXT)
+   [Rule 10-30] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3231,7 +3211,7 @@ Status
 
 10.2.4.3.1. Augmentation element may only be referenced by its type
 
-   [Rule 10-33] (REF, EXT)
+   [Rule 10-31] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3246,7 +3226,7 @@ Status
 
 10.2.4.3.2. Augmentation reference is optional
 
-   [Rule 10-34] (REF)
+   [Rule 10-32] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3258,7 +3238,7 @@ Status
 
 10.2.4.3.3. Augmentation reference is unbounded
 
-   [Rule 10-35] (REF)
+   [Rule 10-33] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3270,7 +3250,7 @@ Status
 
 10.2.4.3.4. Augmentation reference must be last particle
 
-   [Rule 10-36] (REF, EXT)
+   [Rule 10-34] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3288,13 +3268,13 @@ Status
 
 10.2.4.4.1. Augmentation type name ends in "AugmentationType"
 
-   [Rule 10-37] (REF, EXT)
+   [Rule 10-35] (REF, EXT)
 
       A [schema component] has a name that ends in "AugmentationType" if and only if it is a [complex type definition] that defines an [augmentation type].
 
 10.2.4.4.2. Augmentation type derived from augmentation type
 
-   [Rule 10-38] (REF, EXT)
+   [Rule 10-36] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[@name[ends-with(., 'AugmentationType')]]">
@@ -3310,7 +3290,7 @@ Status
 
 10.2.4.4.3. Augmentation types are derived from augmentation types
 
-   [Rule 10-39] (REF, EXT)
+   [Rule 10-37] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3330,7 +3310,7 @@ Status
 
 10.2.4.5.1. Augmentation element is an element of an augmentation type
 
-   [Rule 10-40] (REF, EXT)
+   [Rule 10-38] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3352,23 +3332,23 @@ Status
 
       A metadata type describes data about data, that is, information that is not descriptive of objects and their relationships, but is descriptive of the data itself. It is useful to provide a general mechanism for data about data. This provides required flexibility to precisely represent information.
 
-   [Rule 10-41] (REF, EXT)
+   [Rule 10-39] (REF, EXT)
 
-      Within the schema, a metadata type SHALL contain elements appropriate for a specific class of data about data.
+      Within the schema, a metadata type MUST contain elements appropriate for a specific class of data about data.
 
-   [Rule 10-42] (REF, EXT)
+   [Rule 10-40] (REF, EXT)
 
-      Within the schema, a metadata type and only a metadata type SHALL be derived directly from structures:MetadataType.
+      Within the schema, a metadata type and only a metadata type MUST be derived directly from structures:MetadataType.
 
    Rationale
 
    A metadata type establishes a specific, named aggregation of data about data. Any type derived from structures:MetadataType is a metadata type. Metadata types should not be derived from other metadata types. Such metadata types should be used asis and additional metadata types defined for additional content.
 
-   [Rule 10-43] (REF, EXT)
+   [Rule 10-41] (REF, EXT)
 
       Within the schema, a metadata type MAY have application information appinfo:AppliesTo, indicating the NIEM-conformant object, association, or external adapter types to which the metadata applies.
 
-   [Rule 10-44] (REF, EXT)
+   [Rule 10-42] (REF, EXT)
 
       Within the schema, a metadata type that does not have application information appinfo:AppliesTo MAY be applied to any object type, association type, or external adapter type.
 
@@ -3378,7 +3358,7 @@ Status
 
 10.2.5.2. Metadata types are derived from metadata types
 
-   [Rule 10-45] (REF, EXT)
+   [Rule 10-43] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3420,7 +3400,7 @@ Status
 
 10.4.1. Extension of XSD namespace simple types
 
-   [Rule 10-46] (REF, EXT)
+   [Rule 10-44] (REF, EXT)
 
       Within the schema, a complex type that is a direct extension of a simple type from the XML Schema namespace simple type MAY use the same local name as the simple type if and only if the extension adds no content other than the attribute group structures:SimpleObjectAttributeGroup.
 
@@ -3430,9 +3410,9 @@ Status
 
 10.4.2. Usage of English
 
-   [Rule 10-47] (REF, EXT)
+   [Rule 10-45] (REF, EXT)
 
-      The name of any XML Schema component defined by the schema SHALL be composed of words from the English language, using the prevalent U.S. spelling, as provided by [OED].
+      The name of any XML Schema component defined by the schema MUST be composed of words from the English language, using the prevalent U.S. spelling, as provided by [OED].
 
    Rationale
 
@@ -3440,9 +3420,9 @@ Status
 
 10.4.3. Characters in names
 
-   [Rule 10-48] (REF, EXT)
+   [Rule 10-46] (REF, EXT)
 
-      The name of any XML Schema component defined by the schema SHALL contain only the following characters:
+      The name of any XML Schema component defined by the schema MUST contain only the following characters:
 
          *  Upper-case letters ("A"-"Z").
 
@@ -3452,9 +3432,9 @@ Status
 
          *  Hyphen ("-").
 
-      Other characters, such as the underscore ("_") character and the period (".") character SHALL NOT appear in component names in NIEM-conformant schemas.
+      Other characters, such as the underscore ("_") character and the period (".") character MUST NOT appear in component names in NIEM-conformant schemas.
 
-   [Rule 10-49] (REF, EXT)
+   [Rule 10-47] (REF, EXT)
 
       The hyphen character ("-") MAY appear in component names only when used as a separator between parts of a single word, phrase, or value, which would otherwise be incomprehensible without the use of a separator.
 
@@ -3472,17 +3452,17 @@ Status
 
 10.4.4.1. Names use camel case
 
+   [Rule 10-48] (REF, EXT)
+
+      The name of any XML Schema component defined by the schema MUST use the camel case formatting convention.
+
+   [Rule 10-49] (REF, EXT)
+
+      Within the schema, any attribute declaration MUST have a name that begins with a lower-case letter ("a"-"z").
+
    [Rule 10-50] (REF, EXT)
 
-      The name of any XML Schema component defined by the schema SHALL use the camel case formatting convention.
-
-   [Rule 10-51] (REF, EXT)
-
-      Within the schema, any attribute declaration SHALL have a name that begins with a lower-case letter ("a"-"z").
-
-   [Rule 10-52] (REF, EXT)
-
-      Within the schema, any XML Schema component other than an attribute declaration SHALL have a name that begins with an upper-case letter ("A"-"Z").
+      Within the schema, any XML Schema component other than an attribute declaration MUST have a name that begins with an upper-case letter ("A"-"Z").
 
    The foregoing rules establish lowerCamelCase for all NIEM components that are XML attributes and UpperCamelCase for all NIEM components that are types, elements, or groups.
 
@@ -3490,7 +3470,7 @@ Status
 
    Acronyms and abbreviations have the ability to improve readability and comprehensibility of large, complex, or frequently used terms. They also obscure meaning and impair understanding when their definitions are not clear or when they are used injudiciously. They should be used with great care. Acronyms and abbreviations that are used must be documented and used consistently.
 
-   [Rule 10-53] (REF, EXT)
+   [Rule 10-51] (REF, EXT)
 
       The schema MUST consistently use approved acronyms, abbreviations, and word truncations within defined names. The approved shortened forms are defined in Table Table 10-1, Abbreviations used in NIEM core names.
 
@@ -3570,17 +3550,17 @@ Status
 
 10.4.6. Word forms
 
-   [Rule 10-54] (REF, EXT)
+   [Rule 10-52] (REF, EXT)
 
       A noun used as a term in the name of an XML Schema component MUST be in singular form unless the concept itself is plural.
 
-   [Rule 10-55] (REF, EXT)
+   [Rule 10-53] (REF, EXT)
 
       A verb used as a term in the name of an XML Schema component MUST be used in the present tense unless the concept itself is past tense.
 
-   [Rule 10-56] (REF, EXT)
+   [Rule 10-54] (REF, EXT)
 
-      Articles, conjunctions, and prepositions SHALL NOT be used in NIEM component names except where they are required for clarity or by standard convention.
+      Articles, conjunctions, and prepositions MUST NOT be used in NIEM component names except where they are required for clarity or by standard convention.
 
    Rationale
 
@@ -3590,9 +3570,9 @@ Status
 
    Elements in NIEM-conformant schemas are given names that follow a specific pattern. This pattern comes from [ISO 11179-5].
 
-   [Rule 10-57] (REF, EXT)
+   [Rule 10-55] (REF, EXT)
 
-      Except as specified elsewhere in this document, any element or attribute defined within the schema SHALL have a name that takes the form:
+      Except as specified elsewhere in this document, any element or attribute defined within the schema MUST have a name that takes the form:
 
          *  Object-class qualifier terms (0 or more).
 
@@ -3614,9 +3594,9 @@ Status
 
    The NIEM adopts an object-oriented approach to representation of data. Object classes represent what [ISO 11179-5] refers to as "things of interest in a universe of discourse that may be found in a model of that universe." An object class or object term is a word that represents a class of real-world entities or concepts. An object-class term describes the applicable context for a NIEM component.
 
-   [Rule 10-58] (REF, EXT)
+   [Rule 10-56] (REF, EXT)
 
-      The object-class term of a NIEM component SHALL consist of a term identifying a category of concrete concepts or entities.
+      The object-class term of a NIEM component MUST consist of a term identifying a category of concrete concepts or entities.
 
    Rationale
 
@@ -3632,9 +3612,9 @@ Status
 
    Objects or concepts are usually described in terms of their characteristic properties, data attributes, or constituent subparts. Most objects can be described by several characteristics. Therefore, a property term in the name of a data component represents a characteristic or subpartof an object class and generally describes the essence of that data component.
 
-   [Rule 10-59] (REF, EXT)
+   [Rule 10-57] (REF, EXT)
 
-      A property term SHALL describe or represent a characteristic or subpart of an entity or concept.
+      A property term MUST describe or represent a characteristic or subpart of an entity or concept.
 
    Rationale
 
@@ -3644,17 +3624,17 @@ Status
 
    Qualifier terms modify object, property, representation, or other qualifier terms to increase semantic precision and reduce ambiguity. Qualifier terms may precede or succeed the terms they modify. The goal for the placement of qualifier terms is to generally follow the rules of ordinary English while maintaining clarity.
 
-   [Rule 10-60] (REF, EXT)
+   [Rule 10-58] (REF, EXT)
 
       Multiple qualifier terms MAY be used within a component name as necessary to ensure clarity and uniqueness within its namespace and usage context.
 
-   [Rule 10-61] (REF, EXT)
+   [Rule 10-59] (REF, EXT)
 
       The number of qualifier terms SHOULD be limited to the absolute minimum required to make the component name unique and understandable.
 
-   [Rule 10-62] (REF, EXT)
+   [Rule 10-60] (REF, EXT)
 
-      The order of qualifiers SHALL NOT be used to differentiate names.
+      The order of qualifiers MUST NOT be used to differentiate names.
 
    Rationale
 
@@ -3670,7 +3650,7 @@ Status
 
       3. It indicates the nature of the value carried by element. Labeling elements and attributes with a notional indicator of the content eases discovery and comprehension.
 
-   [Rule 10-63] (REF, EXT)
+   [Rule 10-61] (REF, EXT)
 
       If any word in the representation term is redundant with any word in the property term, one occurrence SHOULD be deleted.
 
@@ -3680,15 +3660,15 @@ Status
 
    The valid value set of a data element or value domain is described by the representation term. NIEM uses a standard set of representation terms in the representation portion of a NIEM-conformant component name. Table Table 11-1, Representation terms, below, lists the primary representation terms and a definition for the concept associated with the use of that term. The table also lists secondary representation terms that may represent more specific uses of the concept associated with the primary representation term.
 
-   [Rule 10-64] (REF, EXT)
+   [Rule 10-62] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of simple content MUST use a representation term found in Table Table 11-1, Representation terms.
 
-   [Rule 10-65] (REF, EXT)
+   [Rule 10-63] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content, and that corresponds to a concept listed in Table Table 11-1, Representation terms, MUST use a representation term from that table.
 
-   [Rule 10-66] (REF, EXT)
+   [Rule 10-64] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content and that does not correspond to a concept listed in Table Table 11-1, Representation terms MUST NOT use a representation term.
 
@@ -3732,7 +3712,7 @@ Status
 
 10.5.1. Machine-readable annotations are valid
 
-   [Rule 10-67] (REF, EXT)
+   [Rule 10-65] (REF, EXT)
 
       Every element information item or attribute information item that appears as a machine-readable annotation in a schema MUST be a valid instance, according to its specification.
 
@@ -3758,15 +3738,15 @@ Status
 
 10.5.2.1.1. A component marked as deprecated is a deprecated component
 
-   [Rule 10-68] (REF, EXT)
+   [Rule 10-66] (REF, EXT)
 
-      A [schema component] that has an attribute appinfo:deprecated with a value of "true" SHALL be a [deprecated component].
+      A [schema component] that has an attribute appinfo:deprecated with a value of "true" MUST be a [deprecated component].
 
    Deprecation can allow version management to be more consistent; versions of schema may be incrementally improved without introducing validation problems and incompatibility. As XML Schema lacks a deprecation mechanism, NIEM defines such a mechanism.
 
 10.5.2.1.2. Deprecated annotates schema component
 
-   [Rule 10-69] (REF, EXT)
+   [Rule 10-67] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:deprecated)]">
@@ -3777,7 +3757,7 @@ Status
 
 10.5.2.2. External import indicator annotates import
 
-   [Rule 10-70] (REF, EXT)
+   [Rule 10-68] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:externalImportIndicator)]">
@@ -3788,7 +3768,7 @@ Status
 
 10.5.2.3. External adapter type indicator annotates complex type
 
-   [Rule 10-71] (REF)
+   [Rule 10-69] (REF)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:externalAdapterTypeIndicator)]">
@@ -3801,7 +3781,7 @@ Status
 
 10.5.2.4.1. Applies to types annotates metadata element
 
-   [Rule 10-72] (REF, EXT)
+   [Rule 10-70] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
@@ -3813,7 +3793,7 @@ Status
 
 10.5.2.4.2. Applies to types indicates elements
 
-   [Rule 10-73] (SET)
+   [Rule 10-71] (SET)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
@@ -3827,7 +3807,7 @@ Status
 
 10.5.2.5.1. Applies to elements annotates metadata element
 
-   [Rule 10-74] (REF, EXT)
+   [Rule 10-72] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToElements)]">
@@ -3840,13 +3820,13 @@ Status
 
 10.5.2.5.2. Applies to elements indicates elements
 
-   [Rule 10-75] (SET)
+   [Rule 10-73] (SET)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToElements)]">
           <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies
                               count(nf:resolve-element(., resolve-QName($item, .))) = 1"
-            >Every item in @appinfo:appliesToElements must resolve to an element.</sch:assert>
+            >Every item in @appinfo:appliesToElements MUST resolve to an element.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3854,7 +3834,7 @@ Status
 
 10.5.3.1. LocalTerm annotates schema
 
-   [Rule 10-76] (REF, EXT)
+   [Rule 10-74] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="term:LocalTerm">
@@ -3865,7 +3845,7 @@ Status
 
 10.5.3.2. LocalTerm has literal or definition
 
-   [Rule 10-77] (REF, EXT)
+   [Rule 10-75] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="term:LocalTerm">
@@ -4328,15 +4308,15 @@ Status
 
    [Rule 11-24] (REF, EXT)
 
-      Words or synonyms for the words within a data element definition SHALL NOT be reused as terms in the corresponding component name if those words dilute the semantics and understanding of, or impart ambiguity to, the entity or concept that the component represents.
+      Words or synonyms for the words within a data element definition MUST NOT be reused as terms in the corresponding component name if those words dilute the semantics and understanding of, or impart ambiguity to, the entity or concept that the component represents.
 
    [Rule 11-25] (REF, EXT)
 
-      An object class SHALL have one and only one associated semantic meaning (i.e., a single word sense) as described in the definition of the component that represents that object class.
+      An object class MUST have one and only one associated semantic meaning (i.e., a single word sense) as described in the definition of the component that represents that object class.
 
    [Rule 11-26] (REF, EXT)
 
-      An object class SHALL NOT be redefined within the definitions of the components that represent properties or subparts of that entity or class.
+      An object class MUST NOT be redefined within the definitions of the components that represent properties or subparts of that entity or class.
 
    Rationale
 
@@ -4344,7 +4324,7 @@ Status
 
    [Rule 11-27] (REF, EXT)
 
-      A data definition SHALL NOT contain explicit representational or data typing information such as number characters, type of characters, etc., unless the very nature of the component can be described only by such information.
+      A data definition MUST NOT contain explicit representational or data typing information such as number characters, type of characters, etc., unless the very nature of the component can be described only by such information.
 
    Rationale
 
@@ -4374,7 +4354,7 @@ Status
 
    [Rule 11-28] (REF, EXT)
 
-      A component definition SHALL begin with a standard opening phrase that depends on the class of the component per Table Table 11-2, Standard opening phrases.
+      A component definition MUST begin with a standard opening phrase that depends on the class of the component per Table Table 11-2, Standard opening phrases.
 
    Table 11-2: Standard opening phrases
 
@@ -4426,7 +4406,7 @@ Status
 
    [Rule 11-29] (REF, EXT)
 
-      Each [data definition] SHALL conform to the requirements for data definitions provided by [ISO 11179-4] section 5.2, Requirements.
+      Each [data definition] MUST conform to the requirements for data definitions provided by [ISO 11179-4] section 5.2, Requirements.
 
 11.4.3. Data definition follows 11179-4 recommendations
 
@@ -4440,11 +4420,11 @@ Status
 
    [Rule 11-31] (REF, EXT)
 
-      Two XML Schema documents SHALL have the same value for attribute targetNamespace carried by the element xs:schema, if and only if they represent the same set of components.
+      Two XML Schema documents MUST have the same value for attribute targetNamespace carried by the element xs:schema, if and only if they represent the same set of components.
 
    [Rule 11-32] (REF, EXT)
 
-      Two XML Schema documents SHALL have the same value for attribute targetNamespace carried by the element xs:schema, and different values for attribute version carried by the element xs:schema if and only if they are different views of the same set of components.
+      Two XML Schema documents MUST have the same value for attribute targetNamespace carried by the element xs:schema, and different values for attribute version carried by the element xs:schema if and only if they are different views of the same set of components.
 
    Rationale
 
@@ -4507,7 +4487,7 @@ Status
         <sch:rule context="xs:import[exists(@namespace)
                                      and xs:anyURI(@namespace) = xs:anyURI('urn:us:gov:ic:ism')]">
           <sch:assert test="empty(@appinfo:externalImportIndicator)"
-            >The namespace for IC-ISM MUST be imported as conformant.</sch:assert>
+            >An import of the namespace for IC-ISM MUST NOT be marked as an external import.</sch:assert>
         </sch:rule>
       </sch:pattern>          
 
@@ -4519,7 +4499,7 @@ Status
         <sch:rule context="xs:import[exists(@namespace)
                                      and xs:anyURI(@namespace) = xs:anyURI('urn:us:gov:ic:ntk')]">
           <sch:assert test="empty(@appinfo:externalImportIndicator)"
-            >The namespace for IC-NTK MUST be imported as conformant.</sch:assert>
+            >An import of the namespace for IC-NTK MUST NOT be marked as an external import.</sch:assert>
         </sch:rule>
       </sch:pattern>          
 
@@ -4556,7 +4536,7 @@ Status
 
 12. XML instance document rules
 
-   This specification attempts to restrict XML instance data as little as possible while still maintaining interoperability. Section 2.6, NIEM-Conformant XML Documents and Elements, defines terminology for NIEM-conformance and XML documents.
+   This specification attempts to restrict XML instance data as little as possible while still maintaining interoperability.
 
    NIEM does not require a specific encoding or specific requirements for the XML prologue, except as specified by [XML].
 
@@ -4658,7 +4638,7 @@ Status
         <sch:rule context="*[@structures:ref]">
           <sch:let name="ref" value="@structures:ref"/>
           <sch:assert test="exists(//*[@structures:id = $ref])"
-            >The value of an attribute structures:ref must match the value of an attribute structures:id of some element in the XML document.</sch:assert>
+            >The value of an attribute structures:ref MUST match the value of an attribute structures:id of some element in the XML document.</sch:assert>
         </sch:rule>
       </sch:pattern>            
 
@@ -4758,7 +4738,7 @@ Status
 
    [Rule 12-7] (INS)
 
-      Within the instance, the meaning of an element with no content is that additional properties are not asserted. There SHALL NOT be additional meaning interpreted for an element with no content.
+      Within the instance, the meaning of an element with no content is that additional properties are not asserted. There MUST NOT be additional meaning interpreted for an element with no content.
 
    Rationale
 
@@ -4844,11 +4824,11 @@ Status
 
    [Rule 12-8] (INS)
 
-      Within an element instance, when an object O links to a metadata object via an attribute structures:metadata, the information in the metadata object SHALL be applied to the object O.
+      Within an element instance, when an object O links to a metadata object via an attribute structures:metadata, the information in the metadata object MUST be applied to the object O.
 
    [Rule 12-9] (INS)
 
-      Within an element instance, when an object O1 contains an element E, with content object O2 or with a reference to object O2, and O2 links to a metadata object via an attribute structures:relationshipMetadata, the information in the metadata object SHALL be applied to the relationship E between O1 and O2.
+      Within an element instance, when an object O1 contains an element E, with content object O2 or with a reference to object O2, and O2 links to a metadata object via an attribute structures:relationshipMetadata, the information in the metadata object MUST be applied to the relationship E between O1 and O2.
 
    Rationale
 
