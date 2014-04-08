@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+. "$(dirname "$0")"/../../../lib/fn_test.bash
+test_process_args "$@"
+
+# Test Rule 10-69 adapter type indicator annotates complex type
+test_set_stdout <<EOF
+8:successful-report:is-ctas-conformant-document
+8:successful-report:well-formed-xml
+8:successful-report:ns-well-formed
+8:successful-report:ns-valid
+8:successful-report:is-schema-doc
+8:successful-report:target-ns-is-rfc3986
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml ext-adapt.xsd
+
+# Test Rule 10-69 External adapter type indicator annotates complex type
+# This should fail, because the annotation is not on a complex type. But it doesn't ?!
+test_set_stdout <<EOF
+6:successful-report:is-ctas-conformant-document
+6:successful-report:well-formed-xml
+6:successful-report:ns-well-formed
+6:successful-report:ns-valid
+6:successful-report:is-schema-doc
+6:successful-report:target-ns-is-rfc3986
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml ext-adapt-biblio-invalid.xsd
+
+test_exit
+
+
