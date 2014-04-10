@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+. "$(dirname "$0")"/../../../lib/fn_test.bash
+test_process_args "$@"
+
+cd "$NDR_TOOLS_COMMAND_DIR"
+
+# Test Rule 10-70 owner of appinfo-appliestotypes
+test_set_stdout <<EOF
+8:successful-report:is-ctas-conformant-document
+8:successful-report:well-formed-xml
+8:successful-report:ns-well-formed
+8:successful-report:ns-valid
+8:successful-report:is-schema-doc
+8:successful-report:target-ns-is-rfc3986
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml metadata.xsd
+
+# Test Rule 10-70 owner of appinfo-appliestotypes
+# This should fail, because the annotation does not apply to a type.
+test_set_stdout <<EOF
+7:successful-report:is-ctas-conformant-document
+7:failed-assert:req-ct-ext
+7:successful-report:well-formed-xml
+7:successful-report:ns-well-formed
+7:successful-report:ns-valid
+7:successful-report:is-schema-doc
+7:successful-report:target-ns-is-rfc3986
+17:failed-assert:rule-owner-of-appinfo-appliestotypes
+44:failed-assert:rule-el-csc-uses-rep-term
+25:failed-assert:att-name-uses-rep-term
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml invalid1.xsd
+
+# Test Rule 10-70 owner of appinfo-appliestotypes
+# This should fail because the annotation applies to an element
+test_set_stdout <<EOF
+8:successful-report:is-ctas-conformant-document
+8:successful-report:well-formed-xml
+8:successful-report:ns-well-formed
+8:successful-report:ns-valid
+8:successful-report:is-schema-doc
+8:successful-report:target-ns-is-rfc3986
+18:failed-assert:rule-owner-of-appinfo-appliestotypes
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml metadataInvalid.xsd
+
+test_exit
+
+
