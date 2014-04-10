@@ -24,6 +24,7 @@ test_set_stdout <<EOF
 6:successful-report:ns-valid
 6:successful-report:is-schema-doc
 6:successful-report:target-ns-is-rfc3986
+18:failed-assert:rule-owner-of-appinfo-externaladaptertypeindicator
 EOF
 
 test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml ext-adapt-biblio-invalid.xsd
