@@ -1,6 +1,6 @@
 National Information Exchange Model Naming and Design Rules
 
-Version 3.0alpha10
+Version 3.0alpha11pre1
 
 April 16, 2014
 
@@ -24,11 +24,11 @@ Authors
 
 Abstract
 
-   This document specifies the data model, XML components, and XML data for use with the National Information Exchange Model (NIEM) version 3.0.
+   This document specifies the data model, XML Schema components, and XML data for use with the National Information Exchange Model (NIEM) version 3.0.
 
 Status
 
-   This document is draft of the specification for NIEM-conformant XML Schema documents, components, and instances. It represents the design that has evolved from the collaborative work of the NIEM Business Architecture Committee (NBAC) and the NIEM Technical Architecture Committee (NTAC) and their predecessors.
+   This document is a draft of the specification for NIEM-conformant XML Schema documents, components, and instances. It represents the design that has evolved from the collaborative work of the NIEM Business Architecture Committee (NBAC), the NIEM Technical Architecture Committee (NTAC), and their predecessors.
 
    This specification is a product of the NIEM Program Management Office (PMO).
 
@@ -40,7 +40,7 @@ Status
 
    NIEM specifies a set of reusable information components for defining standard information exchange messages, transactions, and documents on a large scale: across multiple communities of interest and lines of business. These reusable components are rendered in XML Schema documents as type, element, and attribute definitions that comply with the W3C XML Schema specification. The resulting reference schemas are available to government practitioners and developers at http://niem.gov/.
 
-   The W3C XML Schema standard enables information interoperability and sharing by providing a common language for describing data precisely. The constructs it defines are basic metadata building blocks -- baseline data types and structural components. Users employ these building blocks to describe their own domain-oriented data semantics and structures, as well as structures for specific information exchanges and components for reuse across multiple information exchanges. Rules that profile allowable XML Schema constructs and describe how to use them help ensure that those components are consistent and reusable.
+   The W3C XML Schema standard enables information interoperability and sharing by providing a common language for describing data precisely. The constructs it defines are basic metadata building blocks -- baseline data types and structural components. Developers employ these building blocks to describe their own domain-oriented data semantics and structures, as well as structures for specific information exchanges and components for reuse across multiple information exchanges. Rules that profile allowable XML Schema constructs and describe how to use them help ensure that those components are consistent and reusable.
 
    This document specifies principles and enforceable rules for NIEM data components and schemas. Schemas and components that obey the rules set forth here are considered to be NIEM-conformant.
 
@@ -76,7 +76,7 @@ Status
 
 1.2. Audience
 
-   This document targets practitioners and developers who employ NIEM for information exchange and interoperability. Such information exchanges may be between or within organizations. The NIEM reference schemas provide system implementers much content on which to build specific exchanges. However, there is a need for extended and additional content. The purpose of this document is to define the rules for such new content so that it will be consistent with the NIEM reference schemas. These rules are intended to establish and, more important, enforce a degree of standardization across a broad set of users.
+   This document targets practitioners and developers who employ NIEM for information exchange and interoperability. Such information exchanges may be between organizations or within an organization. The NIEM reference schemas provide system implementers much content on which to build specific exchanges. However, there is a need for extended and additional content. The purpose of this document is to define the rules for such new content, so that it will be consistent with the NIEM reference schemas. These rules are intended to establish and, more importantly, enforce a degree of standardization across a broad set of users.
 
 2. Document conventions and normative content
 
@@ -86,41 +86,25 @@ Status
 
    This document relies on references to many outside documents. Such references are noted by bold, bracketed inline terms. For example, a reference to RFC 2119 is shown as [RFC 2119]. All reference documents are recorded in Appendix A, References, below.
 
-2.2. Formatting
-
-   In addition to special formatting for definitions, principles, and rules, this document uses consistent formatting to identify NIEM components.
-
-   Courier: All words appearing in Courier font are values, objects, keywords, or literal XML text.
-
-   Italics: All words appearing in italics, when not titles or used for emphasis, are special terms with definitions appearing in this document.
-
-   Throughout the document, fragments of XML Schema or XML instances are used to clarify a principle or rule. These fragments are specially formatted in Courier font and appear in text boxes. An example of such a fragment follows:
-
-   Figure 2-1: Example of an XML fragment
-
-      <xsd:complexType name="PersonType">
-        ...
-      </xsd:complexType>
-
-2.3. Clark notation and qualified names
+2.2. Clark notation and qualified names
 
    This document uses both Clark notation and QName notation to represent qualified names.
 
-   QName notation is defined by [XML Namespaes] section 4, Qualified Names. A QName for the XML Schema string datatype is xs:string. Namespace prefixes used within this specification are listed in Section 2.4, Use of namespaces, below.
+   QName notation is defined by [XML Namespaes] section 4, Qualified Names. A QName for the XML Schema string datatype is xs:string. Namespace prefixes used within this specification are listed in Section 2.3, Use of namespaces and namespace prefixes, below.
 
-   This document sometimes uses Clark notation to represent qualified names in normative text. Clark notation is described by [ClarkNS], and provides the information in an XML qualified name (as defined by [XML Namespaes]) without the need to define a namespace prefix and then reference that namespace prefix. A Clark notation representation for the qualified name for the XML Schema string datatype is {http://www.w3.org/2001/XMLSchema}string.
+   This document sometimes uses Clark notation to represent qualified names in normative text. Clark notation is described by [ClarkNS], and provides the information in a qualified name without the need to first define a namespace prefix, and then to reference that namespace prefix. A Clark notation representation for the qualified name for the XML Schema string datatype is {http://www.w3.org/2001/XMLSchema}string.
 
-   Each Clark notation value consists of a namespace URI surrounded by curly braces, concatenated with a local name. Clark notation is frequently used to represent the qualified name for an attribute with no namespace, which is ambiguous when represented using QName notation. For example, the element targetNamespace, which has no [namespace name] property, is represented in Clark notation as {}targetNamespace.
+   Each Clark notation value usually consists of a namespace URI surrounded by curly braces, concatenated with a local name. The exception to this is when Clark notation is used to represent the qualified name for an attribute with no namespace, which is ambiguous when represented using QName notation. For example, the element targetNamespace, which has no [namespace name] property, is represented in Clark notation as {}targetNamespace.
 
-2.4. Use of namespaces
+2.3. Use of namespaces and namespace prefixes
 
-   The following namespace prefixes are used consistently within this specification. These prefixes are not normative; this document issues no requirement that these prefixes be used in any conformant artifact.
+   The following namespace prefixes are used consistently within this specification. These prefixes are not normative; this document issues no requirement that these prefixes be used in any conformant artifact. Although there is no requirement for a schema or XML document to use a particular namespace prefix, the meaning of the following namespace prefixes have fixed meaning in this document.
 
       *  xs: The namespace for the XML Schema definition language as defined by [XML Schema Structures] and [XML Schema Datatypes], "http://www.w3.org/2001/XMLSchema".
 
       *  xsi: The XML Schema instance namespace, defined by [XML Schema Structures] section 2.6, Schema-Related Markup in Documents Being Validated, for use in XML documents, "http://www.w3.org/2001/XMLSchema-instance".
 
-      *  sch: The Schematron namespace URI, as defined by [Schematron], "http://purl.oclc.org/dsdl/schematron".
+      *  sch: The Schematron namespace, as defined by [Schematron], "http://purl.oclc.org/dsdl/schematron".
 
       *  nf: The namespace defined by this specification for XPath functions, "http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions".
 
@@ -132,7 +116,7 @@ Status
 
       *  term: The namespace for the [local terminology appinfo namespace], "http://release.niem.gov/niem/localTerminology/3.0/".
 
-2.5. Normative and informative content
+2.4. Normative and informative content
 
    This document includes a variety of content. Some content is normative (binding and enforceable in implementations), while other content is informative (explanatory, but not part of the NIEM specification). In general, the informative material appears as supporting text and specific rationales for the normative material.
 
@@ -154,7 +138,7 @@ Status
 
    Principles are numbered in the order in which they appear in the document.
 
-2.5.1. Rules
+2.4.1. Rules
 
    Rules state specific requirements on artifacts or on the interpretation of artifacts. The classes of artifacts are identified by [conformance targets] that are enumerated by this document in Section 4.1, Conformance targets defined, below. The rules are normative.
 
@@ -178,7 +162,7 @@ Status
 
    Rules are numbered according to the section in which they appear and the order in which they appear within that section. For example, Rule 6-1 is the first rule in Section 6.
 
-2.6. Use of normative Schematron
+2.5. Use of normative Schematron
 
    This document defines many normative rules using Schematron rule-based validation syntax, as defined by [Schematron]. Effort has been made to make the rules precise and unambiguous. Very detailed text descriptions of rules can introduce ambiguity, and they are not directly executable by users. Providing NDR rules that are expressed as Schematron rules ensures that the rules are precise, and that they are directly executable through commercially-available and free tools.
 
@@ -196,7 +180,7 @@ Status
 
    In either case, the Schematron reporting mechanism may be used to identify specific location within artifacts that need further attention. 
 
-2.7. Normative XPath functions
+2.6. Normative XPath functions
 
    The Schematron within this document is supported by functions, to make the rules more comprehensible, and to abstract away process-specific operations. Each function has a normative XPath interface and a normative text definition. Any implementation provided for these functions should be considered informative, not normative, but may be useful for certain implementations of the rules.
 
@@ -228,11 +212,11 @@ Status
 
          Yields true if and only if an [effective conformance target identifier] of the XML document containing $context is $match.
 
-2.8. Normative Schematron namespace declarations
+2.7. Normative Schematron namespace declarations
 
    The following Schematron namespace declarations are normative for the Schematron rules and supporting code within this specification:
 
-   Figure 2-2: Normative Schematron namespace declarations
+   Figure 2-1: Normative Schematron namespace declarations
 
       <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
       <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
@@ -244,6 +228,28 @@ Status
       <sch:ns prefix="term" uri="http://release.niem.gov/niem/localTerminology/3.0/"/>
 
    Note that the binding of the prefix xml to the XML namespace ("http://www.w3.org/XML/1998/namespace") is implicit.
+
+2.8. Additional formatting
+
+   In addition to special formatting for definitions, principles, and rules, this document uses additional formatting conventions.
+
+   Courier: All words appearing in Courier font are values, objects, keywords, or literal XML text.
+
+   Italics: A phrase appearing in italics is one of:
+
+      *  a title of a section of document or a rule,
+
+      *  a locally-defined term, often one that is not normatively defined, or
+
+      *  is emphasized for importance or prominence.
+
+   Throughout the document, fragments of XML Schema or XML instances are used to clarify a principle or rule. These fragments are specially formatted in Courier font and appear in text boxes. An example of such a fragment follows:
+
+   Figure 2-2: Example of an XML fragment
+
+      <xsd:complexType name="PersonType">
+        ...
+      </xsd:complexType>
 
 3. Terminology
 
@@ -466,8 +472,6 @@ Status
 
       *  Each element information item within the XML document that has a namespace name matching the target namespace of a [conformant reference schema document] or [conformant extension schema document] is a [conformant element information item].
 
-   {Just make these term references}
-
    In this definition and the next definition below, the term XML document is as specified in [XML]. The terms document information item, document element, element information item, namespace name, and local name are as specified in [XML Infoset]. The term valid is as specified in [XML Schema Structures].
 
    Schema-validity may be assessed against a single set of schemas or against multiple sets of schemas. Assessment against schemas is as directed by an MPD, other instructions, or tools.
@@ -508,7 +512,7 @@ Status
 
    The term [conformance target identifier] is defined by [CTAS].
 
-4.3.1. Schema is CTAS-conformant
+Rule 4-1. Schema is CTAS-conformant
 
    [Rule 4-1] (REF, EXT)
 
@@ -520,7 +524,7 @@ Status
 
    The term "conformant document" is defined by [CTAS] section 3.2, Conformance to this Specification.
 
-4.3.2. Document element has conformanceTargets
+Rule 4-2. Document element has conformanceTargets
 
    [Rule 4-2] (REF, EXT)
 
@@ -534,7 +538,7 @@ Status
 
    The term "document element" is as described by Section 3.3, XML Information Set terminology, above.
 
-4.3.3. Schema claims reference schema conformance target.
+Rule 4-3. Schema claims reference schema conformance target.
 
    [Rule 4-3] (REF)
 
@@ -545,7 +549,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-4.3.4. Schema claims extension conformance target
+Rule 4-4. Schema claims extension conformance target
 
    [Rule 4-4] (EXT)
 
@@ -1049,7 +1053,7 @@ Status
 
 7.4. ISO 11179 Part 4
 
-   Good data definitions are fundamental to data interoperability. You cannot effectively exchange what you cannot understand. NIEM employs the guidance of [ISO 11179-4] as a baseline for its data component definitions. [ISO 11179-4] All NIEM components are documented.
+   Good data definitions are fundamental to data interoperability. You cannot effectively exchange what you cannot understand. NIEM employs the guidance of [ISO 11179-4] as a baseline for its data component definitions.
 
    To advance the goal of creating semantically rich NIEM-conformant schemas, it is necessary that data definitions be descriptive, meaningful, and precise. [ISO 11179-4] provides standard structure and rules for defining data definitions. NIEM uses this standard for component definitions.
 
@@ -1179,8 +1183,6 @@ Status
 
       *  Element and type declarations in a [conformant reference schema document] may not use block or final.
 
-   {Add, to the above, cross-references to specific rules}
-
 8.3. Avoid recursive model groups
 
    XML Schema provides the capability for model groups to be recursively defined. This means that a sequence may contain a sequence, and a choice may contain a choice. These rules are designed to keep content models simple, comprehensive, and reusable: The content of an element should boil down to a simple list of elements, defined in as straightforward a manner as is possible to meet requirements.
@@ -1233,8 +1235,6 @@ Status
    * Section 9.6, Annotation components
    * Section 9.7, Schema as a whole
    * Section 9.8, Schema assembly
-
-   {add issue about requiring imports of referenced components}
 
 9.1. Type definition components
 
@@ -1873,7 +1873,7 @@ Status
 
 9.2.1.11. Element declaration is nillable
 
-   All elements declared by reference schemas allow a nil value. This enables the ID/IDREF mechanism linking structures:ref and structures:id, as described by Section 12.3, Reference elements, below.
+   All elements declared by reference schemas allow a nil value. This enables the ID/IDREF mechanism linking structures:ref and structures:id, as described by Section 12.2, Reference elements, below.
 
    A developer may constrain the use of nil in instance by setting nillable to false in subset schemas, or by use of non-XML Schema mechanisms, such as Schematron.
 
@@ -2048,8 +2048,6 @@ Status
 
    The element xs:all provides a set of particles (e.g., elements) that may be included in an instance, in no particular order. This can greatly complicate processing and may be difficult to comprehend and satisfy.
 
-   
-
 9.3.1.3. Sequence
 
 9.3.1.3.1. xs:sequence must be child of xs:extension
@@ -2164,7 +2162,7 @@ Status
 
 9.3.3. Attribute use
 
-9.3.3.1. Attribute ref defined by conformant schemas
+9.3.3.1. Referenced attribute defined by conformant schemas
 
    [Rule 9-63] (REF, EXT)
 
@@ -2319,20 +2317,20 @@ Status
 
 9.6. Annotation components
 
-9.6.1. Comments are not recommended
+9.6.1. Comment is not recommended
 
    [Rule 9-74] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="comment()">
           <sch:report test="true()"
-            >An XML Comment is not an XML Schema annotation component; XML Comments SHOULD NOT appear in the schema.</sch:report>
+            >An XML Comment is not an XML Schema annotation component; an XML comment SHOULD NOT appear in the schema.</sch:report>
         </sch:rule>
       </sch:pattern>
 
    Since XML comments are not associated with any specific XML Schema construct, there is no standard way to interpret comments. As such, comments should be reserved for internal use, and XML Schema annotations should be preferred for meaningful information about components. NIEM specifically defines how information should be encapsulated in NIEM-conformant schemas via xs:annotation elements.
 
-9.6.2. Documentation elements have no element children
+9.6.2. Documentation element has no element children
 
    [Rule 9-75] (REF, EXT)
 
@@ -2343,7 +2341,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-9.6.3. Application information annotations
+9.6.3. Application information annotation
 
    XML Schema provides special annotations for support of automatic processing. The XML Schema specification provides the element xs:appinfo to carry such content and does not specify what style of content they should carry. In NIEM, xs:appinfo elements carry structured XML content.
 
@@ -2679,8 +2677,6 @@ Status
       </sch:pattern>
 
 10.2.2.2. Roles
-
-   {Indicate that a subset of role type could omit the RoleOf element, in which case an instance of the role type is just a regular object.}
 
    NIEM differentiates between an object and a role of the object. The term "role" is used here to mean a function or part played by some object. The simplest way to represent a role of an object is to use an element. The following element definition models the role of a person who undergoes an assessment:
 
@@ -3189,7 +3185,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.2.4.2.2. An augmentation point has no type
+Rule 10-25. An augmentation point has no type
 
    [Rule 10-25] (REF, EXT)
 
@@ -3203,7 +3199,7 @@ Status
 
    There is no rule requiring that the augmentation element is abstract, as that is implied by the lack of @type.
 
-10.2.4.2.3. An augmentation point has no substitution group
+Rule 10-26. An augmentation point has no substitution group
 
    [Rule 10-26] (REF, EXT)
 
@@ -3217,7 +3213,7 @@ Status
 
 10.2.4.3. Augmentation point element use
 
-10.2.4.3.1. Augmentation element may only be referenced by its type
+Rule 10-27. Augmentation element may only be referenced by its type
 
    [Rule 10-27] (REF, EXT)
 
@@ -3232,7 +3228,7 @@ Status
         </sch:rule>
       </sch:pattern>            
 
-10.2.4.3.2. Augmentation reference is optional
+Rule 10-28. Augmentation reference is optional
 
    [Rule 10-28] (REF)
 
@@ -3244,7 +3240,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.2.4.3.3. Augmentation reference is unbounded
+Rule 10-29. Augmentation reference is unbounded
 
    [Rule 10-29] (REF)
 
@@ -3256,7 +3252,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.2.4.3.4. Augmentation reference must be last particle
+Rule 10-30. Augmentation reference must be last particle
 
    [Rule 10-30] (REF, EXT)
 
@@ -3274,13 +3270,13 @@ Status
 
       An augmentation type is a complex type that provides a reusable block of data that may be added to object types or association types.
 
-10.2.4.4.1. Augmentation type name ends in "AugmentationType"
+Rule 10-31. Augmentation type name ends in "AugmentationType"
 
    [Rule 10-31] (REF, EXT)
 
       A [schema component] has a name that ends in "AugmentationType" if and only if it is a [complex type definition] that defines an [augmentation type].
 
-10.2.4.4.2. Augmentation type derived from augmentation type
+Rule 10-32. Augmentation type derived from augmentation type
 
    [Rule 10-32] (REF, EXT)
 
@@ -3296,7 +3292,7 @@ Status
 
    The [base type definition] of an [augmentation type] is required to be from a conformant namespace by [Rule 11-3], below.
 
-10.2.4.4.3. Augmentation types are derived from augmentation types
+Rule 10-33. Augmentation types are derived from augmentation types
 
    [Rule 10-33] (REF, EXT)
 
@@ -3316,7 +3312,7 @@ Status
 
 10.2.4.5. Augmentation element declarations
 
-10.2.4.5.1. Augmentation element is an element of an augmentation type
+Rule 10-34. Augmentation element is an element of an augmentation type
 
    [Rule 10-34] (REF, EXT)
 
@@ -3352,7 +3348,7 @@ Status
 
    A metadata type establishes a specific, named aggregation of data about data. Any type derived from structures:MetadataType is a metadata type. Metadata types should not be derived from other metadata types. Such metadata types should be used asis and additional metadata types defined for additional content.
 
-10.2.5.1.1. Metadata types are derived from metadata types
+Rule 10-37. Metadata types are derived from metadata types
 
    [Rule 10-37] (REF, EXT)
 
@@ -3380,7 +3376,7 @@ Status
 
     There are limitations on the meaning of a metadata element in an instance; it does not establish existence of an object, nor is it a property of its containing object.
 
-10.2.5.2.1.1. Metadata element is an element of a metadata type
+Rule 10-38. Metadata element is an element of a metadata type
 
    [Rule 10-38] (REF, EXT)
 
@@ -3490,7 +3486,7 @@ Status
 
    Acronyms and abbreviations have the ability to improve readability and comprehensibility of large, complex, or frequently used terms. They also obscure meaning and impair understanding when their definitions are not clear or when they are used injudiciously. They should be used with great care. Acronyms and abbreviations that are used must be documented and used consistently.
 
-10.4.5.1. Common abbreviations
+Rule 10-46. Names use common abbreviations
 
    [Rule 10-46] (REF, EXT)
 
@@ -3506,7 +3502,7 @@ Status
 
    Consistent, controlled, and documented abridged terms that are used frequently and/or tend to be lengthy can support readability, clarity, and reduction of name length.
 
-10.4.5.2. Use of Acronyms, Initialisms, Abbreviations, and Jargon
+10.4.5.1. Use of Acronyms, Initialisms, Abbreviations, and Jargon
 
    Acronyms, abbreviations, and jargon (language specialized within a certain field) have the ability to improve readability and comprehensibility of large, complex, or frequently used terms. They also obscure meaning and impair understanding when their definitions are not clear or when they are used injudiciously. They should be used with great care. Acronyms, abbreviations, and jargon that are used must be documented and used consistently.
 
@@ -3528,7 +3524,7 @@ Status
 
    Local terminology is introduced into a schema document by the application of local terminology appinfo within the schema.
 
-   See additional rules constraining the use of the [local terminology appinfo namespace] in Section 10.5.3, The NIEM local terminology namespace, below.
+   See additional rules constraining the use of the [local terminology appinfo namespace] in Section 10.5.2, The NIEM local terminology namespace, below.
 
    [Rule 10-47] (REF, EXT)
 
@@ -3566,7 +3562,7 @@ Status
 
    Articles (e.g., a, an, the), conjunctions (e.g., and, or, but), and prepositions (e.g., at, by, for, from, in, of, to) are all disallowed in NIEM component names, unless they are required. For example, PowerOfAttorneyCode requires the preposition. These rules constrain slight variations in word forms and types to improve consistency and reduce potentially ambiguous or confusing component names.
 
-10.4.7. Name generation
+Rule 10-52. Component name follows pattern
 
    Elements in NIEM-conformant schemas are given names that follow a specific pattern. This pattern comes from [ISO 11179-5].
 
@@ -3586,11 +3582,9 @@ Status
 
          *  A representation term (1).
 
-   Rationale
-
    Consistent naming rules are helpful for users who wish to understand components with which they are unfamiliar, as well as for users to find components with known semantics. This rule establishes the basic structure for an element or attribute name, in line with the rules for names under [ISO 11179-5]. Note that many elements with complex type should not have a representation term.
 
-10.4.8. Object-class term
+10.4.7. Object-class term
 
    The NIEM adopts an object-oriented approach to representation of data. Object classes represent what [ISO 11179-5] refers to as "things of interest in a universe of discourse that may be found in a model of that universe." An object class or object term is a word that represents a class of real-world entities or concepts. An object-class term describes the applicable context for a NIEM component.
 
@@ -3598,17 +3592,15 @@ Status
 
       The object-class term of a NIEM component MUST consist of a term identifying a category of concrete concepts or entities.
 
-   Rationale
-
    The object-class term indicates the object category that this data component describes or represents. This term provides valuable context and narrows the scope of the component to an actual class of things or concepts.
 
-   Example
+   Example:
 
-   Concept term: Activity
+      Concept term: Activity
 
-   Entity term: Vehicle
+      Entity term: Vehicle
 
-10.4.9. Property term
+10.4.8. Property term
 
    Objects or concepts are usually described in terms of their characteristic properties, data attributes, or constituent subparts. Most objects can be described by several characteristics. Therefore, a property term in the name of a data component represents a characteristic or subpartof an object class and generally describes the essence of that data component.
 
@@ -3620,7 +3612,7 @@ Status
 
    The property term describes the central meaning of the data component.
 
-10.4.10. Qualifier terms
+10.4.9. Qualifier terms
 
    Qualifier terms modify object, property, representation, or other qualifier terms to increase semantic precision and reduce ambiguity. Qualifier terms may precede or succeed the terms they modify. The goal for the placement of qualifier terms is to generally follow the rules of ordinary English while maintaining clarity.
 
@@ -3640,7 +3632,7 @@ Status
 
    Very large vocabularies may have many similar and closely related properties and concepts. The use of object, property, and representation terms alone is often not sufficient to construct meaningful names that can uniquely distinguish such components. Qualifier terms provide additional context to resolve these subtleties. However, swapping the order of qualifiers rarely (if ever) changes meaning; qualifier ordering is no substitute for meaningful terms.
 
-10.4.11. Representation terms
+10.4.10. Representation terms
 
    The representation terms for a component name serve several purposes in NIEM:
 
@@ -3660,19 +3652,23 @@ Status
 
    The valid value set of a data element or value domain is described by the representation term. NIEM uses a standard set of representation terms in the representation portion of a NIEM-conformant component name. Table Table 11-1, Representation terms, below, lists the primary representation terms and a definition for the concept associated with the use of that term. The table also lists secondary representation terms that may represent more specific uses of the concept associated with the primary representation term.
 
+Rule 10-59. Element with simple content has representation term
+
    [Rule 10-59] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of simple content MUST use a representation term found in Table Table 11-1, Representation terms.
+
+Rule 10-60. Name has representation term when appropriate
 
    [Rule 10-60] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content, and that corresponds to a concept listed in Table Table 11-1, Representation terms, MUST use a representation term from that table.
 
+Rule 10-61. Name has representation term only when appropriate
+
    [Rule 10-61] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content and that does not correspond to a concept listed in Table Table 11-1, Representation terms MUST NOT use a representation term.
-
-   Rationale
 
    An element that represents a value listed in the table should have a representation term. It should do so even if its type is complex with multiple parts. For example, a type with multiple fields may represent a sound binary, a date, or a name.
 
@@ -3710,7 +3706,7 @@ Status
 
    The majority of uses of application information from the [appinfo namespace] are described in the modeling rules for the specific component.
 
-10.5.1. Machine-readable annotations are valid
+Rule 10-62. Machine-readable annotations are valid
 
    [Rule 10-62] (REF, EXT)
 
@@ -3718,7 +3714,7 @@ Status
 
    The specification for an element or attribute may be via an XML Schema, a Schematron schema, via a DTD, by some other specification, or by other means. This rule is intended to allow NIEM schema developers to leverage relevant vocabularies without being limited by the vocabulary's method of specification, while ensuring that developers do not subvert or misuse those vocabularies.
 
-10.5.2. The NIEM appinfo namespace
+10.5.1. The NIEM appinfo namespace
 
    NIEM defines a single namespace that holds components for use in NIEM-conformant schema application information. This namespace is referred to as the [appinfo namespace].
 
@@ -3728,7 +3724,7 @@ Status
 
    The [appinfo namespace] defines attributes which provide additional semantics for components built by NIEM-conformant schemas. The XML Schema document for the appinfo namespace appears in Appendix C, Appinfo namespace, below.
 
-10.5.2.1. Deprecation
+10.5.1.1. Deprecation
 
    The appinfo schema provides a construct for indicating that a construct is deprecated. A deprecated component is one whose use is not recommended. A deprecated component may be kept in a schema for support of older versions but should not be used in new efforts. A deprecated component may be removed, replaced, or renamed in a later version of a namespace.
 
@@ -3738,7 +3734,7 @@ Status
 
    The definition for [deprecated component] is adapted from [JLS] section 9.6.4.6, @Deprecated.
 
-10.5.2.1.1. A component marked as deprecated is a deprecated component
+Rule 10-63. Component marked as deprecated is deprecated component
 
    [Rule 10-63] (REF, EXT)
 
@@ -3746,7 +3742,7 @@ Status
 
    Deprecation can allow version management to be more consistent; versions of schema may be incrementally improved without introducing validation problems and incompatibility. As XML Schema lacks a deprecation mechanism, NIEM defines such a mechanism.
 
-10.5.2.1.2. Deprecated annotates schema component
+Rule 10-64. Deprecated annotates schema component
 
    [Rule 10-64] (REF, EXT)
 
@@ -3757,7 +3753,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.2.2. External import indicator annotates import
+Rule 10-65. External import indicator annotates import
 
    [Rule 10-65] (REF, EXT)
 
@@ -3768,7 +3764,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.2.3. External adapter type indicator annotates complex type
+Rule 10-66. External adapter type indicator annotates complex type
 
    [Rule 10-66] (REF)
 
@@ -3779,9 +3775,9 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.2.4. Applies to types annotation
+10.5.1.2. appinfo:appliesToTypes annotation
 
-10.5.2.4.1. Applies to types annotates metadata element
+Rule 10-67. appinfo:appliesToTypes annotates metadata element
 
    [Rule 10-67] (REF, EXT)
 
@@ -3793,7 +3789,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.2.4.2. Applies to types indicates elements
+Rule 10-68. appinfo:appliesToTypes indicates elements
 
    [Rule 10-68] (SET)
 
@@ -3805,9 +3801,9 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.2.5. Applies to elements annotation
+10.5.1.3. appinfo:appliesToElements annotation
 
-10.5.2.5.1. Applies to elements annotates metadata element
+Rule 10-69. appinfo:appliesToElements annotates metadata element
 
    [Rule 10-69] (REF, EXT)
 
@@ -3820,7 +3816,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.2.5.2. Applies to elements indicates elements
+Rule 10-70. appinfo:appliesToElements indicates elements
 
    [Rule 10-70] (SET)
 
@@ -3832,9 +3828,9 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.3. The NIEM local terminology namespace
+10.5.2. The NIEM local terminology namespace
 
-10.5.3.1. LocalTerm annotates schema
+Rule 10-71. term:LocalTerm annotates schema
 
    [Rule 10-71] (REF, EXT)
 
@@ -3845,7 +3841,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-10.5.3.2. LocalTerm has literal or definition
+Rule 10-72. term:LocalTerm has literal or definition
 
    [Rule 10-72] (REF, EXT)
 
@@ -3862,7 +3858,7 @@ Status
 
 11.1. Type definition components
 
-11.1.1. Name of type ends in "Type"
+Rule 11-1. Name of type ends in "Type"
 
    [Rule 11-1] (REF, EXT)
 
@@ -3884,7 +3880,7 @@ Status
 
    Note that the first sch:rule and subsequent sch:report serve to provide an exception to the rule for proxy types. It does not establish a constraint on the data.
 
-11.1.2. Name of type is in upper camel case
+Rule 11-2. Name of type is in upper camel case
 
    [Rule 11-2] (REF, EXT)
 
@@ -3904,9 +3900,9 @@ Status
 
    Note that the first sch:rule and q subsequent sch:report serve to provide an exception to the rule for proxy types. It does not establish a constraint on the data.
 
-11.1.3. Type definition hierarchy
+11.1.1. Type definition hierarchy
 
-11.1.3.1. Base type definition defined by conformant schema
+Rule 11-3. Base type definition defined by conformant schema
 
    [Rule 11-3] (REF, EXT)
 
@@ -3921,9 +3917,9 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.1.4. Simple type definition
+11.1.2. Simple type definition
 
-11.1.4.1. Name of simple type ends in "SimpleType"
+Rule 11-4. Name of simple type ends in "SimpleType"
 
    [Rule 11-4] (REF, EXT)
 
@@ -3936,7 +3932,7 @@ Status
 
    Specific uses of type definitions have similar syntax but very different effects on data definitions. Schemas that clearly identify complex and simple type definitions are easier to understand without tool support. This rule ensures that names of simple types end in SimpleType.
 
-11.1.4.2. Name of simple type is upper camel case
+Rule 11-5. Name of simple type is upper camel case
 
    [Rule 11-5] (REF, EXT)
 
@@ -3947,9 +3943,9 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.1.4.3. Derivation by list
+11.1.2.1. Derivation by list
 
-11.1.4.3.1. Use lists only when data is uniform
+Rule 11-6. Use lists only when data is uniform
 
    [Rule 11-6] (REF, EXT)
 
@@ -3959,7 +3955,7 @@ Status
 
    Items in a list are not individually addressable by NIEM metadata techniques. The items are also not individually referencable by elements or attributes; one will have a value of the entire list, including all the items in the list. NIEM provides no method for individually addressing an item in a list. If an individual item in a list needs to be marked up in a manner different than other items in the list, the use of individual elements may be preferred to the definition of a list simple type.
 
-11.1.4.3.2. List item type defined by conformant schemas
+Rule 11-7. List item type defined by conformant schemas
 
    [Rule 11-7] (REF, EXT)
 
@@ -3974,9 +3970,9 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.1.4.4. Derivation by union
+11.1.2.2. Derivation by union
 
-11.1.4.4.1. Union member types defined by conformant schemas
+Rule 11-8. Union member types defined by conformant schemas
 
    [Rule 11-8] (REF, EXT)
 
@@ -3992,7 +3988,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.1.4.5. Code simple types
+11.1.2.3. Code simple types
 
    [Definition: code simple type]
 
@@ -4000,7 +3996,7 @@ Status
 
    These types represent lists of values, each of which has a known meaning beyond the text representation. These values may be meaningful text or may be a string of alphanumeric identifiers that represent abbreviations for literals.
 
-11.1.4.5.1. Name of a code simple type has standard suffix
+Rule 11-9. Name of a code simple type has standard suffix
 
    [Rule 11-9] (REF, EXT)
 
@@ -4013,7 +4009,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.1.4.5.2. Code simple type has enumerations
+Rule 11-10. Code simple type has enumerations
 
    [Rule 11-10] (REF, EXT)
 
@@ -4035,7 +4031,7 @@ Status
 
 11.2.1. Element declaration
 
-11.2.1.1. Element name is upper camel case
+Rule 11-11. Element name is upper camel case
 
    [Rule 11-11] (REF, EXT)
 
@@ -4046,7 +4042,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.2.1.2. Element type does not have a simple type name
+Rule 11-12. Element type does not have a simple type name
 
    [Rule 11-12] (REF, EXT)
 
@@ -4057,7 +4053,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.2.1.3. Element type is from conformant namespace
+Rule 11-13. Element type is from conformant namespace
 
    [Rule 11-13] (REF, EXT)
 
@@ -4075,7 +4071,7 @@ Status
 
    Additional prohibitions on element types are defined by [Rule 9-37], above, and [Rule 9-38], above.
 
-11.2.1.4. Name of element that ends in "Abstract" must be abstract
+Rule 11-14. Name of element that ends in "Abstract" must be abstract
 
    [Rule 11-14] (REF, EXT)
 
@@ -4086,7 +4082,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.2.1.5. Name of element that ends in "Representation" must be abstract
+Rule 11-15. Name of element that ends in "Representation" must be abstract
 
    [Rule 11-15] (REF, EXT)
 
@@ -4097,7 +4093,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.2.1.6. Object element declarations
+11.2.1.1. Object element declarations
 
    Table 11-1: Representation terms
 
@@ -4149,7 +4145,7 @@ Status
 
       |List|A sequence of values. This representation term is used in tandem with another of the listed representation terms.
 
-11.2.1.6.1. Elements with simple content use representation term
+Rule 11-16. Element with simple content use representation term
 
    [Rule 11-16] (REF, EXT, SET)
 
@@ -4174,7 +4170,7 @@ Status
 
 11.2.2. Element substitution group
 
-11.2.2.1. Element substitution group defined by conformant schemas
+Rule 11-17. Element substitution group defined by conformant schema
 
    [Rule 11-17] (REF, EXT)
 
@@ -4191,7 +4187,7 @@ Status
 
 11.2.3. Attribute declaration
 
-11.2.3.1. Attribute type defined by conformant schemas
+Rule 11-18. Attribute type defined by conformant schema
 
    [Rule 11-18] (REF, EXT)
 
@@ -4206,7 +4202,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.2.3.2. Attribute name uses representation term
+Rule 11-19. Attribute name uses representation term
 
    [Rule 11-19] (REF, EXT)
 
@@ -4228,7 +4224,7 @@ Status
 
 11.3.2.1. Element use
 
-11.3.2.1.1. Element introduced only once in a content model
+Rule 11-20. Element introduced only once in content model
 
    [Rule 11-20] (REF, EXT)
 
@@ -4236,7 +4232,7 @@ Status
 
    This rule ensures that sequences of elements are simple sequences. A type does not define, for example, a sequence of elements A, B, then A again. Definitions should define, instead, what elements may be included, and the cardinality of each element. Schemas must also be careful not to introduce elements that are substitutable for one another, as this can create violations of the unique particle attribution constraint, as described by [XML Schema Structures] section 3.8.6, Constraints on Model Group Schema Components.
 
-11.3.2.1.2. Element ref in external type defined by external schemas
+Rule 11-21. Element referenced by external type defined by external schemas
 
    [Rule 11-21] (REF, EXT)
 
@@ -4253,7 +4249,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.3.2.1.3. Element reference defined by conformant schemas
+Rule 11-22. Element reference defined by conformant schema
 
    [Rule 11-22] (REF, EXT)
 
@@ -4267,6 +4263,8 @@ Status
             >An element reference MUST be to a component that has a namespace that is either the target namespace of the [schema document] in which it appears, or which is imported as conformant by that [schema document].</sch:assert>
         </sch:rule>
       </sch:pattern>
+
+   The term [schema document] is a defined term.
 
 11.3.3. Attribute use
 
@@ -4284,29 +4282,33 @@ Status
 
 11.4.1. Human-readable documentation
 
-   Note that [Rule 5-4] applies [ISO 11179-4] definition rules to documented components.
+   Note that [Rule 11-28], below, and [Rule 11-29], below, apply [ISO 11179-4] definition rules to documented components.
+
+Rule 11-23. Data definition does not introduce ambiguity
 
    [Rule 11-23] (REF, EXT)
 
       Words or synonyms for the words within a data element definition MUST NOT be reused as terms in the corresponding component name if those words dilute the semantics and understanding of, or impart ambiguity to, the entity or concept that the component represents.
 
+Rule 11-24. Object class has only one meaning
+
    [Rule 11-24] (REF, EXT)
 
       An object class MUST have one and only one associated semantic meaning (i.e., a single word sense) as described in the definition of the component that represents that object class.
+
+Rule 11-25. Data definition of a part does not redefine the whole
 
    [Rule 11-25] (REF, EXT)
 
       An object class MUST NOT be redefined within the definitions of the components that represent properties or subparts of that entity or class.
 
-   Rationale
-
    Data definitions should be concise, precise, and unambiguous without embedding additional definitions of data elements that have already been defined once elsewhere (such as object classes). [ISO 11179-4] says that definitions should not be nested inside other definitions. Furthermore, a data dictionary is not a language dictionary. It is acceptable to reuse terms (object class, property term, and qualifier terms) from a component name within its corresponding definition to enhance clarity, as long as the requirements and recommendations of [ISO 11179-4] are not violated. This further enhances brevity and precision.
+
+Rule 11-26. Do not leak representation into data definition
 
    [Rule 11-26] (REF, EXT)
 
-      A data definition MUST NOT contain explicit representational or data typing information such as number characters, type of characters, etc., unless the very nature of the component can be described only by such information.
-
-   Rationale
+      A data definition MUST NOT contain explicit representational or data typing information such as number characters, classes of characters, etc., unless the very nature of the component can be described only by such information.
 
    A component definition is intended to describe semantic meaning only, not representation or structure. How a component with simple content is represented is indicated through the representation term and further refined through constraints.
 
@@ -4331,6 +4333,8 @@ Status
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+
+Rule 11-27. Data definition uses standard opening phrase
 
    [Rule 11-27] (REF, EXT)
 
@@ -4378,17 +4382,15 @@ Status
 
       Other type|"A data type for a(n)..."
 
-   Rationale
-
    A standard opening phrase based on component class helps to ensure consistent definitions that appropriate for the type of component item being defined. These opening phrases also provide a cue that facilitates recognition of the particular kind of component.
 
-11.4.2. Data definition follows 11179-4 requirements
+Rule 11-28. Data definition follows 11179-4 requirements
 
    [Rule 11-28] (REF, EXT)
 
       Each [data definition] MUST conform to the requirements for data definitions provided by [ISO 11179-4] section 5.2, Requirements.
 
-11.4.3. Data definition follows 11179-4 recommendations
+Rule 11-29. Data definition follows 11179-4 recommendations
 
    [Rule 11-29] (REF, EXT)
 
@@ -4398,9 +4400,13 @@ Status
 
 11.5.1. xs:schema document element restrictions
 
+Rule 11-30. Same namespace means same components
+
    [Rule 11-30] (REF, EXT)
 
       Two XML Schema documents MUST have the same value for attribute targetNamespace carried by the element xs:schema, if and only if they represent the same set of components.
+
+Rule 11-31. Different version means different view
 
    [Rule 11-31] (REF, EXT)
 
@@ -4412,7 +4418,7 @@ Status
 
 11.6. Schema assembly
 
-11.6.1. Reference schemas import reference schemas.
+Rule 11-32. Reference schema imports reference schema.
 
    [Rule 11-32] (SET)
 
@@ -4435,7 +4441,7 @@ Status
 
    [conformant reference schema document] is a defined term.
 
-11.6.2. Extension schema document imports reference or extension schemas.
+Rule 11-33. Extension schema document imports reference or extension schema.
 
    [Rule 11-33] (SET)
 
@@ -4453,16 +4459,16 @@ Status
                             in nf:resolve-namespace(., @namespace)
                             satisfies (
                               nf:has-effective-conformance-target-identifier($schema, xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))
-                              or nf:has-effective-conformance-target-identifier($schema, xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument))"
+                              or nf:has-effective-conformance-target-identifier($schema, xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument)))"
             >A namespace imported as conformant from a [conformant extension schema document] MUST identify a namespace defined by a [conformant reference schema document] or a [conformant extension schema document].</sch:assert>
         </sch:rule>
       </sch:pattern>
 
    [conformant reference schema document] and [conformant extension schema document] are defined terms.
 
-11.6.3. Special namespaces are imported as conformant
+11.6.1. Special namespace is imported as conformant
 
-11.6.3.1. Structures imported as conformant
+Rule 11-34. Structures imported as conformant
 
    [Rule 11-34] (REF, EXT)
 
@@ -4474,7 +4480,7 @@ Status
         </sch:rule>
       </sch:pattern>          
 
-11.6.3.2. Schema for XML imported as conformant
+Rule 11-35. Schema for XML imported as conformant
 
    [Rule 11-35] (REF, EXT)
 
@@ -4486,7 +4492,7 @@ Status
         </sch:rule>
       </sch:pattern>          
 
-11.6.3.3. Schema for IC-ISM imported as conformant
+Rule 11-36. Schema for IC-ISM imported as conformant
 
    [Rule 11-36] (REF, EXT)
 
@@ -4498,7 +4504,7 @@ Status
         </sch:rule>
       </sch:pattern>          
 
-11.6.3.4. Schema for IC-NTK imported as conformant
+Rule 11-37. Schema for IC-NTK imported as conformant
 
    [Rule 11-37] (REF, EXT)
 
@@ -4510,7 +4516,7 @@ Status
         </sch:rule>
       </sch:pattern>          
 
-11.6.4. Each namespace may have only a single root schema in a schema set.
+Rule 11-38. Each namespace may have only a single root schema in a schema set.
 
    [Rule 11-38] (SET)
 
@@ -4524,7 +4530,7 @@ Status
         </sch:rule>
       </sch:pattern>
 
-11.6.5. Consistently marked namespace imports
+Rule 11-39. Consistently marked namespace imports
 
    XML Schemas allows multiple xs:import elements for the same namespace, which allows for multiple sets of annotations and schema locations. 
 
@@ -4547,7 +4553,7 @@ Status
 
    NIEM does not require a specific encoding or specific requirements for the XML prologue, except as specified by [XML].
 
-12.1. Instance must be schema-valid
+Rule 12-1. Instance must be schema-valid
 
    [Rule 12-1] (INS)
 
@@ -4559,7 +4565,7 @@ Status
 
    NIEM embraces the use of XML Schema instance attributes, including xsi:type, xsi:nil, and xsi:schemaLocation, as specified by [XML Schema Structures].
 
-12.2. Content elements
+12.1. Content elements
 
    In XML instances, relationships between data objects are expressed as XML elements:
 
@@ -4587,7 +4593,7 @@ Status
         </nc:ItemOwner>
       </nc:Item>
 
-12.3. Reference elements
+12.2. Reference elements
 
    Content elements are sufficient to represent data that takes the form of a tree. However, use of content elements has limitations; expression of all relationships via element containment is not always possible. Situations that cause problems include:
 
@@ -4624,7 +4630,7 @@ Status
 
       A reference element is an element information item that has an attribute structures:ref. A reference element refers to its value by reference, instead of carrying it as content.
 
-12.3.1. Element with structures:ref does not have content
+Rule 12-2. Element with structures:ref does not have content
 
    [Rule 12-2] (INS)
 
@@ -4635,7 +4641,7 @@ Status
         </sch:rule>
       </sch:pattern>            
 
-12.3.2. Attribute structures:ref must reference structures:id
+Rule 12-3. Attribute structures:ref must reference structures:id
 
    [Rule 12-3] (INS)
 
@@ -4649,7 +4655,7 @@ Status
 
    This mirrors the terminology in [XML] subsection Validity constraint: IDREF within section 3.3.1, Attribute Types, except it requires the target attribute to be structures:id, rather than any attribute of type ID.
 
-12.3.3. Linked elements have same validation root
+Rule 12-4. Linked elements have same validation root
 
    [Rule 12-4] (INS)
 
@@ -4671,7 +4677,7 @@ Status
 
    The term "validation root" is defined by [XML Schema Structures] section 5.2, Assessing Schema-Validity. It is established as a part of validity assessment of an XML document. It is required because relationships between the types of elements cannot be established if those elements were not assessed together.
 
-12.3.4. Attribute structures:ref references element of correct type
+Rule 12-5. Attribute structures:ref references element of correct type
 
    [Rule 12-5] (INS)
 
@@ -4697,11 +4703,13 @@ Status
 
    This rule requires that the type of the element information item pointed to by a structures:ref attribute must be of (or derived from) the type that is specified by the element declaration of the reference element.
 
-12.3.5. Reference and content elements have same meaning
+12.2.1. Reference and content elements have same meaning
 
    An important aspect of the use of NIEM reference and content elements is that they have the same meaning. The use of a content element versus a reference element is merely for convenience and ease of serialization. There is no change in meaning or semantics between content and reference elements.
 
    Any claim that content elements represent composition while reference elements represent aggregation is incorrect. Any life cycle dependency is not expressed through the use of content and reference elements, and is not an explicit part of the NIEM model.
+
+Rule 12-6. Reference and content elements have the same meaning
 
    [Rule 12-6] (INS)
 
@@ -4739,17 +4747,15 @@ Status
 
    Assertions that indicate "included" data is intrinsic, while referenced data is extrinsic, are not valid and are not applicable to NIEM-conformant data instances and data definitions.
 
-12.4. Instance meaning
+Rule 12-7. Empty content has no meaning
 
    [Rule 12-7] (INS)
 
       Within the instance, the meaning of an element with no content is that additional properties are not asserted. There MUST NOT be additional meaning interpreted for an element with no content.
 
-   Rationale
-
    Elements without content only show a lack of asserted information. That is, all that is asserted is what is explicitly stated, through a combination of XML instance data and its schema. Data that is not present makes no claims. It may be absent due to lack of availability, lack of knowledge, or deliberate withholding of information. These cases should be modeled explicitly, if they are required.
 
-12.5. Instance metadata
+12.3. Instance metadata
 
    NIEM provides the metadata mechanism for giving information about object assertions. An object may have an attribute that refers to one or more metadata objects. A structures:metadata attribute indicates that a data item has the given metadata. A structures:relationshipMetadata attribute asserts that the link (or relationship) established by an element has the given metadata.
 
@@ -4811,49 +4817,57 @@ Status
 
    Application of metadata to a type or element to which it is not applicable is not NIEM-conformant. A metadata element may be labeled as applicable to multiple elements via attribute appinfo:appliesToElements, or to multiple types via attribute appinfo:appliesToTypes. In either case it may apply to an instance of any of the listed elements or types. A metadata element with neither attribute appinfo:appliesToElements nor attribute appinfo:appliesToTypes may be applied to any element of any type.
 
+Rule 12-8. Metadata applies to referring entity
+
    [Rule 12-8] (INS)
 
-      Within an element instance, when an object O links to a metadata object via an attribute structures:metadata, the information in the metadata object MUST be applied to the object O.
+      Within an element instance, when an object $O links to a metadata object via an attribute structures:metadata, the information in the metadata object MUST be applied to the object $O.
+
+   structures:metadata applies metadata to an object.
+
+Rule 12-9. Referent of structures:relationshipMetadata annotates relationship
 
    [Rule 12-9] (INS)
 
-      Within an element instance, when an object O1 contains an element E, with content object O2 or with a reference to object O2, and O2 links to a metadata object via an attribute structures:relationshipMetadata, the information in the metadata object MUST be applied to the relationship E between O1 and O2.
+      Within an element instance, when an object $O1 contains an element $E, with content object $O2 or with a reference to object $O2, and $O2 links to a metadata object via an attribute structures:relationshipMetadata, the information in the metadata object MUST be applied to the relationship $E between $O1 and $O2.
 
-   Rationale
+   structures:relationshipMetadata applies metadata to a relationship between two objects.
 
-   These two rules define the meaning of metadata:
-
-      *  structures:metadata applies metadata to an object.
-
-      *  structures:relationshipMetadata applies metadata to a relationship between two objects.
+Rule 12-10. Values of structures:metadata refer to values of structures:id
 
    [Rule 12-10] (INS)
 
       Given that each IDREF in the value of an attribute structures:metadata must match the value of an ID attribute on some element in the XML document, that ID attribute MUST be an occurrence of the attribute structures:id.
 
+Rule 12-11. Value of structures:metadata refers to instance of a metdata type
+
    [Rule 12-11] (INS)
 
       Each element that an attribute structures:metadata references MUST have a type definition that is derived from structures:MetadataType.
+
+Rule 12-12. Value of structures:relationshipMetadata refers to value of structures:id
 
    [Rule 12-12] (INS)
 
       Given that each IDREF in the value of an attribute structures:relationshipMetadata must match the value of an ID attribute on some element in the XML document, that ID attribute MUST be an occurrence of the attribute structures:id.
 
+Rule 12-13. Relationship metadata refers to metadata type
+
    [Rule 12-13] (INS)
 
       Each element that an attribute structures:relationshipMetadata references MUST have a type definition that is derived from structures:MetadataType.
 
-   Rationale
-
    All structures:metadata and structures:relationshipMetadata attributes must refer to metadata objects, and the reference to that object must be established using the structures:id attribute, to facilitate processing of XML documents.
+
+Rule 12-14. Metadata is applicable to element
 
    [Rule 12-14] (INS)
 
-      Given that an element information item E has a type definition of some type T, each metadata type that is the type definition of an element information item referenced by an attribute structures:metadata or structures:relationshipMetadata on element E MUST be applicable to T.
+      Given that an element information item $E has a type definition of some type $T, each metadata type that is the type definition of an element information item referenced by an attribute structures:metadata or structures:relationshipMetadata on element $E MUST be applicable to $T.
 
    The applicability is described by appinfo:appliesToTypes and appinfo:appliesToElements application information annotaionts on the metadata element definition. The instances must correspond to the applicability specified by the metadata element definition.
 
-12.6. Attribute structures:ref references structures:id
+Rule 12-15. Attribute structures:ref references structures:id
 
    [Rule 12-15] (INS)
 
@@ -4867,7 +4881,7 @@ Status
 
    This states that in NIEM-conformant content, structures:ref attributes must refer to structures:id attributes. By [XML] section 3.3.1, Attribute Types, an IDREF is required to reference an ID. This rule ensures that the target of a reference is a NIEM ID for easier processing of XML documents.
 
-12.7. Attribute structures:metadata references a metadata element
+Rule 12-16. Attribute structures:metadata references metadata element
 
    [Rule 12-16] (INS)
 
@@ -4882,7 +4896,7 @@ Status
 
    Note that this will NOT catch a scenario in which the element with a name ending in "Metadata" is an external element; additional tests would be required to catch that.
 
-12.8. Attribute structures:relationshipMetadata references a metadata element
+Rule 12-17. Attribute structures:relationshipMetadata references metadata element
 
    [Rule 12-17] (INS)
 

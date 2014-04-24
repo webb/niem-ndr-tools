@@ -26,33 +26,33 @@
   </sch:rule>
 </sch:pattern>            
         
-<sch:pattern id="rule_12-2"><sch:title>Element with structures:ref does not have content</sch:title>
+<sch:pattern id="rule_12-2"><sch:title>Reference elements</sch:title>
   <sch:rule context="*[@structures:ref]">
     <sch:assert test="empty(element() | text())">Rule 12-2: An element that has attribute structures:ref MUST NOT have element or text content.</sch:assert>
   </sch:rule>
 </sch:pattern>            
           
-<sch:pattern id="rule_12-3"><sch:title>Attribute structures:ref must reference structures:id</sch:title>
+<sch:pattern id="rule_12-3"><sch:title>Reference elements</sch:title>
   <sch:rule context="*[@structures:ref]">
     <sch:let name="ref" value="@structures:ref"/>
     <sch:assert test="exists(//*[@structures:id = $ref])">Rule 12-3: The value of an attribute structures:ref MUST match the value of an attribute structures:id of some element in the XML document.</sch:assert>
   </sch:rule>
 </sch:pattern>            
           
-<sch:pattern id="rule_12-15"><sch:title>Attribute structures:ref references structures:id</sch:title>
+<sch:pattern id="rule_12-15"><sch:title>XML instance document rules</sch:title>
   <sch:rule context="*[exists(@structures:ref)]">
     <sch:let name="ref" value="@structures:ref"/>
     <sch:assert test="exists(//@structures:id[. = $ref])">Rule 12-15: The value of an attribute structures:ref MUST appear as the value of an attribute structures:id in the [XML instance document].</sch:assert>
   </sch:rule>
 </sch:pattern>
         
-<sch:pattern id="rule_12-16"><sch:title>Attribute structures:metadata references a metadata element</sch:title>
+<sch:pattern id="rule_12-16"><sch:title>XML instance document rules</sch:title>
   <sch:rule context="*[exists(@structures:metadata)]">
     <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata)) satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-16: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         
-<sch:pattern id="rule_12-17"><sch:title>Attribute structures:relationshipMetadata references a metadata element</sch:title>
+<sch:pattern id="rule_12-17"><sch:title>XML instance document rules</sch:title>
   <sch:rule context="*[exists(@structures:relationshipMetadata)]">
     <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata)) satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-17: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>

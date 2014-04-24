@@ -8,19 +8,19 @@
 <sch:ns prefix="structures" uri="http://release.niem.gov/niem/structures/3.0/"/>
 <sch:ns prefix="term" uri="http://release.niem.gov/niem/localTerminology/3.0/"/>
       
-<sch:pattern id="rule_4-1"><sch:title>Schema is CTAS-conformant</sch:title>
+<sch:pattern id="rule_4-1"><sch:title>Conformance target identifiers</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:report test="true()">Rule 4-1: The document MUST be a conformant document as defined by the NIEM Conformance Targets Attribute Specification.</sch:report>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_4-2"><sch:title>Document element has conformanceTargets</sch:title>
+<sch:pattern id="rule_4-2"><sch:title>Conformance target identifiers</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)                        or exists(@ct:conformanceTargets)]">
     <sch:assert test="(. is nf:get-document-element(.)) = exists(@ct:conformanceTargets)">Rule 4-2: An element MUST own an attribute {http://release.niem.gov/niem/conformanceTargets/3.0/}conformanceTargets if and only if it is a [document element].</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_4-3"><sch:title>Schema claims reference schema conformance target.</sch:title>
+<sch:pattern id="rule_4-3"><sch:title>Conformance target identifiers</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:assert test="nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))">Rule 4-3: The document MUST have an effective conformance target identifier of http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument.</sch:assert>
   </sch:rule>
@@ -382,7 +382,7 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-63"><sch:title>Attribute ref defined by conformant schemas</sch:title>
+<sch:pattern id="rule_9-63"><sch:title>Referenced attribute defined by conformant schemas</sch:title>
   <sch:rule context="xs:attribute[exists(@ref)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@ref, .))"/>
     <sch:assert test="$namespace = nf:get-target-namespace(.)                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 9-63: An attribute {}ref MUST have the target namespace or a namespace that is imported as conformant.</sch:assert>
@@ -449,13 +449,13 @@
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-74"><sch:title>Comments are not recommended</sch:title>
+<sch:pattern id="rule_9-74"><sch:title>Comment is not recommended</sch:title>
   <sch:rule context="comment()">
-    <sch:report test="true()">Rule 9-74: An XML Comment is not an XML Schema annotation component; XML Comments SHOULD NOT appear in the schema.</sch:report>
+    <sch:report test="true()">Rule 9-74: An XML Comment is not an XML Schema annotation component; an XML comment SHOULD NOT appear in the schema.</sch:report>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_9-75"><sch:title>Documentation elements have no element children</sch:title>
+<sch:pattern id="rule_9-75"><sch:title>Documentation element has no element children</sch:title>
   <sch:rule context="xs:documentation/node()">
     <sch:assert test="self::text() or self::comment()">Rule 9-75: A child of element xs:documentation MUST be text or an XML comment.</sch:assert>
   </sch:rule>
@@ -623,50 +623,50 @@
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-25"><sch:title>An augmentation point has no type</sch:title>
+<sch:pattern id="rule_10-25"><sch:title>Augmentation point element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
     <sch:assert test="empty(@type)">Rule 10-25: An augmentation point element MUST have no type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-26"><sch:title>An augmentation point has no substitution group</sch:title>
+<sch:pattern id="rule_10-26"><sch:title>Augmentation point element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
     <sch:assert test="empty(@substitutionGroup)">Rule 10-26: An augmentation point element MUST have no substitution group.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-27"><sch:title>Augmentation element may only be referenced by its type</sch:title>
+<sch:pattern id="rule_10-27"><sch:title>Augmentation point element use</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                        matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
 
     <sch:assert test="QName(nf:get-target-namespace(ancestor::xs:complexType[1]), ancestor::xs:complexType[1]/@name)                       = QName(namespace-uri-from-QName(resolve-QName(@ref, .)),                 replace(local-name-from-QName(resolve-QName(@ref, .)), 'AugmentationPoint$', 'Type'))">Rule 10-27: An augmentation element MUST only be referenced by its corresponding type.</sch:assert>
   </sch:rule>
 </sch:pattern>            
             
-<sch:pattern id="rule_10-28"><sch:title>Augmentation reference is optional</sch:title>
+<sch:pattern id="rule_10-28"><sch:title>Augmentation point element use</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
     <sch:assert test="exists(@minOccurs) and xs:integer(@minOccurs) = 0">Rule 10-28: An augmentation element particle MUST have attribute minOccurs equal to 0.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-29"><sch:title>Augmentation reference is unbounded</sch:title>
+<sch:pattern id="rule_10-29"><sch:title>Augmentation point element use</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
     <sch:assert test="exists(@maxOccurs) and string(@maxOccurs) = 'unbounded'">Rule 10-29: An augmentation element particle MUST have attribute maxOccurs set to unbounded.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-30"><sch:title>Augmentation reference must be last particle</sch:title>
+<sch:pattern id="rule_10-30"><sch:title>Augmentation point element use</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
     <sch:assert test="empty(following-sibling::*)">Rule 10-30: An augmentation element particle MUST be the last element atom in its content model.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-32"><sch:title>Augmentation type derived from augmentation type</sch:title>
+<sch:pattern id="rule_10-32"><sch:title>Augmentation types</sch:title>
   <sch:rule context="xs:complexType[@name[ends-with(., 'AugmentationType')]]">
     <sch:assert test="xs:complexContent/                         xs:*[self::xs:extension or self::xs:restriction]/                           @base[resolve-QName(., ..) = xs:QName('structures:AugmentationType')                                 or ends-with(., 'AugmentationType')]">Rule 10-32: The [base type definition] of an [augmentation type] MUST be either structures:AugmentationType or an [augmentation type].</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-33"><sch:title>Augmentation types are derived from augmentation types</sch:title>
+<sch:pattern id="rule_10-33"><sch:title>Augmentation types</sch:title>
   <sch:rule context="xs:complexType">
     <sch:let name="is-augmentation-type" value="exists(@name[ends-with(., 'AugmentationType')])"/>
     <sch:let name="has-augmentation-base-type" value="       exists(xs:complexContent[         exists(xs:*[local-name() = ('extension', 'restriction')                     and exists(@base[ends-with(., 'AugmentationType')])])])"/>
@@ -674,13 +674,13 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-34"><sch:title>Augmentation element is an element of an augmentation type</sch:title>
+<sch:pattern id="rule_10-34"><sch:title>Augmentation element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
     <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-34: An element MUST have a name that ends in 'Augmentation' if and only if it has a type that is a augmentation type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-37"><sch:title>Metadata types are derived from metadata types</sch:title>
+<sch:pattern id="rule_10-37"><sch:title>Metadata types</sch:title>
   <sch:rule context="xs:complexType">
     <sch:let name="is-metadata-type" value="exists(@name[ends-with(., 'MetadataType')])"/>
     <sch:let name="has-metadata-base-type" value="       exists(xs:complexContent[         exists(xs:*[local-name() = ('extension', 'restriction')                     and exists(@base[ends-with(., 'MetadataType')])])])"/>
@@ -688,55 +688,55 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-38"><sch:title>Metadata element is an element of a metadata type</sch:title>
+<sch:pattern id="rule_10-38"><sch:title>Metadata element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
     <sch:assert test="exists(@type[ends-with(., 'MetadataType')])                       = exists(@name[ends-with(., 'Metadata')])">Rule 10-38: An element MUST have a name that ends in 'Metadata' if and only if it has a type that is a metadata type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-64"><sch:title>Deprecated annotates schema component</sch:title>
+<sch:pattern id="rule_10-64"><sch:title>Deprecation</sch:title>
   <sch:rule context="*[exists(@appinfo:deprecated)]">
     <sch:assert test="namespace-uri-from-QName(node-name(.)) = xs:anyURI('http://www.w3.org/2001/XMLSchema')">Rule 10-64: The attribute appinfo:deprecated MUST be owned by an element with a namespace name <namespace-uri-for-prefix xmlns="https://iead.ittl.gtri.org/wr24/doc/2011-09-30-2258">xs</namespace-uri-for-prefix>.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-65"><sch:title>External import indicator annotates import</sch:title>
+<sch:pattern id="rule_10-65"><sch:title>The NIEM appinfo namespace</sch:title>
   <sch:rule context="*[exists(@appinfo:externalImportIndicator)]">
     <sch:assert test="exists(self::xs:import)">Rule 10-65: The attribute {http://release.niem.gov/niem/appinfo/3.0/}externalImportIndicator MUST be owned by an element xs:import.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-66"><sch:title>External adapter type indicator annotates complex type</sch:title>
+<sch:pattern id="rule_10-66"><sch:title>The NIEM appinfo namespace</sch:title>
   <sch:rule context="*[exists(@appinfo:externalAdapterTypeIndicator)]">
     <sch:assert test="exists(self::xs:complexType)">Rule 10-66: The attribute appinfo:externalAdapterTypeIndicator MUST be owned by an element xs:complexType.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-67"><sch:title>Applies to types annotates metadata element</sch:title>
+<sch:pattern id="rule_10-67"><sch:title>appinfo:appliesToTypes annotation</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
     <sch:assert test="exists(self::xs:element[exists(@name)                                and ends-with(@name, 'Metadata')])">Rule 10-67: The attribute appinfo:appliesToTypes MUST be owned by a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-69"><sch:title>Applies to elements annotates metadata element</sch:title>
+<sch:pattern id="rule_10-69"><sch:title>appinfo:appliesToElements annotation</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToElements)]">
     <sch:assert test="exists(self::xs:element[                           exists(@name)                           and ends-with(@name, 'Metadata')])">Rule 10-69: The attribute appinfo:appliesToElements MUST be owned by a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-71"><sch:title>LocalTerm annotates schema</sch:title>
+<sch:pattern id="rule_10-71"><sch:title>The NIEM local terminology namespace</sch:title>
   <sch:rule context="term:LocalTerm">
     <sch:assert test="parent::xs:appinfo[parent::xs:annotation[parent::xs:schema]]">Rule 10-71: The element term:LocalTerm MUST be application information an an element xs:schema.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-72"><sch:title>LocalTerm has literal or definition</sch:title>
+<sch:pattern id="rule_10-72"><sch:title>The NIEM local terminology namespace</sch:title>
   <sch:rule context="term:LocalTerm">
     <sch:assert test="exists(@literal) or exists(@definition)">Rule 10-72: The element {http://release.niem.gov/niem/localTerminology/3.0/}LocalTerm MUST have a literal or definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_11-1"><sch:title>Name of type ends in "Type"</sch:title>
+<sch:pattern id="rule_11-1"><sch:title>Type definition components</sch:title>
   <sch:rule context="xs:complexType[exists(@name)                        and exists(xs:simpleContent/xs:extension/@base)                        and (for $extension in xs:simpleContent/xs:extension,                                 $base-qname in resolve-QName($extension/@base, $extension) return                               $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name))]">
     <sch:report test="false()">Rule 11-1: The name of a proxy type does not end in "Type".</sch:report>
   </sch:rule>
@@ -745,7 +745,7 @@
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_11-2"><sch:title>Name of type is in upper camel case</sch:title>
+<sch:pattern id="rule_11-2"><sch:title>Type definition components</sch:title>
   <sch:rule context="xs:complexType[exists(@name)                        and exists(xs:simpleContent/xs:extension/@base)                        and (for $extension in xs:simpleContent/xs:extension,                                 $base-qname in resolve-QName($extension/@base, $extension) return                               $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name))]">
     <sch:report test="false()">Rule 11-2: The name of a proxy type is not upper camel case.</sch:report>
   </sch:rule>
@@ -754,81 +754,81 @@
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_11-3"><sch:title>Base type definition defined by conformant schema</sch:title>
+<sch:pattern id="rule_11-3"><sch:title>Type definition hierarchy</sch:title>
   <sch:rule context="xs:*[exists(@base)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@base, .))"/>
     <sch:assert test="$namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 11-3: The [base type definition] of a [type definition] MUST have the target namespace or the XML Schema namespace or a namespace that is imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-4"><sch:title>Name of simple type ends in "SimpleType"</sch:title>
+<sch:pattern id="rule_11-4"><sch:title>Simple type definition</sch:title>
   <sch:rule context="xs:simpleType[@name]">
     <sch:assert test="ends-with(@name, 'SimpleType')">Rule 11-4: A simple type definition schema component MUST have a name that ends in "SimpleType".</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-5"><sch:title>Name of simple type is upper camel case</sch:title>
+<sch:pattern id="rule_11-5"><sch:title>Simple type definition</sch:title>
   <sch:rule context="xs:simpleType[exists(@name)]">
     <sch:assert test="matches(string(@name), '^([A-Z][A-Za-z0-9\-]*)+$')">Rule 11-5: The name of a simple type definition schema component MUST be upper camel case.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-7"><sch:title>List item type defined by conformant schemas</sch:title>
+<sch:pattern id="rule_11-7"><sch:title>Derivation by list</sch:title>
   <sch:rule context="xs:list[exists(@itemType)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@itemType, .))"/>
     <sch:assert test="$namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 11-7: The item type of a list simple type definition MUST have a target namespace equal to the target namespace of the XML Schema document within which it is defined, or a namespace that is imported as conformant by the schema document within which it is defined.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-8"><sch:title>Union member types defined by conformant schemas</sch:title>
+<sch:pattern id="rule_11-8"><sch:title>Derivation by union</sch:title>
   <sch:rule context="xs:union[exists(@memberTypes)]">
     <sch:assert test="every $qname in tokenize(normalize-space(@memberTypes), ' '),                             $namespace in namespace-uri-from-QName(resolve-QName($qname, .))                       satisfies ($namespace = nf:get-target-namespace(.)                                  or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                            and $namespace = xs:anyURI(@namespace)                                            and empty(@appinfo:externalImportIndicator)]))">Rule 11-8: Every member type of a union simple type definition MUST have a target namespace that is equal to either the target namespace of the XML Schema document within which it is defined or a namespace that is imported as conformant by the schema document within which it is defined.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-9"><sch:title>Name of a code simple type has standard suffix</sch:title>
+<sch:pattern id="rule_11-9"><sch:title>Code simple types</sch:title>
   <sch:rule context="xs:simpleType[exists(@name)       and (xs:restriction/xs:enumeration            or xs:restriction[ends-with(local-name-from-QName(resolve-QName(@base, .)), 'CodeSimpleType')])]">
     <sch:assert test="ends-with(@name, 'CodeSimpleType')">Rule 11-9: A simple type definition schema component that has an enumeration facet or that is derived from a code type MUST have a name that ends in "CodeSimpleType".</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-10"><sch:title>Code simple type has enumerations</sch:title>
+<sch:pattern id="rule_11-10"><sch:title>Code simple types</sch:title>
   <sch:rule context="xs:simpleType[exists(@name) and ends-with(@name, 'CodeSimpleType')]">
     <sch:assert test="xs:restriction[ends-with(local-name-from-QName(resolve-QName(@base, .)), 'CodeSimpleType')]                       or xs:restriction/xs:enumeration                       or (for $union in xs:union,                              $member-types in $union/@memberTypes return                            some $member-type in tokenize(normalize-space($member-types), ' ') satisfies                              ends-with(local-name-from-QName(resolve-QName($member-type, $union)), 'CodeSimpleType'))">Rule 11-10: A code simple type MUST be derived from a code simple type or have an enumeration facet.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-11"><sch:title>Element name is upper camel case</sch:title>
+<sch:pattern id="rule_11-11"><sch:title>Element declaration</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
     <sch:assert test="matches(string(@name), '^([A-Z][A-Za-z0-9\-]*)+$')">Rule 11-11: The name of an element declaration schema component MUST be upper camel case.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-12"><sch:title>Element type does not have a simple type name</sch:title>
+<sch:pattern id="rule_11-12"><sch:title>Element declaration</sch:title>
   <sch:rule context="xs:element[exists(@type)]">
     <sch:assert test="not(ends-with(@type, 'SimpleType'))">Rule 11-12: The {type definition} of an [element declaration] MUST NOT have a {name} that ends in 'SimpleType'.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-13"><sch:title>Element type is from conformant namespace</sch:title>
+<sch:pattern id="rule_11-13"><sch:title>Element declaration</sch:title>
   <sch:rule context="xs:element[exists(@type)]">
     <sch:assert test="for $type-qname in resolve-QName(@type, .),                           $type-namespace in namespace-uri-from-QName($type-qname) return                         $type-namespace = nf:get-target-namespace(.)                         or exists(nf:get-document-element(.)/xs:import[                                     xs:anyURI(@namespace) = $type-namespace                                     and empty(@appinfo:externalImportIndicator)])">Rule 11-13: The {type definition} of an {element declaration} MUST have a {target namespace} that is the target namesapce, or one that is imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-14"><sch:title>Name of element that ends in "Abstract" must be abstract</sch:title>
+<sch:pattern id="rule_11-14"><sch:title>Element declaration</sch:title>
   <sch:rule context="xs:element[@name[ends-with(., 'Abstract')]]">
     <sch:assert test="exists(@abstract) and xs:boolean(@abstract) = true()">Rule 11-14: An element with a name that ends in 'Abstract' MUST be abstract.</sch:assert>
   </sch:rule>
 </sch:pattern>
 	    
-<sch:pattern id="rule_11-15"><sch:title>Name of element that ends in "Representation" must be abstract</sch:title>
+<sch:pattern id="rule_11-15"><sch:title>Element declaration</sch:title>
   <sch:rule context="xs:element[@name[ends-with(., 'Representation')]]">
     <sch:report test="empty(@abstract) or xs:boolean(@abstract) = false()">Rule 11-15: An element with a name that ends in 'Representation' SHOULD be abstract.</sch:report>
   </sch:rule>
 </sch:pattern>
 	    
-<sch:pattern id="rule_11-16"><sch:title>Elements with simple content use representation term</sch:title>
+<sch:pattern id="rule_11-16"><sch:title>Object element declarations</sch:title>
   <sch:rule context="xs:element[       (nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))        or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))       and exists(@name)        and exists(@type)]">
     <sch:let name="has-simple-content" value="       some $type in nf:resolve-type(., resolve-QName(@type, .)) satisfies         exists($type[exists(xs:simpleContent)])"/>
     <sch:let name="name-uses-representation-term" value="       some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies         ends-with(@name, $representation-term)"/>
@@ -836,65 +836,65 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-17"><sch:title>Element substitution group defined by conformant schemas</sch:title>
+<sch:pattern id="rule_11-17"><sch:title>Element substitution group</sch:title>
   <sch:rule context="xs:element[exists(@substitutionGroup)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@substitutionGroup, .))"/>
     <sch:assert test="$namespace = nf:get-target-namespace(.)                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 11-17: An element substitution group MUST have either the target namespace or a namespace that is imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-18"><sch:title>Attribute type defined by conformant schemas</sch:title>
+<sch:pattern id="rule_11-18"><sch:title>Attribute declaration</sch:title>
   <sch:rule context="xs:attribute[exists(@type)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@type, .))"/>
     <sch:assert test="$namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 11-18: The type of an attribute declaration MUST have the target namespace or the XML Schema namespace or a namespace that is imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-19"><sch:title>Attribute name uses representation term</sch:title>
+<sch:pattern id="rule_11-19"><sch:title>Attribute declaration</sch:title>
   <sch:rule context="xs:attribute[exists(@name)]">
     <sch:assert test="some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies                         ends-with(@name, $representation-term)">Rule 11-19: An attribute name MUST end with a representation term.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-21"><sch:title>Element ref in external type defined by external schemas</sch:title>
+<sch:pattern id="rule_11-21"><sch:title>Element use</sch:title>
   <sch:rule context="xs:element[exists(@ref)                                 and exists(ancestor::xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)])]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@ref, .))"/>
     <sch:assert test="$namespace != nf:get-target-namespace(.)                       and exists(nf:get-document-element(.)/self::xs:schema/xs:import[                           exists(@namespace)                           and $namespace = xs:anyURI(@namespace)                           and xs:boolean(@appinfo:externalImportIndicator) = true()])">Rule 11-21: An element reference that appears within an external adapter type MUST have a target namespace that is imported as external.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-22"><sch:title>Element reference defined by conformant schemas</sch:title>
+<sch:pattern id="rule_11-22"><sch:title>Element use</sch:title>
   <sch:rule context="xs:element[exists(ancestor::xs:complexType[empty(@appinfo:externalAdapterTypeIndicator)]) and exists(@ref)]">
     <sch:let name="namespace" value="namespace-uri-from-QName(resolve-QName(@ref, .))"/>
     <sch:assert test="$namespace = nf:get-target-namespace(.)                       or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                     and $namespace = xs:anyURI(@namespace)                                     and empty(@appinfo:externalImportIndicator)])">Rule 11-22: An element reference MUST be to a component that has a namespace that is either the target namespace of the [schema document] in which it appears, or which is imported as conformant by that [schema document].</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_11-34"><sch:title>Structures imported as conformant</sch:title>
+<sch:pattern id="rule_11-34"><sch:title>Special namespace is imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                 and xs:anyURI(@namespace) = xs:anyURI('http://release.niem.gov/niem/structures/3.0/')]">
     <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-34: The structures namespace MUST be imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>          
             
-<sch:pattern id="rule_11-35"><sch:title>Schema for XML imported as conformant</sch:title>
+<sch:pattern id="rule_11-35"><sch:title>Special namespace is imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                and xs:anyURI(@namespace) = xs:anyURI('http://www.w3.org/XML/1998/namespace')]">
     <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-35: The namespace for XML MUST be imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>          
             
-<sch:pattern id="rule_11-36"><sch:title>Schema for IC-ISM imported as conformant</sch:title>
+<sch:pattern id="rule_11-36"><sch:title>Special namespace is imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                and xs:anyURI(@namespace) = xs:anyURI('urn:us:gov:ic:ism')]">
     <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-36: An import of the namespace for IC-ISM MUST NOT be marked as an external import.</sch:assert>
   </sch:rule>
 </sch:pattern>          
             
-<sch:pattern id="rule_11-37"><sch:title>Schema for IC-NTK imported as conformant</sch:title>
+<sch:pattern id="rule_11-37"><sch:title>Special namespace is imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                and xs:anyURI(@namespace) = xs:anyURI('urn:us:gov:ic:ntk')]">
     <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-37: An import of the namespace for IC-NTK MUST NOT be marked as an external import.</sch:assert>
   </sch:rule>
 </sch:pattern>          
             
-<sch:pattern id="rule_11-39"><sch:title>Consistently marked namespace imports</sch:title>
+<sch:pattern id="rule_11-39"><sch:title>Schema assembly</sch:title>
   <sch:rule context="xs:import">
     <sch:let name="namespace" value="@namespace"/>
     <sch:let name="is-conformant" value="empty(@appinfo:externalImportIndicator)"/>
