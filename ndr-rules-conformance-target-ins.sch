@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for instance XML documents</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for instance XML documents</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -48,13 +48,13 @@
         
 <sch:pattern id="rule_12-16"><sch:title>XML instance document rules</sch:title>
   <sch:rule context="*[exists(@structures:metadata)]">
-    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata)) satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-16: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
+    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-16: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         
 <sch:pattern id="rule_12-17"><sch:title>XML instance document rules</sch:title>
   <sch:rule context="*[exists(@structures:relationshipMetadata)]">
-    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata)) satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-17: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
+    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-17: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         </sch:schema>
