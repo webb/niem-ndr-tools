@@ -86,26 +86,25 @@
    <map:rule descriptiveID="no-xs-unique" ruleID="rule_9-71"/>
    <map:rule descriptiveID="no-xs-key" ruleID="rule_9-72"/>
    <map:rule descriptiveID="no-xs-keyref" ruleID="rule_9-73"/>
-   <map:rule descriptiveID="no-xs-selector" ruleID="rule_9-74"/>
-   <map:rule descriptiveID="no-xs-field" ruleID="rule_9-75"/>
-   <map:rule descriptiveID="no-xs-group" ruleID="rule_9-76"/>
-   <map:rule descriptiveID="no-def-attr-grp" ruleID="rule_9-77"/>
-   <map:rule descriptiveID="no-comments" ruleID="rule_9-78"/>
-   <map:rule descriptiveID="doc-has-no-els" ruleID="rule_9-79"/>
-   <map:rule descriptiveID="appinfo-has-els" ruleID="rule_9-80"/>
-   <map:rule descriptiveID="appinfo-el-has-ns" ruleID="rule_9-81"/>
-   <map:rule descriptiveID="no-xs-in-appinfo" ruleID="rule_9-82"/>
-   <map:rule descriptiveID="sch-has-dd" ruleID="rule_9-83"/>
-   <map:rule descriptiveID="sch-dd-is-not-empty" ruleID="rule_9-84"/>
-   <map:rule descriptiveID="req-target-ns" ruleID="rule_9-85"/>
-   <map:rule descriptiveID="target-ns-is-rfc3986" ruleID="rule_9-86"/>
-   <map:rule descriptiveID="has-version" ruleID="rule_9-87"/>
-   <map:rule descriptiveID="version-not-empty" ruleID="rule_9-88"/>
-   <map:rule descriptiveID="no-blockdefault" ruleID="rule_9-89"/>
-   <map:rule descriptiveID="no-finalDefault" ruleID="rule_9-90"/>
-   <map:rule descriptiveID="no-redefine" ruleID="rule_9-91"/>
-   <map:rule descriptiveID="no-include" ruleID="rule_9-92"/>
-   <map:rule descriptiveID="xs-import-has-ns" ruleID="rule_9-93"/>
+   <map:rule descriptiveID="no-xs-group" ruleID="rule_9-74"/>
+   <map:rule descriptiveID="no-def-attr-grp" ruleID="rule_9-75"/>
+   <map:rule descriptiveID="no-comments" ruleID="rule_9-76"/>
+   <map:rule descriptiveID="doc-has-no-els" ruleID="rule_9-77"/>
+   <map:rule descriptiveID="appinfo-has-els" ruleID="rule_9-78"/>
+   <map:rule descriptiveID="appinfo-el-has-ns" ruleID="rule_9-79"/>
+   <map:rule descriptiveID="no-xs-in-appinfo" ruleID="rule_9-80"/>
+   <map:rule descriptiveID="sch-has-dd" ruleID="rule_9-81"/>
+   <map:rule descriptiveID="sch-dd-is-not-empty" ruleID="rule_9-82"/>
+   <map:rule descriptiveID="req-target-ns" ruleID="rule_9-83"/>
+   <map:rule descriptiveID="target-ns-is-rfc3986" ruleID="rule_9-84"/>
+   <map:rule descriptiveID="has-version" ruleID="rule_9-85"/>
+   <map:rule descriptiveID="version-not-empty" ruleID="rule_9-86"/>
+   <map:rule descriptiveID="no-blockdefault" ruleID="rule_9-87"/>
+   <map:rule descriptiveID="no-finalDefault" ruleID="rule_9-88"/>
+   <map:rule descriptiveID="no-redefine" ruleID="rule_9-89"/>
+   <map:rule descriptiveID="no-include" ruleID="rule_9-90"/>
+   <map:rule descriptiveID="xs-import-has-ns" ruleID="rule_9-91"/>
+   <map:rule descriptiveID="rule-set-is-closed" ruleID="rule_9-92"/>
    <map:rule descriptiveID="" ruleID="rule_10-1"/>
    <map:rule descriptiveID="code-classes" ruleID="rule_10-2"/>
    <map:rule descriptiveID="object-with-cc-derived-from-object" ruleID="rule_10-3"/>
@@ -169,7 +168,7 @@
    <map:rule descriptiveID="" ruleID="rule_10-56"/>
    <map:rule descriptiveID="" ruleID="rule_10-57"/>
    <map:rule descriptiveID="" ruleID="rule_10-58"/>
-   <map:rule descriptiveID="" ruleID="rule_10-59"/>
+   <map:rule descriptiveID="rule-csc-has-rep-term" ruleID="rule_10-59"/>
    <map:rule descriptiveID="" ruleID="rule_10-60"/>
    <map:rule descriptiveID="" ruleID="rule_10-61"/>
    <map:rule descriptiveID="" ruleID="rule_10-62"/>
