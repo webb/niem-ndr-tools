@@ -118,10 +118,13 @@ COMMAND+=("$1")
 
 vrun "${COMMAND[@]}" > "$SVRL_RESULTS"
 
-temp_make_file ANNOTATED_SVRL_RESULTS
+temp_make_file ANNOTATED_SVRL_RESULTS UNSORTED_TEST_REPORT
 
 vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -L -XSL "$ANNOTATE_SVRL_XSL"  -IN "$SVRL_RESULTS" -PARAM ndr-id-map "$NDR_ID_MAP" -OUT "$ANNOTATED_SVRL_RESULTS"
 
-vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -XSL "$ANNOTATED_SVRL_TO_TEXT_XSL" -IN "$ANNOTATED_SVRL_RESULTS"
+vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -XSL "$ANNOTATED_SVRL_TO_TEXT_XSL" -IN "$ANNOTATED_SVRL_RESULTS" -OUT "$UNSORTED_TEST_REPORT"
+
+vrun sort --field-separator=: --key=1n --key=3f --key=2f "$UNSORTED_TEST_REPORT"
+
 # output to stdout
 

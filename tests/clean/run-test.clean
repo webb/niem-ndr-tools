@@ -7,12 +7,15 @@ cd "$(dirname "$0")"
 
 while read -r -d $'\n' XSD; do
     case "$XSD" in
-        niem/appinfo/3.0/appinfo.xsd ) true;;
-        niem/structures/3.0/structures.xsd ) true;;
-        niem/conformanceTargets/3.0/conformanceTargets.xsd ) true;;
-        niem/localTerminology/3.0/localTerminology.xsd ) true ;;
-        niem/niem-core/3.0/niem-core.xsd \
-            | niem/proxy/xsd/3.0/xs.xsd )
+        subset/niem/appinfo/3.0/appinfo.xsd ) true;;
+        subset/niem/structures/3.0/structures.xsd ) true;;
+        subset/niem/conformanceTargets/3.0/conformanceTargets.xsd ) true;;
+        subset/niem/localTerminology/3.0/localTerminology.xsd ) true ;;
+        subset/niem/external/cap/1.1/cap.xsd ) true;;
+        subset/niem/niem-core/3.0/niem-core.xsd \
+            | subset/niem/proxy/xsd/3.0/xs.xsd \
+            | subset/niem/adapters/edxl-cap/3.0/edxl-cap.xsd \
+            )
             test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
@@ -26,7 +29,7 @@ EOF
             ;;
         * ) test_fail "No test for XSD \"$XSD\"" ;;
     esac
-done < <(find niem -type f -name '*.xsd')
+done < <(find subset -type f -name '*.xsd')
 
 
 
