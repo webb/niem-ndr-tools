@@ -281,25 +281,27 @@ Status
 
    When discussing XML documents, this document uses terminology and language as defined by [XML Infoset].
 
-   [XML Infoset] uses the term "information item" to describe pieces of XML documents. Documents, elements, and attributes are types of information items. The use of the term "element information item", for example, refers to the term as defined by [XML Infoset]. Shorthand terms may also be used to refer to information items, such as "element", as described within this section. The element information items are identified and defined by [XML Infoset] Section 2, Information Items.
+   [XML Infoset] uses the term "information item" to describe pieces of XML documents. Documents, elements, and attributes are types of information items. The use of the term "element information item", for example, refers to the term as defined by [XML Infoset]. Shorthand terms may also be used to refer to information items, such as [element], as defined below. The information items are identified and defined by [XML Infoset] Section 2, Information Items.
 
-   Shorthand terms for information items include:
+   [Definition: element]
 
-      *  element: an element information item
+      An element is an element information item, as defined by [XML Infoset] Section 2.2, Element Information Items
 
-      *  attribute: an attribute information item
+   [Definition: attribute]
+
+      An attribute is an attribute information item, as defined by [XML Infoset] Section 2.3, Attribute Information Items
 
    [XML Infoset] also describes properties of information items. Each class of information item carries a set of properties. Each property has a name, and the property is identified by putting the name into square brackets. For example, the element that contains an attribute is described as the [owner element] of an attribute information item, as defined in [XML Infoset] Section 2.3, Attribute Information Items.
 
    Shorthand terms for properties of information items include:
 
-      *  parent (of an element): the [parent] property of an element information item
+      *  parent (of an element): the value of the [parent] property of an element information item
 
-      *  child (of an element): a member of the [children] property of an element information item
+      *  child (of an element): a member of the list of information items that is the value of the [children] property of an element information item
 
-      *  owner (of an attribute): the [owner element] property of an attribute information item
+      *  owner (of an attribute): the value of the [owner element] property of an attribute information item
 
-      *  document element: the [document element] property of a document information item, preferred over the common term "root element".
+      *  document element: the value of the [document element] property of a document information item; preferred over the term "root element".
 
 3.4. XML Schema terminology
 
@@ -544,7 +546,7 @@ Rule 4-1. Schema is CTAS-conformant
         </sch:rule>
       </sch:pattern>
 
-   The term "conformant document" is defined by [CTAS] Section 3.2, Conformance to this Specification.
+   The term "conformant document" is defined by [CTAS] Section 3.2, Conformance to this Specification. Note that this rule uses sch:report to provide a location that must be checked for conformance to an external standard, and does not itself provide any enforcement or checking of the actual rule.
 
 Rule 4-2. Document element has attribute ct:conformanceTargets
 
@@ -1288,7 +1290,7 @@ Rule 7-6. Component name follows ISO 11179 Part 5 Annex A
 
    This section establishes a profile of XML Schema for NIEM-conformant schemas. Because the XML Schema specifications are flexible, comprehensive rules are needed to achieve a balance between establishing uniform schema design and providing developers flexibility to solve novel data modeling problems.
 
-   Note that external schemas (i.e., non-NIEM-conformant schemas) do not need to obey the rules set forth in this section. So long as schema components from external schemas are adapted for use with NIEM according to the modeling rules in Section 10.2.2.3, External adapter types and external components, below, they may be used as they appear in the external standard, even if the schema components themselves violate the rules for NIEM-conformant schemas.
+   Note that external schema documents (i.e., non-NIEM-conformant schema documents) do not need to obey the rules set forth in this section. So long as schema components from external schema documents are adapted for use with NIEM according to the modeling rules in Section 10.2.2.3, External adapter types and external components, below, they may be used as they appear in the external standard, even if the schema components themselves violate the rules for NIEM-conformant schemas.
 
    The following sections are broken down in the order provided by [XML Schema Structures] Section 2.2, XML Schema Abstract Data Model, followed by a section on a schema document as a whole and a section on schema namespaces and assembly:
 
@@ -1635,7 +1637,7 @@ Rule 9-24. No mixed content on complex type
 
    Mixed content allows the mixing of data tags with text. Languages such as XHTML use this syntax for markup of text. NIEM-conformant schemas define XML that is for data exchange, not text markup. Mixed content creates complexity in processing, defining, and constraining content.
 
-   Well-defined markup languages exist outside NIEM and may be used with NIEM data. External schemas may include mixed content and may be used with NIEM. However, mixed content must not be defined by NIEM-conformant schemas in keeping with Section 6.2.7, Disallow mixed content, above.
+   Well-defined markup languages exist outside NIEM and may be used with NIEM data. External schema documents may include mixed content and may be used with NIEM. However, mixed content must not be defined by NIEM-conformant schemas in keeping with Section 6.2.7, Disallow mixed content, above.
 
 Rule 9-25. No mixed content on complex content
 
@@ -1983,7 +1985,7 @@ Rule 9-46. Element declaration is nillable
 
    All elements declared by reference schemas allow a nil value. This enables the ID/IDREF mechanism linking structures:ref and structures:id, as described by Section 12.2, Reference elements, below.
 
-   A developer may constrain the use of nil in instance by setting nillable to false in subset schemas, or by use of non-XML Schema mechanisms, such as Schematron.
+   A developer may constrain the use of nil in an instance by setting nillable to false in subset schemas, or by use of non-XML Schema mechanisms, such as Schematron.
 
    [Rule 9-46] (REF)
 
@@ -2935,19 +2937,19 @@ Rule 10-7. Instance of RoleOf element indicates a role object
 
 10.2.2.3. External adapter types and external components
 
-   There are a variety of commonly used standards that are represented in XML Schema. Such schemas are generally not NIEM-conformant. NIEM-conformant schemas may reference components defined by these external schemas. This section provides rules under which NIEM-conformant components may be constructed from schema components that are not NIEM-conformant.
+   There are a variety of commonly used standards that are represented in XML Schema. Such schemas are generally not NIEM-conformant. NIEM-conformant schemas may reference components defined by these external schema documents. This section provides rules under which NIEM-conformant components may be constructed from schema components that are not NIEM-conformant.
 
    [Definition: external schema document]
 
       An external schema document is any [schema document] that is not a [conformant reference schema document], a [conformant extension schema document], or a [schema document] defining the [structures namespace].
 
-   Note that, although the schema document for the [structures namespace] is not conformant, it is not considered an external schema because it defines the fundamental framework on which NIEM is built; it is considered a supporting namespace. It is not considered an external schema because of its supporting nature and is thus excluded from this definition.
+   Note that, although the schema document for the [structures namespace] is not conformant, it is not considered an external schema document because it defines the fundamental framework on which NIEM is built; it is considered a supporting namespace. It is not considered an external schema document because of its supporting nature and is thus excluded from this definition.
 
    A [schema component] defined by an [external schema document] may be called an external component. A NIEM-conformant type may use external components in its definition. There are two ways to integrate external components into a NIEM-conformant schema:
 
-      1. An adapter type may be constructured from externally-defined elements and attributes. A goal of this method is to represent, as a single unit, a set of data that embodies a single concept from an external standard. This is an [external adapter type].
+      1. An external adapter type may be constructured from externally-defined elements and attributes. A goal of this method is to represent, as a single unit, a set of data that embodies a single concept from an external standard. This is an [external adapter type].
 
-      2. A non-adapter type may incorporate externally-defined attributes.
+      2. A type that is not an external adapter type may incorporate externally-defined attributes.
 
    Figure 10-6: Use of external components to create a NIEM-conformant type
 
@@ -2963,15 +2965,13 @@ Rule 10-7. Instance of RoleOf element indicates a role object
 
    [Rule 10-8] (REF, EXT)
 
-      Within the schema, an element xs:import that imports a namespace defined by an external schema MUST be a documented component.
+      Within the schema, an element xs:import that imports a namespace defined by an external schema document MUST be a documented component.
 
-   Rationale
-
-   A NIEM-conformant schema has well-known documentation points. Therefore, a schema that imports a NIEM-conformant namespace need not provide additional documentation. However, when an external schema is imported, appropriate documentation must be provided at the point of import because documentation associated with external schemas is undefined and variable. In this particular case, documentation of external schemas is required at their point of use in NIEM.
+   A NIEM-conformant schema has well-known documentation points. Therefore, a schema that imports a NIEM-conformant namespace need not provide additional documentation. However, when an external schema document is imported, appropriate documentation must be provided at the point of import because documentation associated with external schema documents is undefined and variable. In this particular case, documentation of external schema documents is required at their point of use in NIEM.
 
    [Definition: external adapter type]
 
-      An external adapter type is a NIEM-conformant type that adapts external components for use within NIEM. An adapter type creates a new class of object that embodies a single concept composed of external components. A NIEM-conformant schema defines an adapter type.
+      An external adapter type is a NIEM-conformant type that adapts external components for use within NIEM. An external adapter type creates a new class of object that embodies a single concept composed of external components. A NIEM-conformant schema defines an external adapter type.
 
    [Rule 10-9] (REF, EXT)
 
@@ -2979,41 +2979,33 @@ Rule 10-7. Instance of RoleOf element indicates a role object
 
    [Rule 10-10] (REF, EXT)
 
-      Within the schema, an adapter type MUST be an immediate extension of type structures:ObjectType.
+      Within the schema, an external adapter type MUST be an immediate extension of type structures:ObjectType.
 
-   Rationale
-
-   The adapter type must contain the content defined for any NIEM component. The type structures:ObjectType provides such content.
+   The external adapter type must contain the content defined for any NIEM component. The type structures:ObjectType provides such content.
 
    [Rule 10-11] (REF, EXT)
 
-      Within the schema, an adapter type MUST be composed of only elements and attributes from an external standard.
+      Within the schema, an external adapter type MUST be composed of only elements and attributes from an external standard.
 
-   Rationale
+   An external adapter type should contain the information from an external standard to express a complete concept. This expression should be composed of content entirely from an external schema document. Most likely, the external schema document will be based on an external standard with its own legacy support.
 
-   An adapter type should contain the information from an external standard to express a complete concept. This expression should be composed of content entirely from an external schema. Most likely, the external schema will be based on an external standard with its own legacy support.
-
-   In the case of an external expression that is in the form of model groups, attribute groups, or types, additional elements and type components may be created in an external schema, and the adapter type may use those components.
+   In the case of an external expression that is in the form of model groups, attribute groups, or types, additional elements and type components may be created in an external schema document, and the external adapter type may use those components.
 
    [Rule 10-12] (REF, EXT)
 
-      Within the schema, an element reference used in an adapter type definition MUST be a documented component.
+      Within the schema, an element reference used in an external adapter type definition MUST be a documented component.
 
    [Rule 10-13] (REF, EXT)
 
-      Within the schema, an attribute reference used in an adapter type definition MUST be a documented component.
+      Within the schema, an attribute reference used in an external adapter type definition MUST be a documented component.
 
-   Rationale
-
-   In normal (conformant) type definition, a reference to an attribute or element is a reference to a documented component. Within an adapter type, the references to the attributes and elements being adapted are references to undocumented components. These components must be documented to provide comprehensibility and interoperability. Since documentation made available by nonconformant schemas is undefined and variable, documentation of these components is required at their point of use, within the conformant schema.
+   In normal (conformant) type definition, a reference to an attribute or element is a reference to a documented component. Within an external adapter type, the references to the attributes and elements being adapted are references to undocumented components. These components must be documented to provide comprehensibility and interoperability. Since documentation made available by nonconformant schemas is undefined and variable, documentation of these components is required at their point of use, within the conformant schema.
 
    [Rule 10-14] (REF, EXT)
 
-      Within the schema, an adapter type MUST NOT be extended or restricted.
+      Within the schema, an external adapter type MUST NOT be extended or restricted.
 
-   Rationale
-
-   Adapter types are meant to stand alone; each type expresses a single concept from an external schema, and adapter types are maintained in separate schemas that only contain adapter types. In this way, processors may easily switch modes, processing NIEM-conformant content in one way, and external content in another.
+   Each external adapter type is meant to stand alone; each type expresses a single concept, and is built from schema components from one or more external schema documents.
 
 Rule 10-15. External adapter type has complex content
 
@@ -3084,7 +3076,7 @@ Rule 10-19. Name of code type ends in "CodeType"
                             and (ends-with(@base, 'CodeSimpleType')
                                  or ends-with(@base, 'CodeType'))])])"/>
           <sch:assert test="$has-code-type-name = $has-code-type-base"
-            >A complex type with a [base type] of a code type or code simple type MUST have a name that ends in 'CodeType'.</sch:assert>
+            >A complex type definition MUST have a {name} that ends in 'CodeType' if and only if it has a {base type definition} of a code type or code simple type.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3100,58 +3092,45 @@ Rule 10-19. Name of code type ends in "CodeType"
 
    Figure 10-7: An association in an instance
 
-      <nc:GuardianAssociation>
-        <nc:PersonGuardianReference s:ref="p1"/>
-        <nc:PersonDependentReference s:ref="p2"/>
-      </nc:GuardianAssociation>
-      
-      <nc:Person s:id="p1">
-        <nc:PersonName>
-          <nc:PersonFullName>John Doe</nc:PersonFullName>
-        </nc:PersonName>
-      </nc:Person>
-                
-      <nc:Person s:id="p2">
-        <nc:PersonName>
-          <nc:PersonFullName>Jane Doe</nc:PersonFullName>
-        </nc:PersonName>
-      </nc:Person>
+      <scr:PersonPhoneAssociation>
+        <nc:Person>
+          <nc:PersonName>
+            <nc:PersonFullName>John Doe</nc:PersonFullName>
+          </nc:PersonName>
+        </nc:Person>
+        <nc:TelephoneNumber>
+          <nc:FullTelephoneNumber>
+            <nc:TelephoneNumberFullID>(212)555-1212</nc:TelephoneNumberFullID>
+          </nc:FullTelephoneNumber>
+        </nc:TelephoneNumber>
+      </scr:PersonPhoneAssociation>
 
-   This example shows an association between a guardian and a dependent. This relationship is defined by the element nc:GuardianAssociation, whose structure is defined by the type nc:GuardianAssociationType. The type defines what an association relates, but the element defines the actual meaning of the association.
+   This example shows an association between a person and a phone number. This relationship is defined by the element scr:PersonPhoneAssociation, the structure of which is defined by the type scr:PersonPhoneAssociationType. In practice, an [association type] usually defines what kinds of things the association relates, while the association element may refine the meaning of the association.
 
-   An example of an association type defined by an XML Schema document follows.
+   An example of an association type defined by an XML Schema document follows, in Figure 10-8, A definition of an association type, below.
 
-   Note that the NIEM Core schema in NIEM 3.0 defines a type nc:AssociationType, which acts as the base type for all other association types defined within NIEM Core. This is a convention adopted by the NIEM Core namespace but is not a requirement of the NDR. Implementers of NIEM-conformant schemas are not required to base association types on nc:AssociationType.
+   Note that the NIEM Core schema in NIEM 3.0 defines a type nc:AssociationType, which acts as the base type for all of the other association types defined within NIEM Core. This is a convention adopted by that version of NIEM Core namespace, but is not a requirement of this document. An implementer of a NIEM-conformant schema is not required by this specification to base a new association type on nc:AssociationType.
 
    Figure 10-8: A definition of an association type
 
-      <xs:complexType name="AssociationType">
-        ...
-        <xs:complexContent>
-          <xs:extension base="s:ObjectType">
-          <xs:sequence>
-            <xs:element ref="nc:AssociationBeginDate" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="nc:AssociationEndDate" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-          </xs:extension>
-        </xs:complexContent>
-      </xs:complexType>
-      
-      <xs:complexType name="GuardianAssociationType">
-        ...
-        <xs:complexContent>
-          <xs:extension base="s:AssociationType">
-          <xs:sequence>
-            <xs:element ref="nc:PersonGuardianReference" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="nc:PersonDependentReference" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-          </xs:extension>
-        </xs:complexContent>
-      </xs:complexType>
-      
-      <xs:element name="GuardianAssociation" type="nc:GuardianAssociationType" nillable="true">
-        ...
-      </xs:element>
+        <xs:complexType name="PersonPhoneAssociationType">
+          <xs:annotation>
+            <xs:documentation>A data type for a relationship between a PERSON and a PHONE.</xs:documentation>
+          </xs:annotation>
+          <xs:complexContent>
+            <xs:extension base="nc:AssociationType">
+              <xs:sequence>
+                <xs:element ref="nc:Person" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="nc:TelephoneNumber" minOccurs="0" maxOccurs="unbounded"/>
+              </xs:sequence>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+        <xs:element name="PersonPhoneAssociation" type="scr:PersonPhoneAssociationType" nillable="true">
+          <xs:annotation>
+            <xs:documentation>An association between a PERSON and a PHONE.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
 
    This schema fragment shows the definition of a generic AssociationType, which contains a begin and end date. It then defines a specific association type, which contains the structure required to express guardianship. This is followed by the definition of an element that expresses the semantics of the guardian relationship.
 
@@ -3161,7 +3140,7 @@ Rule 10-19. Name of code type ends in "CodeType"
 
    [Definition: association]
 
-      In a NIEM-conformant schema, an association is an element whose type is an association type.
+      In a NIEM-conformant schema, an association is an [element] whose type is an [association type].
 
 10.2.3.1. Association types
 
@@ -3221,37 +3200,29 @@ Rule 10-21. Association element type is an association type
 
    [Definition: augmentation]
 
-      An augmentation is a block of data added to a NIEM-conformant complex type, which carries additional data beyond that of the original type definition.
+      An augmentation is an [element] that
 
-   [Rule 10-22] (REF, EXT)
+         1. is a child of an [element] that is an instance of an [augmentable type], and
 
-      An augmentation type:
-
-         1. MUST be transitively derived from structures:AugmentationType.
-
-         2. MUST contain elements that represent properties to be applied to a base type.
-
-   Rationale
-
-   A base type is the type to which an augmentation is to be applied. An augmentation may be applied to any number of types. Base types are assigned by augmentation elements.
+         2. is a member of the substitution group of the augmentation point element declaration for the [augmentable type].
 
 10.2.4.1. Augmentable types
 
    [Definition: augmentable type]
 
-      An augmentable type is any [complex type definition] that meets all of these criteria:
+      An augmentable type is [complex type definition] that
 
-         *  It is defined by either a [conformant reference schema document] or by an [conformant extension schema document].
+         *  is defined by either a [conformant reference schema document] or by an [conformant extension schema document], and
 
-         *  It is either:
+         *  is either
 
                *  an [association type], or
 
                *  an [object type] that has complex content and is not an external adapter type.
 
-Rule 10-23. Augmentable type has augmentation point element
+Rule 10-22. Augmentable type has augmentation point element
 
-   [Rule 10-23] (REF)
+   [Rule 10-22] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[
@@ -3269,9 +3240,9 @@ Rule 10-23. Augmentable type has augmentation point element
         </sch:rule>
       </sch:pattern>
 
-Rule 10-24. Augmentable type has at most one augmentation point element
+Rule 10-23. Augmentable type has at most one augmentation point element
 
-   [Rule 10-24] (REF, EXT)
+   [Rule 10-23] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[
@@ -3291,9 +3262,9 @@ Rule 10-24. Augmentable type has at most one augmentation point element
 
 10.2.4.2. Augmentation point element declarations
 
-Rule 10-25. Augmentation point corresponds to augmentable type
+Rule 10-24. Augmentation point corresponds to augmentable type
 
-   [Rule 10-25] (REF, EXT)
+   [Rule 10-24] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3307,13 +3278,15 @@ Rule 10-25. Augmentation point corresponds to augmentable type
                                         and not(ends-with(., 'AugmentationType'))])
                                       and empty(@appinfo:externalAdapterTypeIndicator)
                                       and exists(child::xs:complexContent)])"
-            >A schema document defining an augmentation point element MUST also define a corresponding [augmentable type].</sch:assert>
+            >A schema document containing an augmentation point element declaration MUST also contain a corresponding augmentable type definition.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
-Rule 10-26. An augmentation point has no type
+   This document defines the terms [schema document], [element declaration], and [augmentable type].
 
-   [Rule 10-26] (REF, EXT)
+Rule 10-25. An augmentation point has no type
+
+   [Rule 10-25] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3325,9 +3298,9 @@ Rule 10-26. An augmentation point has no type
 
    Because an augmentation point element has no type, it will be abstract, per Rule 9-37, Untyped element is abstract
 
-Rule 10-27. An augmentation point has no substitution group
+Rule 10-26. An augmentation point has no substitution group
 
-   [Rule 10-27] (REF, EXT)
+   [Rule 10-26] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3339,9 +3312,9 @@ Rule 10-27. An augmentation point has no substitution group
 
 10.2.4.3. Augmentation point element use
 
-Rule 10-28. Augmentation element may only be referenced by its type
+Rule 10-27. Augmentation point element may only be referenced by its type
 
-   [Rule 10-28] (REF, EXT)
+   [Rule 10-27] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3350,43 +3323,43 @@ Rule 10-28. Augmentation element may only be referenced by its type
           <sch:assert test="QName(nf:get-target-namespace(ancestor::xs:complexType[1]), ancestor::xs:complexType[1]/@name)
                             = QName(namespace-uri-from-QName(resolve-QName(@ref, .)), 
                      replace(local-name-from-QName(resolve-QName(@ref, .)), 'AugmentationPoint$', 'Type'))"
-            >An augmentation element MUST only be referenced by its corresponding type.</sch:assert>
+            >An augmentation point element MUST only be referenced by its corresponding type.</sch:assert>
         </sch:rule>
       </sch:pattern>            
 
-Rule 10-29. Augmentation reference is optional
+Rule 10-28. Augmentation point reference is optional
+
+   [Rule 10-28] (REF)
+
+      <sch:pattern>
+        <sch:rule context="xs:complexType//xs:element[exists(@ref[
+                                 matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
+          <sch:assert test="exists(@minOccurs) and xs:integer(@minOccurs) = 0"
+              >An augmentation point element particle MUST have attribute minOccurs equal to 0.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+
+Rule 10-29. Augmentation point reference is unbounded
 
    [Rule 10-29] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
                                  matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
-          <sch:assert test="exists(@minOccurs) and xs:integer(@minOccurs) = 0"
-              >An augmentation element particle MUST have attribute minOccurs equal to 0.</sch:assert>
-        </sch:rule>
-      </sch:pattern>
-
-Rule 10-30. Augmentation reference is unbounded
-
-   [Rule 10-30] (REF)
-
-      <sch:pattern>
-        <sch:rule context="xs:complexType//xs:element[exists(@ref[
-                                 matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
           <sch:assert test="exists(@maxOccurs) and string(@maxOccurs) = 'unbounded'"
-             >An augmentation element particle MUST have attribute maxOccurs set to unbounded.</sch:assert>
+             >An augmentation point element particle MUST have attribute maxOccurs set to unbounded.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
-Rule 10-31. Augmentation reference must be last particle
+Rule 10-30. Augmentation point reference must be last particle
 
-   [Rule 10-31] (REF, EXT)
+   [Rule 10-30] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
                                  matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
           <sch:assert test="empty(following-sibling::*)"
-             >An augmentation element particle MUST be the last element occurrence in its content model.</sch:assert>
+             >An augmentation point element particle MUST be the last element occurrence in its content model.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3394,7 +3367,41 @@ Rule 10-31. Augmentation reference must be last particle
 
    [Definition: augmentation type]
 
-      An augmentation type is a complex type that provides a reusable block of data that may be added to object types or association types.
+      An augmentation type is a [complex type definition] that
+
+         1. provides elements that establish relationships to a base object or association, rather than to the instance of the augmentation type itself, and
+
+         2. is designed to be the type of an [augmentation element declaration].
+
+   [Definition: augmentation element declaration]
+
+      An augmentation element declaration is an [element declaration] that
+
+         1. has a type that is an [augmentation type], and
+
+         2. carries elements that establish a relationship to its parent object or association
+
+         3. is designed to be used as an [augmentation] of its parent object or association
+
+Rule 10-31. Element within instance of augmentation type modifies base
+
+   [Rule 10-31] (INS)
+
+      Given:
+
+         1. Some element has a value $base-value.
+
+         2. Value $base-value contains element $augmentation.
+
+         3. Element $augmentation has property [element declaration] with a value that is an [augmentation element declaration].
+
+         4. Element $augmentation has a value, by reference or by content.
+
+         5. The value of $augmentation contains element $relationship.
+
+         6. Element $relationship has a value, by reference or by content.
+
+      Element $relationship establishes a relationship between $base-value and the value of $relationship.
 
 Rule 10-32. Augmentation type name ends in "AugmentationType"
 
@@ -3410,11 +3417,11 @@ Rule 10-33. Augmentation types are derived from augmentation types
         <sch:rule context="xs:complexType">
           <sch:let name="is-augmentation-type" value="exists(@name[ends-with(., 'AugmentationType')])"/>
           <sch:let name="has-augmentation-base-type" 
-                   value="xs:complexContent[
-                            *[(self::xs:extension or self::xs:restriction)
-                              and @base[ends-with(., 'AugmentationType')]]]"/>
+                   value="exists(xs:complexContent[
+                                   *[(self::xs:extension or self::xs:restriction)
+                                     and @base[ends-with(., 'AugmentationType') ] ] ] )"/>
           <sch:assert test="$is-augmentation-type = $has-augmentation-base-type"
-            >A complex type definition MUST is an augmentation type if and only if it is has a base type definition that is an augmentation type.</sch:assert>
+            >A complex type definition MUST is an augmentation type if and only if it has a base type definition that is an augmentation type.<sch:value-of select="$is-augmentation-type"/>, <sch:value-of select="$has-augmentation-base-type"/></sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3430,7 +3437,7 @@ Rule 10-34. Augmentation element type is an augmentation type
         <sch:rule context="xs:element[exists(@name)]">
           <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])
                             = exists(@name[ends-with(., 'Augmentation')])"
-            >An element MUST have a name that ends in 'Augmentation' if and only if it has a type that is a augmentation type.</sch:assert>
+            >An element declaration MUST have a name that ends in "Augmentation" if and only if it has a type that is an augmentation type.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3453,8 +3460,6 @@ Rule 10-34. Augmentation element type is an augmentation type
    [Rule 10-36] (REF, EXT)
 
       Within the schema, a metadata type and only a metadata type MUST be derived directly from structures:MetadataType.
-
-   Rationale
 
    A metadata type establishes a specific, named aggregation of data about data. Any type derived from structures:MetadataType is a metadata type. Metadata types should not be derived from other metadata types. Such metadata types should be used asis and additional metadata types defined for additional content.
 
@@ -3530,8 +3535,6 @@ Rule 10-38. Metadata element type is a metadata type
 
       Within the schema, a complex type that is a direct extension of a simple type from the XML Schema namespace simple type MAY use the same local name as the simple type if and only if the extension adds no content other than the attribute group structures:SimpleObjectAttributeGroup.
 
-   Rationale
-
    It is useful to build complex type bases for further extension. The NIEM distribution proxy schema xsd.xsd provides complex type bases for some of the simple types in the XML Schema namespace. However, the complex types in this proxy schema reuse the local names of the simple types they extend, even though the simple type names may not be NIEM-conformant. Requiring name changes for those NIEM-provided complex type bases would work against user understanding, for those already familiar with the names of the XML Schema namespace simple types being extended.
 
 10.4.2. Usage of English
@@ -3539,8 +3542,6 @@ Rule 10-38. Metadata element type is a metadata type
    [Rule 10-40] (REF, EXT)
 
       The name of any XML Schema component defined by the schema MUST be composed of words from the English language, using the prevalent U.S. spelling, as provided by [OED].
-
-   Rationale
 
    The English language has many spelling variations for the same word. For example, American English "program" has a corresponding British spelling "programme." This variation has the potential to cause interoperability problems when XML components are exchanged because of the different names used by the same elements. Providing users with a dictionary standard for spelling will mitigate this potential interoperability issue.
 
@@ -3666,8 +3667,6 @@ Rule 10-46. Names use common abbreviations
 
       Articles, conjunctions, and prepositions MUST NOT be used in NIEM component names except where they are required for clarity or by standard convention.
 
-   Rationale
-
    Articles (e.g., a, an, the), conjunctions (e.g., and, or, but), and prepositions (e.g., at, by, for, from, in, of, to) are all disallowed in NIEM component names, unless they are required. For example, PowerOfAttorneyCode requires the preposition. These rules constrain slight variations in word forms and types to improve consistency and reduce potentially ambiguous or confusing component names.
 
 Rule 10-52. Component name follows pattern
@@ -3716,8 +3715,6 @@ Rule 10-52. Component name follows pattern
 
       A property term MUST describe or represent a characteristic or subpart of an entity or concept.
 
-   Rationale
-
    The property term describes the central meaning of the data component.
 
 10.4.9. Qualifier terms
@@ -3736,8 +3733,6 @@ Rule 10-52. Component name follows pattern
 
       The order of qualifiers MUST NOT be used to differentiate names.
 
-   Rationale
-
    Very large vocabularies may have many similar and closely related properties and concepts. The use of object, property, and representation terms alone is often not sufficient to construct meaningful names that can uniquely distinguish such components. Qualifier terms provide additional context to resolve these subtleties. However, swapping the order of qualifiers rarely (if ever) changes meaning; qualifier ordering is no substitute for meaningful terms.
 
 10.4.10. Representation terms
@@ -3753,8 +3748,6 @@ Rule 10-52. Component name follows pattern
    [Rule 10-58] (REF, EXT)
 
       If any word in the representation term is redundant with any word in the property term, one occurrence SHOULD be deleted.
-
-   Rationale
 
    This rule, carried over from 11179, is designed to prevent repeating terms unnecessarily within component names. For example, this rule allows designers to avoid naming an element "PersonFirstNameName."
 
@@ -4025,7 +4018,7 @@ Rule 11-1. Name of type ends in "Type"
       <sch:pattern>
         <sch:rule context="xs:complexType[some $name in @name,
                                $extension in xs:simpleContent/xs:extension,
-                               $base-qname in resolve-QName($extension/@base, $extension) yields
+                               $base-qname in resolve-QName($extension/@base, $extension) satisfies
                              $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
           <sch:report test="false()">The name of a proxy type does not end in "Type".</sch:report>
         </sch:rule>
@@ -4046,7 +4039,7 @@ Rule 11-2. Name of type other than proxy type is in upper camel case
       <sch:pattern>
         <sch:rule context="xs:complexType[some $name in @name,
                                $extension in xs:simpleContent/xs:extension,
-                               $base-qname in resolve-QName($extension/@base, $extension) yields
+                               $base-qname in resolve-QName($extension/@base, $extension) satisfies
                              $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
           <sch:report test="false()">The name of a proxy type is not upper camel case.</sch:report>
         </sch:rule>
@@ -4070,7 +4063,7 @@ Rule 11-3. Base type definition defined by conformant schema
                               $base-namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))
                               or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)
                                                                          and $base-namespace = xs:anyURI(@namespace)
-                                                                         and empty(@appinfo:externalImportIndicator)])"
+                                                                         and empty(@appinfo:externalImportIndicator)]))"
             >The [base type definition] of a [type definition] MUST have the target namespace or the XML Schema namespace or a namespace that is imported as conformant.</sch:assert>
         </sch:rule>
       </sch:pattern>
@@ -4346,7 +4339,7 @@ Rule 11-20. Element introduced only once in content model
 
    This rule ensures that sequences of elements are simple sequences. A type does not define, for example, a sequence of elements A, B, then A again. Definitions should define, instead, what elements may be included, and the cardinality of each element. Schemas must also be careful not to introduce elements that are substitutable for one another, as this can create violations of the unique particle attribution constraint, as described by [XML Schema Structures] Section 3.8.6, Constraints on Model Group Schema Components.
 
-Rule 11-21. Element referenced by external adapter type defined by external schemas
+Rule 11-21. Element referenced by external adapter type defined by external schema documents
 
    [Rule 11-21] (REF, EXT)
 
@@ -4389,9 +4382,10 @@ Rule 11-23. External attribute use only in external adapter type
    [Rule 11-23] (REF)
 
       <sch:pattern>
-        <sch:rule context="xs:attribute[some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies
-                                          exists(ancestor::xs:schema[1]/xs:import[xs:anyURI(@namespace) = $ref-namespace
-                                                                                  and exists(@appinfo:externalImportIndicator)]">
+        <sch:rule context="xs:attribute[some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)),
+                                             $import in ancestor::xs:schema[1]/xs:import satisfies (
+                                          xs:anyURI($import/@namespace) = $ref-namespace
+                                          and exists($import/@appinfo:externalImportIndicator))]">
           <sch:assert test="exists(ancestor::xs:complexType[1]/@appinfo:externalAdapterTypeIndicator)"
             >An external attribute use MUST be in an external adapter type.</sch:assert>
         </sch:rule>
@@ -4404,9 +4398,10 @@ Rule 11-24. External attribute use has data definition
    [Rule 11-24] (REF, EXT)
 
       <sch:pattern>
-        <sch:rule context="xs:attribute[some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies
-                                          exists(ancestor::xs:schema[1]/xs:import[xs:anyURI(@namespace) = $ref-namespace
-                                                                                  and exists(@appinfo:externalImportIndicator)]">
+        <sch:rule context="xs:attribute[some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)),
+                                             $import in ancestor::xs:schema[1]/xs:import satisfies (
+                                          xs:anyURI($import/@namespace) = $ref-namespace
+                                          and exists(@appinfo:externalImportIndicator))]">
           <sch:assert test="some $documentation in xs:annotation/xs:documentation[1] satisfies
                               string-length(normalize-space(string($documentation))) &gt; 0"
             >An external attribute use MUST be a documented component with a non-empty data definition.</sch:assert>
@@ -4550,8 +4545,6 @@ Rule 11-34. Different version means different view
    [Rule 11-34] (REF, EXT)
 
       Two XML Schema documents MUST have the same value for attribute targetNamespace carried by the element xs:schema, and different values for attribute version carried by the element xs:schema if and only if they are different views of the same set of components.
-
-   Rationale
 
    These rules embody the basic philosophy behind NIEM's use of namespaced components: A component is uniquely identified by its class (e.g. element, attribute, type), its namespace (a URI), and its local name (an unqualified string). Any two matching component identifiers refer to the same component, even if the versions of the schemas containing each are different.
 
@@ -4975,23 +4968,9 @@ Rule 12-14. Metadata is applicable to element
 
    The applicability is described by appinfo:appliesToTypes and appinfo:appliesToElements application information annotations on the metadata element declaration. The instances must correspond to the applicability specified by the metadata element declaration.
 
-Rule 12-15. Attribute structures:ref references structures:id
+Rule 12-15. Attribute structures:metadata references metadata element
 
    [Rule 12-15] (INS)
-
-      <sch:pattern>
-        <sch:rule context="*[exists(@structures:ref)]">
-          <sch:let name="ref" value="@structures:ref"/>
-          <sch:assert test="exists(//@structures:id[. = $ref])"
-            >The value of an attribute structures:ref MUST appear as the value of an attribute structures:id in the [XML instance document].</sch:assert>
-        </sch:rule>
-      </sch:pattern>
-
-   This states that in NIEM-conformant content, structures:ref attributes must refer to structures:id attributes. By [XML] Section 3.3.1, Attribute Types, an IDREF is required to reference an ID. This rule ensures that the target of a reference is a NIEM ID for easier processing of XML documents.
-
-Rule 12-16. Attribute structures:metadata references metadata element
-
-   [Rule 12-16] (INS)
 
       <sch:pattern>
         <sch:rule context="*[exists(@structures:metadata)]">
@@ -5004,9 +4983,9 @@ Rule 12-16. Attribute structures:metadata references metadata element
 
    Note that this will NOT catch a scenario in which the element with a name ending in "Metadata" is an external element; additional tests would be required to catch that.
 
-Rule 12-17. Attribute structures:relationshipMetadata references metadata element
+Rule 12-16. Attribute structures:relationshipMetadata references metadata element
 
-   [Rule 12-17] (INS)
+   [Rule 12-16] (INS)
 
       <sch:pattern>
         <sch:rule context="*[exists(@structures:relationshipMetadata)]">
@@ -5377,16 +5356,16 @@ Appendix F. Index of rules
    Rule 10-19, Name of code type ends in "CodeType": Section 10.2.2.4, Code types
    Rule 10-20, Association types is derived from association type: Section 10.2.3.1, Association types
    Rule 10-21, Association element type is an association type: Section 10.2.3.2, Association element declarations
-   Rule 10-22: Section 10.2.4, Augmentations
-   Rule 10-23, Augmentable type has augmentation point element: Section 10.2.4.1, Augmentable types
-   Rule 10-24, Augmentable type has at most one augmentation point element: Section 10.2.4.1, Augmentable types
-   Rule 10-25, Augmentation point corresponds to augmentable type: Section 10.2.4.2, Augmentation point element declarations
-   Rule 10-26, An augmentation point has no type: Section 10.2.4.2, Augmentation point element declarations
-   Rule 10-27, An augmentation point has no substitution group: Section 10.2.4.2, Augmentation point element declarations
-   Rule 10-28, Augmentation element may only be referenced by its type: Section 10.2.4.3, Augmentation point element use
-   Rule 10-29, Augmentation reference is optional: Section 10.2.4.3, Augmentation point element use
-   Rule 10-30, Augmentation reference is unbounded: Section 10.2.4.3, Augmentation point element use
-   Rule 10-31, Augmentation reference must be last particle: Section 10.2.4.3, Augmentation point element use
+   Rule 10-22, Augmentable type has augmentation point element: Section 10.2.4.1, Augmentable types
+   Rule 10-23, Augmentable type has at most one augmentation point element: Section 10.2.4.1, Augmentable types
+   Rule 10-24, Augmentation point corresponds to augmentable type: Section 10.2.4.2, Augmentation point element declarations
+   Rule 10-25, An augmentation point has no type: Section 10.2.4.2, Augmentation point element declarations
+   Rule 10-26, An augmentation point has no substitution group: Section 10.2.4.2, Augmentation point element declarations
+   Rule 10-27, Augmentation point element may only be referenced by its type: Section 10.2.4.3, Augmentation point element use
+   Rule 10-28, Augmentation point reference is optional: Section 10.2.4.3, Augmentation point element use
+   Rule 10-29, Augmentation point reference is unbounded: Section 10.2.4.3, Augmentation point element use
+   Rule 10-30, Augmentation point reference must be last particle: Section 10.2.4.3, Augmentation point element use
+   Rule 10-31, Element within instance of augmentation type modifies base: Section 10.2.4.4, Augmentation types
    Rule 10-32, Augmentation type name ends in "AugmentationType": Section 10.2.4.4, Augmentation types
    Rule 10-33, Augmentation types are derived from augmentation types: Section 10.2.4.4, Augmentation types
    Rule 10-34, Augmentation element type is an augmentation type: Section 10.2.4.5, Augmentation element declarations
@@ -5448,7 +5427,7 @@ Appendix F. Index of rules
    Rule 11-18, Attribute type defined by conformant schema: Section 11.2.3, Attribute declaration
    Rule 11-19, Attribute name uses representation term: Section 11.2.3, Attribute declaration
    Rule 11-20, Element introduced only once in content model: Section 11.3.2.1, Element use
-   Rule 11-21, Element referenced by external adapter type defined by external schemas: Section 11.3.2.1, Element use
+   Rule 11-21, Element referenced by external adapter type defined by external schema documents: Section 11.3.2.1, Element use
    Rule 11-22, Element reference defined by conformant schema: Section 11.3.2.1, Element use
    Rule 11-23, External attribute use only in external adapter type: Section 11.3.3, Attribute use
    Rule 11-24, External attribute use has data definition: Section 11.3.3, Attribute use
@@ -5482,9 +5461,8 @@ Appendix F. Index of rules
    Rule 12-12, Value of structures:relationshipMetadata refers to value of structures:id: Section 12.3, Instance metadata
    Rule 12-13, Relationship metadata refers to metadata type: Section 12.3, Instance metadata
    Rule 12-14, Metadata is applicable to element: Section 12.3, Instance metadata
-   Rule 12-15, Attribute structures:ref references structures:id: Section 12, XML instance document rules
-   Rule 12-16, Attribute structures:metadata references metadata element: Section 12, XML instance document rules
-   Rule 12-17, Attribute structures:relationshipMetadata references metadata element: Section 12, XML instance document rules
+   Rule 12-15, Attribute structures:metadata references metadata element: Section 12, XML instance document rules
+   Rule 12-16, Attribute structures:relationshipMetadata references metadata element: Section 12, XML instance document rules
 
 Appendix G. General index
 

@@ -128,16 +128,16 @@
              ruleID="rule_10-20"/>
    <map:rule descriptiveID="rule-association-el-type-is-association-type"
              ruleID="rule_10-21"/>
-   <map:rule descriptiveID="" ruleID="rule_10-22"/>
-   <map:rule descriptiveID="augmentable-type-has-aug-point" ruleID="rule_10-23"/>
-   <map:rule descriptiveID="augmentable-type-has-at-most-one-aug-point" ruleID="rule_10-24"/>
-   <map:rule descriptiveID="aug-el-matches-aug-type" ruleID="rule_10-25"/>
-   <map:rule descriptiveID="aug-pt-untyped" ruleID="rule_10-26"/>
-   <map:rule descriptiveID="aug-pt-no-subst-grp" ruleID="rule_10-27"/>
-   <map:rule descriptiveID="aug-el-in-type" ruleID="rule_10-28"/>
-   <map:rule descriptiveID="aug-el-is-optional" ruleID="rule_10-29"/>
-   <map:rule descriptiveID="aug-el-is-unbounded" ruleID="rule_10-30"/>
-   <map:rule descriptiveID="aug-ref-is-last" ruleID="rule_10-31"/>
+   <map:rule descriptiveID="augmentable-type-has-aug-point" ruleID="rule_10-22"/>
+   <map:rule descriptiveID="augmentable-type-has-at-most-one-aug-point" ruleID="rule_10-23"/>
+   <map:rule descriptiveID="aug-el-matches-aug-type" ruleID="rule_10-24"/>
+   <map:rule descriptiveID="aug-pt-untyped" ruleID="rule_10-25"/>
+   <map:rule descriptiveID="aug-pt-no-subst-grp" ruleID="rule_10-26"/>
+   <map:rule descriptiveID="aug-el-in-type" ruleID="rule_10-27"/>
+   <map:rule descriptiveID="aug-el-is-optional" ruleID="rule_10-28"/>
+   <map:rule descriptiveID="aug-el-is-unbounded" ruleID="rule_10-29"/>
+   <map:rule descriptiveID="aug-ref-is-last" ruleID="rule_10-30"/>
+   <map:rule descriptiveID="" ruleID="rule_10-31"/>
    <map:rule descriptiveID="aug-type-name" ruleID="rule_10-32"/>
    <map:rule descriptiveID="rule-augmentation-type-derived-from-augmentation-type"
              ruleID="rule_10-33"/>
@@ -237,7 +237,6 @@
    <map:rule descriptiveID="" ruleID="rule_12-12"/>
    <map:rule descriptiveID="" ruleID="rule_12-13"/>
    <map:rule descriptiveID="" ruleID="rule_12-14"/>
-   <map:rule descriptiveID="rule-ref-refers-to-id" ruleID="rule_12-15"/>
-   <map:rule descriptiveID="rule-attr-metadata-refs-metadata" ruleID="rule_12-16"/>
-   <map:rule descriptiveID="rule-attr-rel-metadata-refs-metadata" ruleID="rule_12-17"/>
+   <map:rule descriptiveID="rule-attr-metadata-refs-metadata" ruleID="rule_12-15"/>
+   <map:rule descriptiveID="rule-attr-rel-metadata-refs-metadata" ruleID="rule_12-16"/>
 </map:map>

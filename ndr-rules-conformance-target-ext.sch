@@ -554,7 +554,7 @@
   <sch:rule context="xs:complexType">
     <sch:let name="has-code-type-name" value="ends-with(@name, 'CodeType')"/>
     <sch:let name="has-code-type-base" value="         exists(xs:simpleContent[           exists(xs:*[local-name() = ('extension', 'restriction')                       and (ends-with(@base, 'CodeSimpleType')                            or ends-with(@base, 'CodeType'))])])"/>
-    <sch:assert test="$has-code-type-name = $has-code-type-base">Rule 10-19: A complex type with a [base type] of a code type or code simple type MUST have a name that ends in 'CodeType'.</sch:assert>
+    <sch:assert test="$has-code-type-name = $has-code-type-base">Rule 10-19: A complex type definition MUST have a {name} that ends in 'CodeType' if and only if it has a {base type definition} of a code type or code simple type.</sch:assert>
   </sch:rule>
 </sch:pattern>
                 
@@ -572,56 +572,56 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-24"><sch:title>Augmentable types</sch:title>
+<sch:pattern id="rule_10-23"><sch:title>Augmentable types</sch:title>
   <sch:rule context="xs:complexType[                        exists(@name[                          not(ends-with(., 'MetadataType'))                          and not(ends-with(., 'AugmentationType'))])                        and empty(@appinfo:externalAdapterTypeIndicator)                        and exists(child::xs:complexContent)]">
     <sch:let name="augmentation-point-qname" value="QName(nf:get-target-namespace(.),                           replace(./@name, 'Type$', 'AugmentationPoint'))"/>
-    <sch:assert test="count(xs:complexContent/xs:extension/xs:sequence/xs:element[                               @ref[resolve-QName(., ..) = $augmentation-point-qname]]) &lt;= 1">Rule 10-24: An augmentable type MUST contain no more than one element use of its augmentation point element.</sch:assert>
+    <sch:assert test="count(xs:complexContent/xs:extension/xs:sequence/xs:element[                               @ref[resolve-QName(., ..) = $augmentation-point-qname]]) &lt;= 1">Rule 10-23: An augmentable type MUST contain no more than one element use of its augmentation point element.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_10-24"><sch:title>Augmentation point element declarations</sch:title>
+  <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
+    <sch:let name="element-name" value="@name"/>
+    <sch:assert test="exists(                         parent::xs:schema/xs:complexType[                           @name = replace($element-name, 'AugmentationPoint$', 'Type')                           and exists(@name[                                   not(ends-with(., 'MetadataType'))                                   and not(ends-with(., 'AugmentationType'))])                                 and empty(@appinfo:externalAdapterTypeIndicator)                                 and exists(child::xs:complexContent)])">Rule 10-24: A schema document containing an augmentation point element declaration MUST also contain a corresponding augmentable type definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
 <sch:pattern id="rule_10-25"><sch:title>Augmentation point element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
-    <sch:let name="element-name" value="@name"/>
-    <sch:assert test="exists(                         parent::xs:schema/xs:complexType[                           @name = replace($element-name, 'AugmentationPoint$', 'Type')                           and exists(@name[                                   not(ends-with(., 'MetadataType'))                                   and not(ends-with(., 'AugmentationType'))])                                 and empty(@appinfo:externalAdapterTypeIndicator)                                 and exists(child::xs:complexContent)])">Rule 10-25: A schema document defining an augmentation point element MUST also define a corresponding [augmentable type].</sch:assert>
+    <sch:assert test="empty(@type)">Rule 10-25: An augmentation point element MUST have no type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
 <sch:pattern id="rule_10-26"><sch:title>Augmentation point element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
-    <sch:assert test="empty(@type)">Rule 10-26: An augmentation point element MUST have no type.</sch:assert>
+    <sch:assert test="empty(@substitutionGroup)">Rule 10-26: An augmentation point element MUST have no substitution group.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-27"><sch:title>Augmentation point element declarations</sch:title>
-  <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
-    <sch:assert test="empty(@substitutionGroup)">Rule 10-27: An augmentation point element MUST have no substitution group.</sch:assert>
-  </sch:rule>
-</sch:pattern>
-            
-<sch:pattern id="rule_10-28"><sch:title>Augmentation point element use</sch:title>
+<sch:pattern id="rule_10-27"><sch:title>Augmentation point element use</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                        matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
 
-    <sch:assert test="QName(nf:get-target-namespace(ancestor::xs:complexType[1]), ancestor::xs:complexType[1]/@name)                       = QName(namespace-uri-from-QName(resolve-QName(@ref, .)),                 replace(local-name-from-QName(resolve-QName(@ref, .)), 'AugmentationPoint$', 'Type'))">Rule 10-28: An augmentation element MUST only be referenced by its corresponding type.</sch:assert>
+    <sch:assert test="QName(nf:get-target-namespace(ancestor::xs:complexType[1]), ancestor::xs:complexType[1]/@name)                       = QName(namespace-uri-from-QName(resolve-QName(@ref, .)),                 replace(local-name-from-QName(resolve-QName(@ref, .)), 'AugmentationPoint$', 'Type'))">Rule 10-27: An augmentation point element MUST only be referenced by its corresponding type.</sch:assert>
   </sch:rule>
 </sch:pattern>            
             
-<sch:pattern id="rule_10-31"><sch:title>Augmentation point element use</sch:title>
+<sch:pattern id="rule_10-30"><sch:title>Augmentation point element use</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
-    <sch:assert test="empty(following-sibling::*)">Rule 10-31: An augmentation element particle MUST be the last element occurrence in its content model.</sch:assert>
+    <sch:assert test="empty(following-sibling::*)">Rule 10-30: An augmentation point element particle MUST be the last element occurrence in its content model.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
 <sch:pattern id="rule_10-33"><sch:title>Augmentation types</sch:title>
   <sch:rule context="xs:complexType">
     <sch:let name="is-augmentation-type" value="exists(@name[ends-with(., 'AugmentationType')])"/>
-    <sch:let name="has-augmentation-base-type" value="xs:complexContent[                       *[(self::xs:extension or self::xs:restriction)                         and @base[ends-with(., 'AugmentationType')]]]"/>
-    <sch:assert test="$is-augmentation-type = $has-augmentation-base-type">Rule 10-33: A complex type definition MUST is an augmentation type if and only if it is has a base type definition that is an augmentation type.</sch:assert>
+    <sch:let name="has-augmentation-base-type" value="exists(xs:complexContent[                              *[(self::xs:extension or self::xs:restriction)                                and @base[ends-with(., 'AugmentationType') ] ] ] )"/>
+    <sch:assert test="$is-augmentation-type = $has-augmentation-base-type">Rule 10-33: A complex type definition MUST is an augmentation type if and only if it has a base type definition that is an augmentation type.<sch:value-of select="$is-augmentation-type"/>, <sch:value-of select="$has-augmentation-base-type"/></sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_10-34"><sch:title>Augmentation element declarations</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-34: An element MUST have a name that ends in 'Augmentation' if and only if it has a type that is a augmentation type.</sch:assert>
+    <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-34: An element declaration MUST have a name that ends in "Augmentation" if and only if it has a type that is an augmentation type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -676,7 +676,7 @@
 </sch:pattern>
           
 <sch:pattern id="rule_11-1"><sch:title>Type definition components</sch:title>
-  <sch:rule context="xs:complexType[some $name in @name,                          $extension in xs:simpleContent/xs:extension,                          $base-qname in resolve-QName($extension/@base, $extension) yields                        $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
+  <sch:rule context="xs:complexType[some $name in @name,                          $extension in xs:simpleContent/xs:extension,                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                        $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
     <sch:report test="false()">Rule 11-1: The name of a proxy type does not end in "Type".</sch:report>
   </sch:rule>
   <sch:rule context="xs:*[(self::xs:simpleType or self::xs:complexType) and exists(@name)]">
@@ -685,7 +685,7 @@
 </sch:pattern>
           
 <sch:pattern id="rule_11-2"><sch:title>Type definition components</sch:title>
-  <sch:rule context="xs:complexType[some $name in @name,                          $extension in xs:simpleContent/xs:extension,                          $base-qname in resolve-QName($extension/@base, $extension) yields                        $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
+  <sch:rule context="xs:complexType[some $name in @name,                          $extension in xs:simpleContent/xs:extension,                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                        $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
     <sch:report test="false()">Rule 11-2: The name of a proxy type is not upper camel case.</sch:report>
   </sch:rule>
   <sch:rule context="xs:*[(self::xs:simpleType or self::xs:complexType) and exists(@name)]">
@@ -695,7 +695,7 @@
           
 <sch:pattern id="rule_11-3"><sch:title>Type definition hierarchy</sch:title>
   <sch:rule context="xs:*[exists(@base)]">
-    <sch:assert test="some $base-namespace in namespace-uri-from-QName(resolve-QName(@base, .)) satisfies (                         $base-namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))                         or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                                                    and $base-namespace = xs:anyURI(@namespace)                                                                    and empty(@appinfo:externalImportIndicator)])">Rule 11-3: The [base type definition] of a [type definition] MUST have the target namespace or the XML Schema namespace or a namespace that is imported as conformant.</sch:assert>
+    <sch:assert test="some $base-namespace in namespace-uri-from-QName(resolve-QName(@base, .)) satisfies (                         $base-namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))                         or exists(ancestor::xs:schema[1]/xs:import[exists(@namespace)                                                                    and $base-namespace = xs:anyURI(@namespace)                                                                    and empty(@appinfo:externalImportIndicator)]))">Rule 11-3: The [base type definition] of a [type definition] MUST have the target namespace or the XML Schema namespace or a namespace that is imported as conformant.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
@@ -809,7 +809,7 @@
 </sch:pattern>
               
 <sch:pattern id="rule_11-24"><sch:title>Attribute use</sch:title>
-  <sch:rule context="xs:attribute[some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies                                     exists(ancestor::xs:schema[1]/xs:import[xs:anyURI(@namespace) = $ref-namespace                                                                             and exists(@appinfo:externalImportIndicator)]">
+  <sch:rule context="xs:attribute[some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)),                                        $import in ancestor::xs:schema[1]/xs:import satisfies (                                     xs:anyURI($import/@namespace) = $ref-namespace                                     and exists(@appinfo:externalImportIndicator))]">
     <sch:assert test="some $documentation in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($documentation))) &gt; 0">Rule 11-24: An external attribute use MUST be a documented component with a non-empty data definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
