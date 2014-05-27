@@ -4,6 +4,11 @@
 
   <param name="xml-catalog" as="document-node()?"/>
 
+  <function name="impl:get-clark-name" as="xs:string">
+    <param name="qname" as="xs:QName"/>
+    <value-of select="concat( '{', namespace-uri-from-QName($qname), '}', local-name-from-QName($qname) )"/>
+  </function>
+
   <function name="impl:get-document-element" as="element()">
     <param name="context" as="element()"/>
     <sequence select="root($context)/*"/>
@@ -74,7 +79,9 @@
           <when test="empty($type)">
             <message>
               <value-of select="impl:get-location($context)"/>
-              <text>: type not found.</text>
+              <text>: type not found: </text>
+              <value-of select="impl:get-clark-name($qname)"/>
+              <text>.</text>
             </message>
             <sequence select="()"/>
           </when>

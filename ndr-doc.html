@@ -327,10 +327,10 @@
   &lt;sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))
                                  or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))
                                 and exists(@type)]"&gt;
-    &lt;sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies 
-                        ($type-qname = xs:QName('xs:anySimpleType')
-                         or (some $type in nf:resolve-type(., $type-qname) satisfies
-                              empty($type/self::xs:simpleType))"
+    &lt;sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (
+                        $type-qname = xs:QName('xs:anySimpleType')
+                        or (some $type in nf:resolve-type(., $type-qname) satisfies
+                              empty($type/self::xs:simpleType)))"
                 &gt;An element type that is not xs:anySimpleType MUST NOT be a simple type.&lt;/sch:assert&gt;
   &lt;/sch:rule&gt;
 &lt;/sch:pattern&gt;</pre></div></div><div class="rule-section"><div class="heading"><a name="no-el-block"></a><a name="rule_9-42"></a>Rule 9-42. No element disallowed substitutions </div><div class="box"><div class="normativeHead">[Rule 9-42] (REF) (Constraint)</div><pre>&lt;sch:pattern&gt;

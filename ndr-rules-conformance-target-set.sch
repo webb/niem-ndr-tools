@@ -23,7 +23,7 @@
               
 <sch:pattern id="rule_9-41"><sch:title>Element type is not simple type</sch:title>
   <sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))                                  or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))                                 and exists(@type)]">
-    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies                          ($type-qname = xs:QName('xs:anySimpleType')                          or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType))">Rule 9-41: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
+    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-41: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             

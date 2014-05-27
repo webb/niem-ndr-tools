@@ -96,6 +96,9 @@ then
             "http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument" )
                 RULES=ref
                 ;;
+            "http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument" )
+                RULES=ext
+                ;;
             * )
                 printf "Warning: ignoring unknown conformance target %q\n" "$REPLY" >&2
                 ;;
