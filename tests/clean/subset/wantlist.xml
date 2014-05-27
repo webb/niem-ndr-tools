@@ -16,6 +16,10 @@
     <w:ElementInType w:name="nc:DateAugmentationPoint"
       w:isReference="false" w:minOccurs="0" w:maxOccurs="unbounded"/>
   </w:Type>
+  <w:Type w:name="nc:MetadataType" w:isRequested="true">
+    <w:ElementInType w:name="nc:EffectiveDate" w:isReference="false"
+      w:minOccurs="0" w:maxOccurs="unbounded"/>
+  </w:Type>
   <w:Type w:name="nc:PersonType" w:isRequested="false">
     <w:ElementInType w:name="nc:PersonBirthDate" w:isReference="false"
       w:minOccurs="0" w:maxOccurs="unbounded"/>
