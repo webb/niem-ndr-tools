@@ -6,6 +6,12 @@
 cd "$(dirname "$0")"
 
 while read -r -d $'\n' XSD; do
+    test_set_stdout <<EOF
+EOF
+
+    test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r set -c xml-catalog.xml "$XSD"
+
+
     case "$XSD" in
         subset/niem/appinfo/3.0/appinfo.xsd ) true;;
         subset/niem/structures/3.0/structures.xsd ) true;;

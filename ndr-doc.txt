@@ -168,7 +168,7 @@ Status
 
       An interpretation rule is a rule that sets the methodology, pattern, or procedure for understanding some aspect of an instance of a conformance target.
 
-   Each rule identifies its applicability. This identifies the conformance targets to which the rule applies. Each entry in the list is a code from Table Table 4-1, Codes representing conformance targets, below. If a code appears in the applicability list for a rule, then the rule applies to the corresponding conformance target. The conformance targets are defined in Section 4, Conformance targets, below. For example, a rule with applicability "(REF, EXT)" would be applicable to a [conformant reference schema document], as well as to a [conformant extension schema document].
+   Each rule identifies its applicability. This identifies the conformance targets to which the rule applies. Each entry in the list is a code from Table Table 4-1, Codes representing conformance targets, below. If a code appears in the applicability list for a rule, then the rule applies to the corresponding conformance target. The conformance targets are defined in Section 4, Conformance targets, below. For example, a rule with applicability "(REF, EXT)" would be applicable to a [reference schema document], as well as to an [extension schema document].
 
    Rules are stated with the help of XML Infoset terminology (e.g., elements and attributes), as described by Section 3.3, XML Information Set terminology, below, and XML Schema terminology (e.g., schema components), as described by Section 3.4, XML Schema terminology, below. The choice of terminology is driven by which terms best express a concept. Certain concepts are more clearly expressed using XML Infoset terms items, others using XML Schema terms; still others are best expressed using a combination of terminology drawn from each standard.
 
@@ -428,13 +428,13 @@ Status
 
 4.1.1. Reference schema document
 
-   [Definition: conformant reference schema document]
+   [Definition: reference schema document]
 
-      A conformant reference schema document is a [schema document] that is intended to provide the authoritative definitions of broadly reusable [schema components]. It is a [conformance target] of this specification. A conformant reference schema document MUST conform to all rules of this specification that apply to this conformance target. An [XML document] with a [conformance target identifier] of http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument MUST be a conformant reference schema document.
+      A reference schema document is a [schema document] that is intended to provide the authoritative definitions of broadly reusable [schema components]. It is a [conformance target] of this specification. A reference schema document MUST conform to all rules of this specification that apply to this conformance target. An [XML document] with a [conformance target identifier] of http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument MUST be a conformant reference schema document.
 
-   A [conformant reference schema document] is a [schema document] that is intended to be the authoritative definition schema for a namespace. Examples include NIEM Core and NIEM domains.
+   A [reference schema document] is a [schema document] that is intended to be the authoritative definition schema for a namespace. Examples include NIEM Core and NIEM domains.
 
-   Some characteristics of a [conformant reference schema document]:
+   Some characteristics of a [reference schema document]:
 
       *  It is explicitly designated as a reference schema via the conformance targets attribute, per Rule 4-3, Schema claims reference schema conformance target.
 
@@ -448,31 +448,31 @@ Status
 
    Any schema that defines components that are intended to be incorporated into NIEM Core or a NIEM domain will be defined as a reference schema.
 
-   The rules for conformant reference schema documents are more stringent than are the rules for other classes of NIEM-conformant schemas. Conformant reference schema documents are intended to support the broadest reuse. They are very uniform in their structure. As they are the primary definitions for schema components, they do not need to restrict other data definitions, and they are not allowed to use XML Schema's restriction mechanism (e.g., Rule 9-27, Complex content uses extension). Conformant reference schema documents are intended to be as regular and simple as possible.
+   The rules for reference schema documents are more stringent than are the rules for other classes of NIEM-conformant schemas. Reference schema documents are intended to support the broadest reuse. They are very uniform in their structure. As they are the primary definitions for schema components, they do not need to restrict other data definitions, and they are not allowed to use XML Schema's restriction mechanism (e.g., Rule 9-27, Complex content uses extension). Reference schema documents are intended to be as regular and simple as possible.
 
 4.1.2. Extension schema document
 
-   [Definition: conformant extension schema document]
+   [Definition: extension schema document]
 
-      A conformant extension schema document is a [schema document] that is intended to provide definitions of [schema components] that are intended for reuse within a more narrow scope than those defined by a [conformant reference schema document]. It is a [conformance target] of this specification. An extension schema document MUST conform to all rules of this specification that apply to this conformance target. An XML document with a [conformance target identifier] of http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument MUST be a conformant reference schema document.
+      An extension schema document is a [schema document] that is intended to provide definitions of [schema components] that are intended for reuse within a more narrow scope than those defined by a [reference schema document]. It is a [conformance target] of this specification. An extension schema document MUST conform to all rules of this specification that apply to this conformance target. An XML document with a [conformance target identifier] of http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument MUST be an extension schema document.
 
-   Characteristics of a [conformant extension schema document] include:
+   Characteristics of an [extension schema document] include:
 
-      *  It is explicitly designated as an [conformant extension schema document] via the conformance targets attribute.
+      *  It is explicitly designated as an [extension schema document] via the conformance targets attribute.
 
       *  It provides the broadest, most fundamental definitions of components in its namespace.
 
       *  It provides the authoritative definition of business semantics for components in its namespace.
 
-      *  It contains components that, when appropriate, use or are derived from the components in [conformant reference schema documents].
+      *  It contains components that, when appropriate, use or are derived from the components in [reference schema documents].
 
       *  It is intended to express the additional vocabulary required for an information exchange, above and beyond the vocabulary available from reference schemas, and to also support additional XML Schema validation requirements for an exchange.
 
-      *  It satisfies all rules specified in this document for [conformant extension schema documents].
+      *  It satisfies all rules specified in this document for [extension schema documents].
 
-   An extension schema in an information exchange specification serves several functions. First, it defines new content within a new namespace, which may be an exchange-specific namespace or a namespace shared by several exchanges. This content is NIEM-conformant but has fewer restrictions on it than do [conformant reference schema documents]. Second, the [conformant extension schema document] bases its content on content from [conformant reference schema documents], where appropriate. Methods of deriving content include using (by reference) existing [schema components], as well as creating extensions and restrictions of existing components.
+   An extension schema in an information exchange specification serves several functions. First, it defines new content within a new namespace, which may be an exchange-specific namespace or a namespace shared by several exchanges. This content is NIEM-conformant but has fewer restrictions on it than do [reference schema documents]. Second, the [extension schema document] bases its content on content from [reference schema documents], where appropriate. Methods of deriving content include using (by reference) existing [schema components], as well as creating extensions and restrictions of existing components.
 
-   For example, an information exchange specification may define a type for an exchange-specific phone number and base that type on a type defined by the NIEM Core reference schema document. This exchange-specific phone number type may restrict the NIEM Core type to limit those possibilities that are permitted of the base type. Exchange extensions and restrictions must include annotations and documentation to be conformant, but they are allowed to use restriction, choice, and some other constructs that are not allowed in [conformant reference schema documents].
+   For example, an information exchange specification may define a type for an exchange-specific phone number and base that type on a type defined by the NIEM Core reference schema document. This exchange-specific phone number type may restrict the NIEM Core type to limit those possibilities that are permitted of the base type. Exchange extensions and restrictions must include annotations and documentation to be conformant, but they are allowed to use restriction, choice, and some other constructs that are not allowed in [reference schema documents].
 
    Note that exchange specifications may define schemas that meet the criteria of reference schemas for those components that its developers wish to nominate for later inclusion in NIEM Core or in domains.
 
@@ -494,7 +494,7 @@ Status
 
       *  The document element is locally schema-valid.
 
-      *  Each element within the [XML document] that has a [namespace name] matching the target namespace of a [conformant reference schema document] or [conformant extension schema document] is a [conformant element information item].
+      *  Each element within the [XML document] that has a [namespace name] matching the target namespace of a [reference schema document] or [extension schema document] is a [conformant element information item].
 
    Schema-validity may be assessed against a single set of schemas or against multiple sets of schemas.
 
@@ -506,7 +506,7 @@ Status
 
       A conformant element information item is an element information item that satisfies all of the following criteria:
 
-         *  Its [namespace name] and [local name] matches an element declared by a [conformant reference schema document] or [conformant extension schema document].
+         *  Its [namespace name] and [local name] matches an element declared by a [reference schema document] or [extension schema document].
 
          *  It occurs within a [conformant instance XML document].
 
@@ -524,9 +524,9 @@ Status
 
       Code|Conformance target
 
-      REF|conformant reference schema document
+      REF|reference schema document
 
-      EXT|conformant extension schema document
+      EXT|extension schema document
 
       SET|Conformant schema document set
 
@@ -1246,9 +1246,9 @@ Rule 7-6. Component name follows ISO 11179 Part 5 Annex A
 
    Additional restrictions ensure that NIEM components are also defined such that new components may be derived from them and substituted for them. Reference schemas are defined to maximize reuse, while extension schemas are defined to enable a developer to customize schema definitions to match her exchange needs. In reference schemas, the following restrictions help enforce reusability through extension and substitution:
 
-      *  A [conformant reference schema document] or [conformant extension schema document] may not use blockDefault or finalDefault.
+      *  A [reference schema document] or [extension schema document] may not use blockDefault or finalDefault.
 
-      *  Element declarations and type definitions in a [conformant reference schema document] may not use block or final.
+      *  Element declarations and type definitions in a [reference schema document] may not use block or final.
 
 8.3. Avoid recursive model groups
 
@@ -1673,7 +1673,7 @@ Rule 9-26. Complex type content is explicitly simple or complex
 
       2. By extension of a type defined in the structures namespace.
 
-   Both of these methods use the element xs:extension. Within a [conformant extension schema document], the use of xs:restriction to create a complex type with complex content is also allowed.
+   Both of these methods use the element xs:extension. Within an [extension schema document], the use of xs:restriction to create a complex type with complex content is also allowed.
 
 Rule 9-27. Complex content uses extension
 
@@ -1717,7 +1717,7 @@ Rule 9-28. Base type of complex type with complex content must have complex cont
 
 Rule 9-29. Simple content uses extension
 
-   Within a [conformant reference schema document], a complex type with simple content can be created in one of two ways:
+   Within a [reference schema document], a complex type with simple content can be created in one of two ways:
 
       1. By extension of an existing complex type with simple content.
 
@@ -2333,7 +2333,7 @@ Rule 9-69. No use of xs:any
         </sch:rule>
       </sch:pattern>
 
-   The xs:any particle (see Model Group Restrictions for an informative definition of particle) provides a wildcard that may carry arbitrary content. The particle xs:any may appear within a [conformant extension schema document].
+   The xs:any particle (see Model Group Restrictions for an informative definition of particle) provides a wildcard that may carry arbitrary content. The particle xs:any may appear within an [extension schema document].
 
 Rule 9-70. No use of xs:anyAttribute
 
@@ -2843,7 +2843,7 @@ Rule 10-3. Object type with complex content is derived from object type
 
       A RoleOf element is an [element declaration] that
 
-         *  is defined by a [conformant reference schema document] or a [conformant extension schema document], and
+         *  is defined by a [reference schema document] or an [extension schema document], and
 
          *  has a {name} that begins with "RoleOf".
 
@@ -2941,7 +2941,13 @@ Rule 10-7. Instance of RoleOf element indicates a role object
 
    [Definition: external schema document]
 
-      An external schema document is any [schema document] that is not a [conformant reference schema document], a [conformant extension schema document], or a [schema document] defining the [structures namespace].
+      An external schema document is any [schema document] that is not one of
+
+         *  a [reference schema document],
+
+         *  an [extension schema document], or
+
+         *  a [schema document] that has the [structures namespace] as its target namespace.
 
    Note that, although the schema document for the [structures namespace] is not conformant, it is not considered an external schema document because it defines the fundamental framework on which NIEM is built; it is considered a supporting namespace. It is not considered an external schema document because of its supporting nature and is thus excluded from this definition.
 
@@ -2963,9 +2969,17 @@ Rule 10-7. Instance of RoleOf element indicates a role object
 
    Rule 11-35, Reference schema imports reference schema and Rule 11-36, Extension schema document imports reference or extension schema require that xs:import elements be consistent with an importing [schema document].
 
+Rule 10-8. Import of external namespace is documented
+
    [Rule 10-8] (REF, EXT)
 
-      Within the schema, an element xs:import that imports a namespace defined by an external schema document MUST be a documented component.
+      <sch:pattern>
+        <sch:rule context="xs:import[exists(@appinfo:externalImportIndicator)]">
+          <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies
+                              string-length(normalize-space(string($definition))) &gt; 0"
+            >An element xs:import that is annotated as importing an external schema document MUST be a documented component.</sch:assert>
+        </sch:rule>
+      </sch:pattern>
 
    A NIEM-conformant schema has well-known documentation points. Therefore, a schema that imports a NIEM-conformant namespace need not provide additional documentation. However, when an external schema document is imported, appropriate documentation must be provided at the point of import because documentation associated with external schema documents is undefined and variable. In this particular case, documentation of external schema documents is required at their point of use in NIEM.
 
@@ -2979,79 +2993,38 @@ Rule 10-7. Instance of RoleOf element indicates a role object
 
    [Rule 10-10] (REF, EXT)
 
-      Within the schema, an external adapter type MUST be an immediate extension of type structures:ObjectType.
-
-   The external adapter type must contain the content defined for any NIEM component. The type structures:ObjectType provides such content.
-
-   [Rule 10-11] (REF, EXT)
-
       Within the schema, an external adapter type MUST be composed of only elements and attributes from an external standard.
 
    An external adapter type should contain the information from an external standard to express a complete concept. This expression should be composed of content entirely from an external schema document. Most likely, the external schema document will be based on an external standard with its own legacy support.
 
    In the case of an external expression that is in the form of model groups, attribute groups, or types, additional elements and type components may be created in an external schema document, and the external adapter type may use those components.
 
-   [Rule 10-12] (REF, EXT)
+   [Rule 10-11] (REF, EXT)
 
       Within the schema, an element reference used in an external adapter type definition MUST be a documented component.
 
-   [Rule 10-13] (REF, EXT)
+   [Rule 10-12] (REF, EXT)
 
       Within the schema, an attribute reference used in an external adapter type definition MUST be a documented component.
 
    In normal (conformant) type definition, a reference to an attribute or element is a reference to a documented component. Within an external adapter type, the references to the attributes and elements being adapted are references to undocumented components. These components must be documented to provide comprehensibility and interoperability. Since documentation made available by nonconformant schemas is undefined and variable, documentation of these components is required at their point of use, within the conformant schema.
 
-   [Rule 10-14] (REF, EXT)
+   [Rule 10-13] (REF, EXT)
 
       Within the schema, an external adapter type MUST NOT be extended or restricted.
 
    Each external adapter type is meant to stand alone; each type expresses a single concept, and is built from schema components from one or more external schema documents.
 
-Rule 10-15. External adapter type has complex content
+Rule 10-14. Structure of external adapter type definition follows pattern
 
-   [Rule 10-15] (REF, EXT)
+   [Rule 10-14] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)]">
-          <sch:assert test="xs:complexContent"
-            >An external adapter type definition MUST be a complex type definition with complex content.</sch:assert>
-        </sch:rule>
-      </sch:pattern>
-
-Rule 10-16. External adapter type uses extension
-
-   [Rule 10-16] (REF, EXT)
-
-      <sch:pattern>
-        <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)
-                                          and exists(xs:complexContent)]">
-          <sch:assert test="xs:complexContent/xs:extension"
-            >An external adapter type definition MUST use the extension derivation method.</sch:assert>
-        </sch:rule>
-      </sch:pattern>
-
-Rule 10-17. External adapter type extends structures:ObjectType
-
-   [Rule 10-17] (REF, EXT)
-
-      <sch:pattern>
-        <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)
-                                          and exists(xs:complexContent/xs:extension)]">
-          <sch:assert test="for $extension in xs:complexContent/xs:extension return
-                              resolve-QName($extension/@base, $extension) = xs:QName('structures:ObjectType')"
-            >An external adapter type definition MUST extend structures:ObjectType.</sch:assert>
-        </sch:rule>
-      </sch:pattern>
-
-Rule 10-18. External adapter type uses sequence
-
-   [Rule 10-18] (REF, EXT)
-
-      <sch:pattern>
-        <sch:rule context="xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)
-                                          and exists(xs:complexContent/xs:extension)]">
-          <sch:assert test="exists(xs:complexContent/xs:extension/xs:sequence)"
-            >An external adapter type MUST use sequence as its top-level compositor.</sch:assert>
+          <sch:assert test="xs:complexContent/xs:extension[
+                              resolve-QName(@base, .) = xs:QName('structures:ObjectType')
+                            ]/xs:sequence"
+            >An external adapter type definition MUST be a complex type definition with complex content that extends structures:ObjectType, and that uses xs:sequence as its top-level compositor.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3063,9 +3036,9 @@ Rule 10-18. External adapter type uses sequence
 
    These types represent lists of values, each of which has a known meaning beyond the text representation. These values may be meaningful text or may be a string of alphanumeric identifiers that represent abbreviations for literals.
 
-Rule 10-19. Name of code type ends in "CodeType"
+Rule 10-15. Name of code type ends in "CodeType"
 
-   [Rule 10-19] (REF, EXT)
+   [Rule 10-15] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3144,9 +3117,9 @@ Rule 10-19. Name of code type ends in "CodeType"
 
 10.2.3.1. Association types
 
-Rule 10-20. Association types is derived from association type
+Rule 10-16. Association types is derived from association type
 
-   [Rule 10-20] (REF, EXT)
+   [Rule 10-16] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3164,9 +3137,9 @@ Rule 10-20. Association types is derived from association type
 
 10.2.3.2. Association element declarations
 
-Rule 10-21. Association element type is an association type
+Rule 10-17. Association element type is an association type
 
-   [Rule 10-21] (REF, EXT)
+   [Rule 10-17] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3212,7 +3185,7 @@ Rule 10-21. Association element type is an association type
 
       An augmentable type is [complex type definition] that
 
-         *  is defined by either a [conformant reference schema document] or by an [conformant extension schema document], and
+         *  is defined by either a [reference schema document] or by an [extension schema document], and
 
          *  is either
 
@@ -3220,9 +3193,9 @@ Rule 10-21. Association element type is an association type
 
                *  an [object type] that has complex content and is not an external adapter type.
 
-Rule 10-22. Augmentable type has augmentation point element
+Rule 10-18. Augmentable type has augmentation point element
 
-   [Rule 10-22] (REF)
+   [Rule 10-18] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[
@@ -3240,9 +3213,9 @@ Rule 10-22. Augmentable type has augmentation point element
         </sch:rule>
       </sch:pattern>
 
-Rule 10-23. Augmentable type has at most one augmentation point element
+Rule 10-19. Augmentable type has at most one augmentation point element
 
-   [Rule 10-23] (REF, EXT)
+   [Rule 10-19] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType[
@@ -3262,9 +3235,9 @@ Rule 10-23. Augmentable type has at most one augmentation point element
 
 10.2.4.2. Augmentation point element declarations
 
-Rule 10-24. Augmentation point corresponds to augmentable type
+Rule 10-20. Augmentation point corresponds to augmentable type
 
-   [Rule 10-24] (REF, EXT)
+   [Rule 10-20] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3284,9 +3257,9 @@ Rule 10-24. Augmentation point corresponds to augmentable type
 
    This document defines the terms [schema document], [element declaration], and [augmentable type].
 
-Rule 10-25. An augmentation point has no type
+Rule 10-21. An augmentation point has no type
 
-   [Rule 10-25] (REF, EXT)
+   [Rule 10-21] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3298,9 +3271,9 @@ Rule 10-25. An augmentation point has no type
 
    Because an augmentation point element has no type, it will be abstract, per Rule 9-37, Untyped element is abstract
 
-Rule 10-26. An augmentation point has no substitution group
+Rule 10-22. An augmentation point has no substitution group
 
-   [Rule 10-26] (REF, EXT)
+   [Rule 10-22] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name[
@@ -3312,9 +3285,9 @@ Rule 10-26. An augmentation point has no substitution group
 
 10.2.4.3. Augmentation point element use
 
-Rule 10-27. Augmentation point element may only be referenced by its type
+Rule 10-23. Augmentation point element may only be referenced by its type
 
-   [Rule 10-27] (REF, EXT)
+   [Rule 10-23] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3327,9 +3300,9 @@ Rule 10-27. Augmentation point element may only be referenced by its type
         </sch:rule>
       </sch:pattern>            
 
-Rule 10-28. Augmentation point reference is optional
+Rule 10-24. Augmentation point reference is optional
 
-   [Rule 10-28] (REF)
+   [Rule 10-24] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3339,9 +3312,9 @@ Rule 10-28. Augmentation point reference is optional
         </sch:rule>
       </sch:pattern>
 
-Rule 10-29. Augmentation point reference is unbounded
+Rule 10-25. Augmentation point reference is unbounded
 
-   [Rule 10-29] (REF)
+   [Rule 10-25] (REF)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3351,9 +3324,9 @@ Rule 10-29. Augmentation point reference is unbounded
         </sch:rule>
       </sch:pattern>
 
-Rule 10-30. Augmentation point reference must be last particle
+Rule 10-26. Augmentation point reference must be last particle
 
-   [Rule 10-30] (REF, EXT)
+   [Rule 10-26] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType//xs:element[exists(@ref[
@@ -3383,9 +3356,9 @@ Rule 10-30. Augmentation point reference must be last particle
 
          3. is designed to be used as an [augmentation] of its parent object or association
 
-Rule 10-31. Element within instance of augmentation type modifies base
+Rule 10-27. Element within instance of augmentation type modifies base
 
-   [Rule 10-31] (INS)
+   [Rule 10-27] (INS)
 
       Given:
 
@@ -3403,15 +3376,15 @@ Rule 10-31. Element within instance of augmentation type modifies base
 
       Element $relationship establishes a relationship between $base-value and the value of $relationship.
 
-Rule 10-32. Augmentation type name ends in "AugmentationType"
+Rule 10-28. Augmentation type name ends in "AugmentationType"
 
-   [Rule 10-32] (REF, EXT)
+   [Rule 10-28] (REF, EXT)
 
       A [schema component] has a name that ends in "AugmentationType" if and only if it is a [complex type definition] that defines an [augmentation type].
 
-Rule 10-33. Augmentation types are derived from augmentation types
+Rule 10-29. Augmentation types are derived from augmentation types
 
-   [Rule 10-33] (REF, EXT)
+   [Rule 10-29] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3429,9 +3402,9 @@ Rule 10-33. Augmentation types are derived from augmentation types
 
 10.2.4.5. Augmentation element declarations
 
-Rule 10-34. Augmentation element type is an augmentation type
+Rule 10-30. Augmentation element type is an augmentation type
 
-   [Rule 10-34] (REF, EXT)
+   [Rule 10-30] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3453,19 +3426,19 @@ Rule 10-34. Augmentation element type is an augmentation type
 
       A metadata type describes data about data, that is, information that is not descriptive of objects and their relationships, but is descriptive of the data itself. It is useful to provide a general mechanism for data about data. This provides required flexibility to precisely represent information.
 
-   [Rule 10-35] (REF, EXT)
+   [Rule 10-31] (REF, EXT)
 
       Within the schema, a metadata type MUST contain elements appropriate for a specific class of data about data.
 
-   [Rule 10-36] (REF, EXT)
+   [Rule 10-32] (REF, EXT)
 
       Within the schema, a metadata type and only a metadata type MUST be derived directly from structures:MetadataType.
 
    A metadata type establishes a specific, named aggregation of data about data. Any type derived from structures:MetadataType is a metadata type. Metadata types should not be derived from other metadata types. Such metadata types should be used asis and additional metadata types defined for additional content.
 
-Rule 10-37. Metadata types are derived from metadata types
+Rule 10-33. Metadata types are derived from metadata types
 
-   [Rule 10-37] (REF, EXT)
+   [Rule 10-33] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3491,9 +3464,9 @@ Rule 10-37. Metadata types are derived from metadata types
 
     There are limitations on the meaning of a metadata element in an instance; it does not establish existence of an object, nor is it a property of its containing object.
 
-Rule 10-38. Metadata element type is a metadata type
+Rule 10-34. Metadata element type is a metadata type
 
-   [Rule 10-38] (REF, EXT)
+   [Rule 10-34] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3531,7 +3504,7 @@ Rule 10-38. Metadata element type is a metadata type
 
 10.4.1. Extension of XSD namespace simple types
 
-   [Rule 10-39] (REF, EXT)
+   [Rule 10-35] (REF, EXT)
 
       Within the schema, a complex type that is a direct extension of a simple type from the XML Schema namespace simple type MAY use the same local name as the simple type if and only if the extension adds no content other than the attribute group structures:SimpleObjectAttributeGroup.
 
@@ -3539,7 +3512,7 @@ Rule 10-38. Metadata element type is a metadata type
 
 10.4.2. Usage of English
 
-   [Rule 10-40] (REF, EXT)
+   [Rule 10-36] (REF, EXT)
 
       The name of any XML Schema component defined by the schema MUST be composed of words from the English language, using the prevalent U.S. spelling, as provided by [OED].
 
@@ -3547,7 +3520,7 @@ Rule 10-38. Metadata element type is a metadata type
 
 10.4.3. Characters in names
 
-   [Rule 10-41] (REF, EXT)
+   [Rule 10-37] (REF, EXT)
 
       The name of any XML Schema component defined by the schema MUST contain only the following characters:
 
@@ -3561,7 +3534,7 @@ Rule 10-38. Metadata element type is a metadata type
 
       Other characters, such as the underscore ("_") character and the period (".") character MUST NOT appear in component names in NIEM-conformant schemas.
 
-   [Rule 10-42] (REF, EXT)
+   [Rule 10-38] (REF, EXT)
 
       The hyphen character ("-") MAY appear in component names only when used as a separator between parts of a single word, phrase, or value, which would otherwise be incomprehensible without the use of a separator.
 
@@ -3575,17 +3548,17 @@ Rule 10-38. Metadata element type is a metadata type
 
       CamelCase (camel case) or medial capitals is the practice of writing compound words or phrases such that each word or abbreviation begins with a capital letter. Camel case may start with a capital or, especially in programming languages, with a lowercase letter.
 
-Rule 10-43. Names use camel case
+Rule 10-39. Names use camel case
 
-   [Rule 10-43] (REF, EXT)
+   [Rule 10-39] (REF, EXT)
 
       The name of any XML Schema component defined by the schema MUST use the camel case formatting convention.
 
-   [Rule 10-44] (REF, EXT)
+   [Rule 10-40] (REF, EXT)
 
       Within the schema, any attribute declaration MUST have a name that begins with a lower-case letter ("a"-"z").
 
-   [Rule 10-45] (REF, EXT)
+   [Rule 10-41] (REF, EXT)
 
       Within the schema, any XML Schema component other than an attribute declaration MUST have a name that begins with an upper-case letter ("A"-"Z").
 
@@ -3595,9 +3568,9 @@ Rule 10-43. Names use camel case
 
    Acronyms and abbreviations have the ability to improve readability and comprehensibility of large, complex, or frequently used terms. They also obscure meaning and impair understanding when their definitions are not clear or when they are used injudiciously. They should be used with great care. Acronyms and abbreviations that are used must be documented and used consistently.
 
-Rule 10-46. Names use common abbreviations
+Rule 10-42. Names use common abbreviations
 
-   [Rule 10-46] (REF, EXT)
+   [Rule 10-42] (REF, EXT)
 
       The schema MUST consistently use approved the acronyms, abbreviations, and word truncations within defined names, as identified by Table Table 10-1, Abbreviations used in NIEM core names.
 
@@ -3635,11 +3608,11 @@ Rule 10-46. Names use common abbreviations
 
    See additional rules constraining the use of the [local terminology appinfo namespace] in Section 10.5.2, The NIEM local terminology namespace, below.
 
-   [Rule 10-47] (REF, EXT)
+   [Rule 10-43] (REF, EXT)
 
       An element term:LocalTerm MUST establish the meaning of a [local term] only within the XML Schema document in which it occurs. There MUST NOT be any transitive inheritance of local terminology within schema documents that import the containing schema document.
 
-   [Rule 10-48] (REF, EXT)
+   [Rule 10-44] (REF, EXT)
 
       An element information item term:LocalTerm MUST establish a term as follows:
 
@@ -3655,25 +3628,25 @@ Rule 10-46. Names use common abbreviations
 
 10.4.6. Word forms
 
-   [Rule 10-49] (REF, EXT)
+   [Rule 10-45] (REF, EXT)
 
       A noun used as a term in the name of an XML Schema component MUST be in singular form unless the concept itself is plural.
 
-   [Rule 10-50] (REF, EXT)
+   [Rule 10-46] (REF, EXT)
 
       A verb used as a term in the name of an XML Schema component MUST be used in the present tense unless the concept itself is past tense.
 
-   [Rule 10-51] (REF, EXT)
+   [Rule 10-47] (REF, EXT)
 
       Articles, conjunctions, and prepositions MUST NOT be used in NIEM component names except where they are required for clarity or by standard convention.
 
    Articles (e.g., a, an, the), conjunctions (e.g., and, or, but), and prepositions (e.g., at, by, for, from, in, of, to) are all disallowed in NIEM component names, unless they are required. For example, PowerOfAttorneyCode requires the preposition. These rules constrain slight variations in word forms and types to improve consistency and reduce potentially ambiguous or confusing component names.
 
-Rule 10-52. Component name follows pattern
+Rule 10-48. Component name follows pattern
 
    Elements in NIEM-conformant schemas are given names that follow a specific pattern. This pattern comes from [ISO 11179-5].
 
-   [Rule 10-52] (REF, EXT)
+   [Rule 10-48] (REF, EXT)
 
       Except as specified elsewhere in this document, any element or attribute defined within the schema MUST have a name that takes the form:
 
@@ -3695,7 +3668,7 @@ Rule 10-52. Component name follows pattern
 
    NIEM adopts an object-oriented approach to representation of data. Object classes represent what [ISO 11179-5] refers to as "things of interest in a universe of discourse that may be found in a model of that universe." An object class or object term is a word that represents a class of real-world entities or concepts. An object-class term describes the applicable context for a NIEM component.
 
-   [Rule 10-53] (REF, EXT)
+   [Rule 10-49] (REF, EXT)
 
       The object-class term of a NIEM component MUST consist of a term identifying a category of concrete concepts or entities.
 
@@ -3711,7 +3684,7 @@ Rule 10-52. Component name follows pattern
 
    Objects or concepts are usually described in terms of their characteristic properties, data attributes, or constituent subparts. Most objects can be described by several characteristics. Therefore, a property term in the name of a data component represents a characteristic or subpartof an object class and generally describes the essence of that data component.
 
-   [Rule 10-54] (REF, EXT)
+   [Rule 10-50] (REF, EXT)
 
       A property term MUST describe or represent a characteristic or subpart of an entity or concept.
 
@@ -3721,15 +3694,15 @@ Rule 10-52. Component name follows pattern
 
    Qualifier terms modify object, property, representation, or other qualifier terms to increase semantic precision and reduce ambiguity. Qualifier terms may precede or succeed the terms they modify. The goal for the placement of qualifier terms is to generally follow the rules of ordinary English while maintaining clarity.
 
-   [Rule 10-55] (REF, EXT)
+   [Rule 10-51] (REF, EXT)
 
       Multiple qualifier terms MAY be used within a component name as necessary to ensure clarity and uniqueness within its namespace and usage context.
 
-   [Rule 10-56] (REF, EXT)
+   [Rule 10-52] (REF, EXT)
 
       The number of qualifier terms SHOULD be limited to the absolute minimum required to make the component name unique and understandable.
 
-   [Rule 10-57] (REF, EXT)
+   [Rule 10-53] (REF, EXT)
 
       The order of qualifiers MUST NOT be used to differentiate names.
 
@@ -3745,7 +3718,7 @@ Rule 10-52. Component name follows pattern
 
       3. It indicates the nature of the value carried by element. Labeling elements and attributes with a notional indicator of the content eases discovery and comprehension.
 
-   [Rule 10-58] (REF, EXT)
+   [Rule 10-54] (REF, EXT)
 
       If any word in the representation term is redundant with any word in the property term, one occurrence SHOULD be deleted.
 
@@ -3803,25 +3776,25 @@ Rule 10-52. Component name follows pattern
 
       |List|A sequence of values. This representation term is used in tandem with another of the listed representation terms.
 
-Rule 10-59. Element with simple content has representation term
+Rule 10-55. Element with simple content has representation term
 
-   [Rule 10-59] (REF, EXT)
+   [Rule 10-55] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of simple content MUST use a representation term found in Table Table 10-2, Representation terms.
 
    This rule is also supported by Rule 11-16, Name of element declaration with simple content has representation term, which provides a test that a top-level declaration has a representation term.
 
-Rule 10-60. Name has representation term when appropriate
+Rule 10-56. Name has representation term when appropriate
 
-   [Rule 10-60] (REF, EXT)
+   [Rule 10-56] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content, and that corresponds to a concept listed in Table Table 10-2, Representation terms, MUST use a representation term from that table.
 
    An element that represents a value listed in the table should have a representation term. It should do so even if its type is complex with multiple parts. For example, a type with multiple fields may represent an audio binary, a date, or a name.
 
-Rule 10-61. Name has representation term only when appropriate
+Rule 10-57. Name has representation term only when appropriate
 
-   [Rule 10-61] (REF, EXT)
+   [Rule 10-57] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content and that does not correspond to a concept listed in Table Table 10-2, Representation terms MUST NOT use a representation term.
 
@@ -3859,9 +3832,9 @@ Rule 10-61. Name has representation term only when appropriate
 
    The majority of uses of application information from the [appinfo namespace] are described in the modeling rules for the specific component.
 
-Rule 10-62. Machine-readable annotations are valid
+Rule 10-58. Machine-readable annotations are valid
 
-   [Rule 10-62] (REF, EXT)
+   [Rule 10-58] (REF, EXT)
 
       Every element information item or attribute information item that appears as a machine-readable annotation in a schema MUST be a valid instance, according to its specification.
 
@@ -3887,17 +3860,17 @@ Rule 10-62. Machine-readable annotations are valid
 
    The definition for [deprecated component] is adapted from [JLS] Section 9.6.4.6, @Deprecated.
 
-Rule 10-63. Component marked as deprecated is deprecated component
+Rule 10-59. Component marked as deprecated is deprecated component
 
-   [Rule 10-63] (REF, EXT)
+   [Rule 10-59] (REF, EXT)
 
       A [schema component] that has an attribute appinfo:deprecated with a value of "true" MUST be a [deprecated component].
 
    Deprecation can allow version management to be more consistent; versions of schema may be incrementally improved without introducing validation problems and incompatibility. As XML Schema lacks a deprecation mechanism, NIEM defines such a mechanism.
 
-Rule 10-64. Deprecated annotates schema component
+Rule 10-60. Deprecated annotates schema component
 
-   [Rule 10-64] (REF, EXT)
+   [Rule 10-60] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:deprecated)]">
@@ -3906,9 +3879,9 @@ Rule 10-64. Deprecated annotates schema component
         </sch:rule>
       </sch:pattern>
 
-Rule 10-65. External import indicator annotates import
+Rule 10-61. External import indicator annotates import
 
-   [Rule 10-65] (REF, EXT)
+   [Rule 10-61] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:externalImportIndicator)]">
@@ -3917,9 +3890,9 @@ Rule 10-65. External import indicator annotates import
         </sch:rule>
       </sch:pattern>
 
-Rule 10-66. External adapter type indicator annotates complex type
+Rule 10-62. External adapter type indicator annotates complex type
 
-   [Rule 10-66] (REF)
+   [Rule 10-62] (REF)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:externalAdapterTypeIndicator)]">
@@ -3930,9 +3903,9 @@ Rule 10-66. External adapter type indicator annotates complex type
 
 10.5.1.2. appinfo:appliesToTypes annotation
 
-Rule 10-67. appinfo:appliesToTypes annotates metadata element
+Rule 10-63. appinfo:appliesToTypes annotates metadata element
 
-   [Rule 10-67] (REF, EXT)
+   [Rule 10-63] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
@@ -3942,9 +3915,9 @@ Rule 10-67. appinfo:appliesToTypes annotates metadata element
         </sch:rule>
       </sch:pattern>
 
-Rule 10-68. appinfo:appliesToTypes references types
+Rule 10-64. appinfo:appliesToTypes references types
 
-   [Rule 10-68] (SET)
+   [Rule 10-64] (SET)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
@@ -3956,9 +3929,9 @@ Rule 10-68. appinfo:appliesToTypes references types
 
 10.5.1.3. appinfo:appliesToElements annotation
 
-Rule 10-69. appinfo:appliesToElements annotates metadata element
+Rule 10-65. appinfo:appliesToElements annotates metadata element
 
-   [Rule 10-69] (REF, EXT)
+   [Rule 10-65] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToElements)]">
@@ -3969,9 +3942,9 @@ Rule 10-69. appinfo:appliesToElements annotates metadata element
         </sch:rule>
       </sch:pattern>
 
-Rule 10-70. appinfo:appliesToElements references elements
+Rule 10-66. appinfo:appliesToElements references elements
 
-   [Rule 10-70] (SET)
+   [Rule 10-66] (SET)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToElements)]">
@@ -3983,9 +3956,9 @@ Rule 10-70. appinfo:appliesToElements references elements
 
 10.5.2. The NIEM local terminology namespace
 
-Rule 10-71. term:LocalTerm annotates schema
+Rule 10-67. term:LocalTerm annotates schema
 
-   [Rule 10-71] (REF, EXT)
+   [Rule 10-67] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="term:LocalTerm">
@@ -3994,9 +3967,9 @@ Rule 10-71. term:LocalTerm annotates schema
         </sch:rule>
       </sch:pattern>
 
-Rule 10-72. term:LocalTerm has literal or definition
+Rule 10-68. term:LocalTerm has literal or definition
 
-   [Rule 10-72] (REF, EXT)
+   [Rule 10-68] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="term:LocalTerm">
@@ -4273,7 +4246,7 @@ Rule 11-16. Name of element declaration with simple content has representation t
         </sch:rule>
       </sch:pattern>
 
-   Representation terms are defined by Table Table 10-2, Representation terms, above. This rule supports Rule 10-59, Element with simple content has representation term.
+   Representation terms are defined by Table Table 10-2, Representation terms, above. This rule supports Rule 10-55, Element with simple content has representation term.
 
 11.2.2. Element substitution group
 
@@ -4377,7 +4350,7 @@ Rule 11-22. Element reference defined by conformant schema
 
 Rule 11-23. External attribute use only in external adapter type
 
-   A complex type that is defined by a [conformant reference schema document] is permitted to contain an attribute use schema component only if it is an [external adapter type]. This does not apply to a complex type defined by a [conformant extension schema document], which is permitted to use external attributes, as long as each attribute use is a [documented component], per Rule 11-24, External attribute use has data definition.
+   A complex type that is defined by a [reference schema document] is permitted to contain an attribute use schema component only if it is an [external adapter type]. This does not apply to a complex type defined by an [extension schema document], which is permitted to use external attributes, as long as each attribute use is a [documented component], per Rule 11-24, External attribute use has data definition.
 
    [Rule 11-23] (REF)
 
@@ -4563,11 +4536,11 @@ Rule 11-35. Reference schema imports reference schema
                                                                 xs:anyURI('http://www.w3.org/XML/1998/namespace')))]">
           <sch:assert test="some $schema in nf:resolve-namespace(., @namespace) satisfies
                               nf:has-effective-conformance-target-identifier($schema, xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))"
-            >A namespace imported as conformant from a conformant reference schema document MUST identify a namespace defined by a conformant reference schema document.</sch:assert>
+            >A namespace imported as conformant from a reference schema document MUST identify a namespace defined by a reference schema document.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
-   This document defines the term [conformant reference schema document].
+   This document defines the term [reference schema document].
 
 Rule 11-36. Extension schema document imports reference or extension schema
 
@@ -4583,11 +4556,11 @@ Rule 11-36. Extension schema document imports reference or extension schema
           <sch:assert test="some $schema in nf:resolve-namespace(., @namespace) satisfies (
                               nf:has-effective-conformance-target-identifier($schema, xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))
                               or nf:has-effective-conformance-target-identifier($schema, xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))"
-            >A namespace imported as conformant from a conformant extension schema document MUST identify a namespace defined by a conformant reference schema document or a conformant extension schema document.</sch:assert>
+            >A namespace imported as conformant from an extension schema document MUST identify a namespace defined by a reference schema document or an extension schema document.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
-   This document defines the terms [conformant extension schema document] and [conformant reference schema document].
+   This document defines the terms [extension schema document] and [reference schema document].
 
 11.6.1. Supporting namespaces are imported as conformant
 
@@ -5342,71 +5315,67 @@ Appendix F. Index of rules
    Rule 10-5, Only object type has RoleOf element: Section 10.2.2.2, Roles
    Rule 10-6, RoleOf elements indicate the base types of a role type: Section 10.2.2.2, Roles
    Rule 10-7, Instance of RoleOf element indicates a role object: Section 10.2.2.2, Roles
-   Rule 10-8: Section 10.2.2.3, External adapter types and external components
+   Rule 10-8, Import of external namespace is documented: Section 10.2.2.3, External adapter types and external components
    Rule 10-9: Section 10.2.2.3, External adapter types and external components
    Rule 10-10: Section 10.2.2.3, External adapter types and external components
    Rule 10-11: Section 10.2.2.3, External adapter types and external components
    Rule 10-12: Section 10.2.2.3, External adapter types and external components
    Rule 10-13: Section 10.2.2.3, External adapter types and external components
-   Rule 10-14: Section 10.2.2.3, External adapter types and external components
-   Rule 10-15, External adapter type has complex content: Section 10.2.2.3, External adapter types and external components
-   Rule 10-16, External adapter type uses extension: Section 10.2.2.3, External adapter types and external components
-   Rule 10-17, External adapter type extends structures:ObjectType: Section 10.2.2.3, External adapter types and external components
-   Rule 10-18, External adapter type uses sequence: Section 10.2.2.3, External adapter types and external components
-   Rule 10-19, Name of code type ends in "CodeType": Section 10.2.2.4, Code types
-   Rule 10-20, Association types is derived from association type: Section 10.2.3.1, Association types
-   Rule 10-21, Association element type is an association type: Section 10.2.3.2, Association element declarations
-   Rule 10-22, Augmentable type has augmentation point element: Section 10.2.4.1, Augmentable types
-   Rule 10-23, Augmentable type has at most one augmentation point element: Section 10.2.4.1, Augmentable types
-   Rule 10-24, Augmentation point corresponds to augmentable type: Section 10.2.4.2, Augmentation point element declarations
-   Rule 10-25, An augmentation point has no type: Section 10.2.4.2, Augmentation point element declarations
-   Rule 10-26, An augmentation point has no substitution group: Section 10.2.4.2, Augmentation point element declarations
-   Rule 10-27, Augmentation point element may only be referenced by its type: Section 10.2.4.3, Augmentation point element use
-   Rule 10-28, Augmentation point reference is optional: Section 10.2.4.3, Augmentation point element use
-   Rule 10-29, Augmentation point reference is unbounded: Section 10.2.4.3, Augmentation point element use
-   Rule 10-30, Augmentation point reference must be last particle: Section 10.2.4.3, Augmentation point element use
-   Rule 10-31, Element within instance of augmentation type modifies base: Section 10.2.4.4, Augmentation types
-   Rule 10-32, Augmentation type name ends in "AugmentationType": Section 10.2.4.4, Augmentation types
-   Rule 10-33, Augmentation types are derived from augmentation types: Section 10.2.4.4, Augmentation types
-   Rule 10-34, Augmentation element type is an augmentation type: Section 10.2.4.5, Augmentation element declarations
-   Rule 10-35: Section 10.2.5.1, Metadata types
-   Rule 10-36: Section 10.2.5.1, Metadata types
-   Rule 10-37, Metadata types are derived from metadata types: Section 10.2.5.1, Metadata types
-   Rule 10-38, Metadata element type is a metadata type: Section 10.2.5.2.1, Metadata element declarations
-   Rule 10-39: Section 10.4.1, Extension of XSD namespace simple types
-   Rule 10-40: Section 10.4.2, Usage of English
-   Rule 10-41: Section 10.4.3, Characters in names
-   Rule 10-42: Section 10.4.3, Characters in names
-   Rule 10-43, Names use camel case: Section 10.4.4, Character case
-   Rule 10-44: Section 10.4.4, Character case
-   Rule 10-45: Section 10.4.4, Character case
-   Rule 10-46, Names use common abbreviations: Section 10.4.5, Use of acronyms and abbreviations
-   Rule 10-47: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
-   Rule 10-48: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
-   Rule 10-49: Section 10.4.6, Word forms
-   Rule 10-50: Section 10.4.6, Word forms
-   Rule 10-51: Section 10.4.6, Word forms
-   Rule 10-52, Component name follows pattern: Section 10.4, Naming rules
-   Rule 10-53: Section 10.4.7, Object-class term
-   Rule 10-54: Section 10.4.8, Property term
-   Rule 10-55: Section 10.4.9, Qualifier terms
-   Rule 10-56: Section 10.4.9, Qualifier terms
-   Rule 10-57: Section 10.4.9, Qualifier terms
-   Rule 10-58: Section 10.4.10, Representation terms
-   Rule 10-59, Element with simple content has representation term: Section 10.4.10, Representation terms
-   Rule 10-60, Name has representation term when appropriate: Section 10.4.10, Representation terms
-   Rule 10-61, Name has representation term only when appropriate: Section 10.4.10, Representation terms
-   Rule 10-62, Machine-readable annotations are valid: Section 10.5, Machine-readable annotations
-   Rule 10-63, Component marked as deprecated is deprecated component: Section 10.5.1.1, Deprecation
-   Rule 10-64, Deprecated annotates schema component: Section 10.5.1.1, Deprecation
-   Rule 10-65, External import indicator annotates import: Section 10.5.1, The NIEM appinfo namespace
-   Rule 10-66, External adapter type indicator annotates complex type: Section 10.5.1, The NIEM appinfo namespace
-   Rule 10-67, appinfo:appliesToTypes annotates metadata element: Section 10.5.1.2, appinfo:appliesToTypes annotation
-   Rule 10-68, appinfo:appliesToTypes references types: Section 10.5.1.2, appinfo:appliesToTypes annotation
-   Rule 10-69, appinfo:appliesToElements annotates metadata element: Section 10.5.1.3, appinfo:appliesToElements annotation
-   Rule 10-70, appinfo:appliesToElements references elements: Section 10.5.1.3, appinfo:appliesToElements annotation
-   Rule 10-71, term:LocalTerm annotates schema: Section 10.5.2, The NIEM local terminology namespace
-   Rule 10-72, term:LocalTerm has literal or definition: Section 10.5.2, The NIEM local terminology namespace
+   Rule 10-14, Structure of external adapter type definition follows pattern: Section 10.2.2.3, External adapter types and external components
+   Rule 10-15, Name of code type ends in "CodeType": Section 10.2.2.4, Code types
+   Rule 10-16, Association types is derived from association type: Section 10.2.3.1, Association types
+   Rule 10-17, Association element type is an association type: Section 10.2.3.2, Association element declarations
+   Rule 10-18, Augmentable type has augmentation point element: Section 10.2.4.1, Augmentable types
+   Rule 10-19, Augmentable type has at most one augmentation point element: Section 10.2.4.1, Augmentable types
+   Rule 10-20, Augmentation point corresponds to augmentable type: Section 10.2.4.2, Augmentation point element declarations
+   Rule 10-21, An augmentation point has no type: Section 10.2.4.2, Augmentation point element declarations
+   Rule 10-22, An augmentation point has no substitution group: Section 10.2.4.2, Augmentation point element declarations
+   Rule 10-23, Augmentation point element may only be referenced by its type: Section 10.2.4.3, Augmentation point element use
+   Rule 10-24, Augmentation point reference is optional: Section 10.2.4.3, Augmentation point element use
+   Rule 10-25, Augmentation point reference is unbounded: Section 10.2.4.3, Augmentation point element use
+   Rule 10-26, Augmentation point reference must be last particle: Section 10.2.4.3, Augmentation point element use
+   Rule 10-27, Element within instance of augmentation type modifies base: Section 10.2.4.4, Augmentation types
+   Rule 10-28, Augmentation type name ends in "AugmentationType": Section 10.2.4.4, Augmentation types
+   Rule 10-29, Augmentation types are derived from augmentation types: Section 10.2.4.4, Augmentation types
+   Rule 10-30, Augmentation element type is an augmentation type: Section 10.2.4.5, Augmentation element declarations
+   Rule 10-31: Section 10.2.5.1, Metadata types
+   Rule 10-32: Section 10.2.5.1, Metadata types
+   Rule 10-33, Metadata types are derived from metadata types: Section 10.2.5.1, Metadata types
+   Rule 10-34, Metadata element type is a metadata type: Section 10.2.5.2.1, Metadata element declarations
+   Rule 10-35: Section 10.4.1, Extension of XSD namespace simple types
+   Rule 10-36: Section 10.4.2, Usage of English
+   Rule 10-37: Section 10.4.3, Characters in names
+   Rule 10-38: Section 10.4.3, Characters in names
+   Rule 10-39, Names use camel case: Section 10.4.4, Character case
+   Rule 10-40: Section 10.4.4, Character case
+   Rule 10-41: Section 10.4.4, Character case
+   Rule 10-42, Names use common abbreviations: Section 10.4.5, Use of acronyms and abbreviations
+   Rule 10-43: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
+   Rule 10-44: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
+   Rule 10-45: Section 10.4.6, Word forms
+   Rule 10-46: Section 10.4.6, Word forms
+   Rule 10-47: Section 10.4.6, Word forms
+   Rule 10-48, Component name follows pattern: Section 10.4, Naming rules
+   Rule 10-49: Section 10.4.7, Object-class term
+   Rule 10-50: Section 10.4.8, Property term
+   Rule 10-51: Section 10.4.9, Qualifier terms
+   Rule 10-52: Section 10.4.9, Qualifier terms
+   Rule 10-53: Section 10.4.9, Qualifier terms
+   Rule 10-54: Section 10.4.10, Representation terms
+   Rule 10-55, Element with simple content has representation term: Section 10.4.10, Representation terms
+   Rule 10-56, Name has representation term when appropriate: Section 10.4.10, Representation terms
+   Rule 10-57, Name has representation term only when appropriate: Section 10.4.10, Representation terms
+   Rule 10-58, Machine-readable annotations are valid: Section 10.5, Machine-readable annotations
+   Rule 10-59, Component marked as deprecated is deprecated component: Section 10.5.1.1, Deprecation
+   Rule 10-60, Deprecated annotates schema component: Section 10.5.1.1, Deprecation
+   Rule 10-61, External import indicator annotates import: Section 10.5.1, The NIEM appinfo namespace
+   Rule 10-62, External adapter type indicator annotates complex type: Section 10.5.1, The NIEM appinfo namespace
+   Rule 10-63, appinfo:appliesToTypes annotates metadata element: Section 10.5.1.2, appinfo:appliesToTypes annotation
+   Rule 10-64, appinfo:appliesToTypes references types: Section 10.5.1.2, appinfo:appliesToTypes annotation
+   Rule 10-65, appinfo:appliesToElements annotates metadata element: Section 10.5.1.3, appinfo:appliesToElements annotation
+   Rule 10-66, appinfo:appliesToElements references elements: Section 10.5.1.3, appinfo:appliesToElements annotation
+   Rule 10-67, term:LocalTerm annotates schema: Section 10.5.2, The NIEM local terminology namespace
+   Rule 10-68, term:LocalTerm has literal or definition: Section 10.5.2, The NIEM local terminology namespace
    Rule 11-1, Name of type ends in "Type": Section 11.1, Type definition components
    Rule 11-2, Name of type other than proxy type is in upper camel case: Section 11.1, Type definition components
    Rule 11-3, Base type definition defined by conformant schema: Section 11.1.1, Type definition hierarchy
