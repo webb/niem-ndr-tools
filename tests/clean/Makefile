@@ -1,4 +1,9 @@
 
+SHELL = /bin/bash
+
+default:
+	@printf "Use target:\n"
+	@printf "  update: update the subset from the latest in ~/Downloads\n"
 
 update:
 	rm -rf subset

@@ -63,6 +63,11 @@
       <xs:documentation>A date that information take effect.</xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="Metadata" type="nc:MetadataType" appinfo:appliesToTypes="structures:AssociationType structures:ObjectType">
+    <xs:annotation>
+      <xs:documentation>Information that further qualifies primary data; data about data.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="Person" type="nc:PersonType" nillable="true">
     <xs:annotation>
       <xs:documentation>A human being.</xs:documentation>
