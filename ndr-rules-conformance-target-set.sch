@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -8,22 +8,22 @@
 <sch:ns prefix="structures" uri="http://release.niem.gov/niem/structures/3.0/"/>
 <sch:ns prefix="term" uri="http://release.niem.gov/niem/localTerminology/3.0/"/>
       
-<sch:pattern id="rule_9-28"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
+<sch:pattern id="rule_9-33"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
   <sch:rule context="xs:complexType[       nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))       or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument'))]     /xs:complexContent       /xs:*[(self::xs:restriction or self::xs:extension)             and exists(@base)]">
     <sch:let name="not-complex-content" value="for $qname in resolve-QName(@base, .),                         $not-structures-qname in $qname[namespace-uri-from-QName(.) != xs:anyURI('http://release.niem.gov/niem/structures/3.0/')],                         $base-type in nf:resolve-type(., $not-structures-qname),                         $base-complex-type in $base-type[self::xs:complexType],                         $base-not-complex-content in $base-complex-type[empty(xs:complexContent)]                     return $base-not-complex-content"/>
-    <sch:assert test="empty($not-complex-content)">Rule 9-28: The base type of complex type that has complex content MUST have complex content.</sch:assert>
+    <sch:assert test="empty($not-complex-content)">Rule 9-33: The base type of complex type that has complex content MUST have complex content.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-30"><sch:title>A complex type with simple content has structures:SimpleObjectAttributeGroup</sch:title>
+<sch:pattern id="rule_9-35"><sch:title>A complex type with simple content has structures:SimpleObjectAttributeGroup</sch:title>
   <sch:rule context="xs:simpleContent/xs:extension[       for $base in resolve-QName(@base, .),            $base-namespace in namespace-uri-from-QName($base),           $target-namespace in nf:get-target-namespace(.) return (         $base-namespace = 'http://www.w3.org/2001/XMLSchema'         or (some $type in nf:resolve-type(., $base) satisfies              node-name($type) = xs:QName('xs:simpleType')))]">
-    <sch:assert test="exists(xs:attributeGroup[                         some $ref in @ref satisfies                           resolve-QName($ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])">Rule 9-30: A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
+    <sch:assert test="exists(xs:attributeGroup[                         some $ref in @ref satisfies                           resolve-QName($ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])">Rule 9-35: A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-41"><sch:title>Element type is not simple type</sch:title>
+<sch:pattern id="rule_9-46"><sch:title>Element type is not simple type</sch:title>
   <sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))                                  or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))                                 and exists(@type)]">
-    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-41: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
+    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-46: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
