@@ -28,7 +28,7 @@
           
 <sch:pattern id="rule_7-1"><sch:title>Conformance to XML</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
-    <sch:report test="true()">Rule 7-1: The document MUST be a well-formed XML document, as defined by Extensible Markup Language.</sch:report>
+    <sch:report test="true()">Rule 7-1: The document MUST be an XML document.</sch:report>
   </sch:rule>
 </sch:pattern>
         
@@ -600,67 +600,71 @@
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-29"><sch:title>Augmentation types are derived from augmentation types</sch:title>
-  <sch:rule context="xs:complexType">
-    <sch:let name="is-augmentation-type" value="exists(@name[ends-with(., 'AugmentationType')])"/>
-    <sch:let name="has-augmentation-base-type" value="exists(xs:complexContent[                              *[(self::xs:extension or self::xs:restriction)                                and @base[ends-with(., 'AugmentationType') ] ] ] )"/>
-    <sch:assert test="$is-augmentation-type = $has-augmentation-base-type">Rule 10-29: A complex type definition MUST is an augmentation type if and only if it has a base type definition that is an augmentation type.<sch:value-of select="$is-augmentation-type"/>, <sch:value-of select="$has-augmentation-base-type"/></sch:assert>
+<sch:pattern id="rule_10-29"><sch:title>Schema component with name ending in "AugmentationType" is an augmentation type</sch:title>
+  <sch:rule context="xs:*[ends-with(@name, 'AugmentationType')]">
+    <sch:assert test="self::xs:complexType/xs:complexContent/xs:*[                         (self::xs:extension or self::xs:restriction)                         and ends-with(@base, 'AugmentationType')]">Rule 10-29: An augmentation type definition schema component with {name} ending in 'AugmentationType' MUST be an augmentation type definition that is a complex type definition with complex content that extends or restricts an augmentation type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-30"><sch:title>Augmentation element type is an augmentation type</sch:title>
+<sch:pattern id="rule_10-30"><sch:title>Type derived from augmentation type is an augmentation type</sch:title>
+  <sch:rule context="xs:*[(self::xs:restriction or self::xs:extension)                           and ends-with(@base, 'AugmentationType')]">
+    <sch:assert test="ancestor::xs:complexType[ends-with(@name, 'AugmentationType')]">Rule 10-30: A type definition derived from an augmentation type MUST be an augmentation type definition</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_10-31"><sch:title>Augmentation element type is an augmentation type</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-30: An element declaration MUST have a name that ends in "Augmentation" if and only if it has a type that is an augmentation type.</sch:assert>
+    <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-31: An element declaration MUST have a name that ends in "Augmentation" if and only if it has a type that is an augmentation type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-33"><sch:title>Metadata types are derived from metadata types</sch:title>
+<sch:pattern id="rule_10-34"><sch:title>Metadata types are derived from metadata types</sch:title>
   <sch:rule context="xs:complexType">
     <sch:let name="is-metadata-type" value="exists(@name[ends-with(., 'MetadataType')])"/>
     <sch:let name="has-metadata-base-type" value="       exists(xs:complexContent[         exists(xs:*[local-name() = ('extension', 'restriction')                     and exists(@base[ends-with(., 'MetadataType')])])])"/>
-    <sch:assert test="$is-metadata-type = $has-metadata-base-type">Rule 10-33: A type MUST have a metadata type name if an only if it is derived from a metadata type.</sch:assert>
+    <sch:assert test="$is-metadata-type = $has-metadata-base-type">Rule 10-34: A type MUST have a metadata type name if an only if it is derived from a metadata type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-34"><sch:title>Metadata element type is a metadata type</sch:title>
+<sch:pattern id="rule_10-35"><sch:title>Metadata element type is a metadata type</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(@type[ends-with(., 'MetadataType')])                       = exists(@name[ends-with(., 'Metadata')])">Rule 10-34: An element MUST have a name that ends in 'Metadata' if and only if it has a type that is a metadata type.</sch:assert>
+    <sch:assert test="exists(@type[ends-with(., 'MetadataType')])                       = exists(@name[ends-with(., 'Metadata')])">Rule 10-35: An element MUST have a name that ends in 'Metadata' if and only if it has a type that is a metadata type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-60"><sch:title>Deprecated annotates schema component</sch:title>
+<sch:pattern id="rule_10-61"><sch:title>Deprecated annotates schema component</sch:title>
   <sch:rule context="*[exists(@appinfo:deprecated)]">
-    <sch:assert test="namespace-uri-from-QName(node-name(.)) = xs:anyURI('http://www.w3.org/2001/XMLSchema')">Rule 10-60: The attribute appinfo:deprecated MUST be owned by an element with a namespace name <namespace-uri-for-prefix xmlns="https://iead.ittl.gtri.org/wr24/doc/2011-09-30-2258">xs</namespace-uri-for-prefix>.</sch:assert>
+    <sch:assert test="namespace-uri-from-QName(node-name(.)) = xs:anyURI('http://www.w3.org/2001/XMLSchema')">Rule 10-61: The attribute appinfo:deprecated MUST be owned by an element with a namespace name <namespace-uri-for-prefix xmlns="https://iead.ittl.gtri.org/wr24/doc/2011-09-30-2258">xs</namespace-uri-for-prefix>.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-61"><sch:title>External import indicator annotates import</sch:title>
+<sch:pattern id="rule_10-62"><sch:title>External import indicator annotates import</sch:title>
   <sch:rule context="*[exists(@appinfo:externalImportIndicator)]">
-    <sch:assert test="exists(self::xs:import)">Rule 10-61: The attribute {http://release.niem.gov/niem/appinfo/3.0/}externalImportIndicator MUST be owned by an element xs:import.</sch:assert>
+    <sch:assert test="exists(self::xs:import)">Rule 10-62: The attribute {http://release.niem.gov/niem/appinfo/3.0/}externalImportIndicator MUST be owned by an element xs:import.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-63"><sch:title>appinfo:appliesToTypes annotates metadata element</sch:title>
+<sch:pattern id="rule_10-64"><sch:title>appinfo:appliesToTypes annotates metadata element</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
-    <sch:assert test="exists(self::xs:element[exists(@name)                                and ends-with(@name, 'Metadata')])">Rule 10-63: The attribute appinfo:appliesToTypes MUST be owned by a metadata element.</sch:assert>
+    <sch:assert test="exists(self::xs:element[exists(@name)                                and ends-with(@name, 'Metadata')])">Rule 10-64: The attribute appinfo:appliesToTypes MUST be owned by a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-65"><sch:title>appinfo:appliesToElements annotates metadata element</sch:title>
+<sch:pattern id="rule_10-66"><sch:title>appinfo:appliesToElements annotates metadata element</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToElements)]">
-    <sch:assert test="exists(self::xs:element[                           exists(@name)                           and ends-with(@name, 'Metadata')])">Rule 10-65: The attribute appinfo:appliesToElements MUST be owned by a metadata element.</sch:assert>
+    <sch:assert test="exists(self::xs:element[                           exists(@name)                           and ends-with(@name, 'Metadata')])">Rule 10-66: The attribute appinfo:appliesToElements MUST be owned by a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-67"><sch:title>term:LocalTerm annotates schema</sch:title>
+<sch:pattern id="rule_10-68"><sch:title>term:LocalTerm annotates schema</sch:title>
   <sch:rule context="term:LocalTerm">
-    <sch:assert test="parent::xs:appinfo[parent::xs:annotation[parent::xs:schema]]">Rule 10-67: The element term:LocalTerm MUST be application information an an element xs:schema.</sch:assert>
+    <sch:assert test="parent::xs:appinfo[parent::xs:annotation[parent::xs:schema]]">Rule 10-68: The element term:LocalTerm MUST be application information an an element xs:schema.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_10-68"><sch:title>term:LocalTerm has literal or definition</sch:title>
+<sch:pattern id="rule_10-69"><sch:title>term:LocalTerm has literal or definition</sch:title>
   <sch:rule context="term:LocalTerm">
-    <sch:assert test="exists(@literal) or exists(@definition)">Rule 10-68: The element {http://release.niem.gov/niem/localTerminology/3.0/}LocalTerm MUST have a literal or definition.</sch:assert>
+    <sch:assert test="exists(@literal) or exists(@definition)">Rule 10-69: The element {http://release.niem.gov/niem/localTerminology/3.0/}LocalTerm MUST have a literal or definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
           

@@ -10,7 +10,7 @@
       
 <sch:pattern id="rule_7-1"><sch:title>Conformance to XML</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
-    <sch:report test="true()">Rule 7-1: The document MUST be a well-formed XML document, as defined by Extensible Markup Language.</sch:report>
+    <sch:report test="true()">Rule 7-1: The document MUST be an XML document.</sch:report>
   </sch:rule>
 </sch:pattern>
         

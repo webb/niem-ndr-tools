@@ -18,10 +18,14 @@ EOF
         subset/niem/conformanceTargets/3.0/conformanceTargets.xsd ) true;;
         subset/niem/localTerminology/3.0/localTerminology.xsd ) true ;;
         subset/niem/external/cap/1.1/cap.xsd ) true;;
-        subset/niem/niem-core/3.0/niem-core.xsd \
-            | subset/niem/proxy/xsd/3.0/xs.xsd \
-            | subset/niem/adapters/edxl-cap/3.0/edxl-cap.xsd \
-            )
+
+        subset/niem/adapters/edxl-cap/3.0/edxl-cap.xsd | \
+        subset/niem/domains/jxdm/5.0/jxdm.xsd | \
+        subset/niem/niem-core/3.0/niem-core.xsd | \
+        subset/niem/proxy/xsd/3.0/xs.xsd )
+
+            #### REF rules
+
             test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
@@ -32,14 +36,17 @@ EOF
 EOF
 
             test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref -c xml-catalog.xml "$XSD"
+
+            #### SET rules
+
+            test_set_stdout <<EOF
+EOF
+
+            test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r set -c xml-catalog.xml "$XSD"
+
             ;;
         * ) test_fail "No test for XSD \"$XSD\"" ;;
     esac
 done < <(find subset -type f -name '*.xsd')
 
-
-
-
-
-
-
+test_exit

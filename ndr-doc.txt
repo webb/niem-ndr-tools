@@ -275,7 +275,9 @@ Status
 
    [Definition: XML document]
 
-      The term "XML document" is as defined by [XML] Section 2, Documents.
+      The term "XML document" is as defined by [XML] Section 2, Documents, which states:
+
+         A data object is an XML document if it is well-formed, as defined in this specification. In addition, the XML document is valid if it meets certain further constraints.
 
 3.3. XML Information Set terminology
 
@@ -1049,11 +1051,11 @@ Rule 4-4. Schema claims extension conformance target
 
       <sch:pattern>
         <sch:rule context="*[. is nf:get-document-element(.)]">
-          <sch:report test="true()">The document MUST be a well-formed XML document, as defined by Extensible Markup Language.</sch:report>
+          <sch:report test="true()">The document MUST be an XML document.</sch:report>
         </sch:rule>
       </sch:pattern>
 
-   See [XML] for the normative definition of well-formed XML document.
+   The term [XML document] is defined by this document.
 
 7.2. Conformance to XML Namespaces
 
@@ -3376,35 +3378,46 @@ Rule 10-27. Element within instance of augmentation type modifies base
 
       Element $relationship establishes a relationship between $base-value and the value of $relationship.
 
-Rule 10-28. Augmentation type name ends in "AugmentationType"
+Rule 10-28. Only an augmentation type name ends in "AugmentationType"
 
    [Rule 10-28] (REF, EXT)
 
-      A [schema component] has a name that ends in "AugmentationType" if and only if it is a [complex type definition] that defines an [augmentation type].
+      A [schema component] that has a name that ends in "AugmentationType" MUST be an [augmentation type].
 
-Rule 10-29. Augmentation types are derived from augmentation types
+   The primary indicator that a complex type is an [augmentation type] is its name. Using the qualifier Augmentation immediately identifies a type as an augmentation type.
+
+Rule 10-29. Schema component with name ending in "AugmentationType" is an augmentation type
 
    [Rule 10-29] (REF, EXT)
 
       <sch:pattern>
-        <sch:rule context="xs:complexType">
-          <sch:let name="is-augmentation-type" value="exists(@name[ends-with(., 'AugmentationType')])"/>
-          <sch:let name="has-augmentation-base-type" 
-                   value="exists(xs:complexContent[
-                                   *[(self::xs:extension or self::xs:restriction)
-                                     and @base[ends-with(., 'AugmentationType') ] ] ] )"/>
-          <sch:assert test="$is-augmentation-type = $has-augmentation-base-type"
-            >A complex type definition MUST is an augmentation type if and only if it has a base type definition that is an augmentation type.<sch:value-of select="$is-augmentation-type"/>, <sch:value-of select="$has-augmentation-base-type"/></sch:assert>
+        <sch:rule context="xs:*[ends-with(@name, 'AugmentationType')]">
+          <sch:assert test="self::xs:complexType/xs:complexContent/xs:*[
+                              (self::xs:extension or self::xs:restriction)
+                              and ends-with(@base, 'AugmentationType')]"
+             >An augmentation type definition schema component with {name} ending in 'AugmentationType' MUST be an augmentation type definition that is a complex type definition with complex content that extends or restricts an augmentation type.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
-   The primary indicator that a complex type is an [augmentation type] is its name. Using the qualifier Augmentation immediately identifies a type as an augmentation type. The [base type definition] of an augmentation type is required to be from a conformant namespace by Rule 11-3, Base type definition defined by conformant schema.
+   The [base type definition] of an augmentation type is required to be from a conformant namespace by Rule 11-3, Base type definition defined by conformant schema.
+
+Rule 10-30. Type derived from augmentation type is an augmentation type
+
+   [Rule 10-30] (REF, EXT)
+
+      <sch:pattern>
+        <sch:rule context="xs:*[(self::xs:restriction or self::xs:extension)
+                                and ends-with(@base, 'AugmentationType')]">
+          <sch:assert test="ancestor::xs:complexType[ends-with(@name, 'AugmentationType')]"
+                      >A type definition derived from an augmentation type MUST be an augmentation type definition</sch:assert>
+        </sch:rule>
+      </sch:pattern>
 
 10.2.4.5. Augmentation element declarations
 
-Rule 10-30. Augmentation element type is an augmentation type
+Rule 10-31. Augmentation element type is an augmentation type
 
-   [Rule 10-30] (REF, EXT)
+   [Rule 10-31] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3426,19 +3439,19 @@ Rule 10-30. Augmentation element type is an augmentation type
 
       A metadata type describes data about data, that is, information that is not descriptive of objects and their relationships, but is descriptive of the data itself. It is useful to provide a general mechanism for data about data. This provides required flexibility to precisely represent information.
 
-   [Rule 10-31] (REF, EXT)
+   [Rule 10-32] (REF, EXT)
 
       Within the schema, a metadata type MUST contain elements appropriate for a specific class of data about data.
 
-   [Rule 10-32] (REF, EXT)
+   [Rule 10-33] (REF, EXT)
 
       Within the schema, a metadata type and only a metadata type MUST be derived directly from structures:MetadataType.
 
    A metadata type establishes a specific, named aggregation of data about data. Any type derived from structures:MetadataType is a metadata type. Metadata types should not be derived from other metadata types. Such metadata types should be used asis and additional metadata types defined for additional content.
 
-Rule 10-33. Metadata types are derived from metadata types
+Rule 10-34. Metadata types are derived from metadata types
 
-   [Rule 10-33] (REF, EXT)
+   [Rule 10-34] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:complexType">
@@ -3464,9 +3477,9 @@ Rule 10-33. Metadata types are derived from metadata types
 
     There are limitations on the meaning of a metadata element in an instance; it does not establish existence of an object, nor is it a property of its containing object.
 
-Rule 10-34. Metadata element type is a metadata type
+Rule 10-35. Metadata element type is a metadata type
 
-   [Rule 10-34] (REF, EXT)
+   [Rule 10-35] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:element[exists(@name)]">
@@ -3504,7 +3517,7 @@ Rule 10-34. Metadata element type is a metadata type
 
 10.4.1. Extension of XSD namespace simple types
 
-   [Rule 10-35] (REF, EXT)
+   [Rule 10-36] (REF, EXT)
 
       Within the schema, a complex type that is a direct extension of a simple type from the XML Schema namespace simple type MAY use the same local name as the simple type if and only if the extension adds no content other than the attribute group structures:SimpleObjectAttributeGroup.
 
@@ -3512,7 +3525,7 @@ Rule 10-34. Metadata element type is a metadata type
 
 10.4.2. Usage of English
 
-   [Rule 10-36] (REF, EXT)
+   [Rule 10-37] (REF, EXT)
 
       The name of any XML Schema component defined by the schema MUST be composed of words from the English language, using the prevalent U.S. spelling, as provided by [OED].
 
@@ -3520,7 +3533,7 @@ Rule 10-34. Metadata element type is a metadata type
 
 10.4.3. Characters in names
 
-   [Rule 10-37] (REF, EXT)
+   [Rule 10-38] (REF, EXT)
 
       The name of any XML Schema component defined by the schema MUST contain only the following characters:
 
@@ -3534,7 +3547,7 @@ Rule 10-34. Metadata element type is a metadata type
 
       Other characters, such as the underscore ("_") character and the period (".") character MUST NOT appear in component names in NIEM-conformant schemas.
 
-   [Rule 10-38] (REF, EXT)
+   [Rule 10-39] (REF, EXT)
 
       The hyphen character ("-") MAY appear in component names only when used as a separator between parts of a single word, phrase, or value, which would otherwise be incomprehensible without the use of a separator.
 
@@ -3548,17 +3561,17 @@ Rule 10-34. Metadata element type is a metadata type
 
       CamelCase (camel case) or medial capitals is the practice of writing compound words or phrases such that each word or abbreviation begins with a capital letter. Camel case may start with a capital or, especially in programming languages, with a lowercase letter.
 
-Rule 10-39. Names use camel case
-
-   [Rule 10-39] (REF, EXT)
-
-      The name of any XML Schema component defined by the schema MUST use the camel case formatting convention.
+Rule 10-40. Names use camel case
 
    [Rule 10-40] (REF, EXT)
 
-      Within the schema, any attribute declaration MUST have a name that begins with a lower-case letter ("a"-"z").
+      The name of any XML Schema component defined by the schema MUST use the camel case formatting convention.
 
    [Rule 10-41] (REF, EXT)
+
+      Within the schema, any attribute declaration MUST have a name that begins with a lower-case letter ("a"-"z").
+
+   [Rule 10-42] (REF, EXT)
 
       Within the schema, any XML Schema component other than an attribute declaration MUST have a name that begins with an upper-case letter ("A"-"Z").
 
@@ -3568,9 +3581,9 @@ Rule 10-39. Names use camel case
 
    Acronyms and abbreviations have the ability to improve readability and comprehensibility of large, complex, or frequently used terms. They also obscure meaning and impair understanding when their definitions are not clear or when they are used injudiciously. They should be used with great care. Acronyms and abbreviations that are used must be documented and used consistently.
 
-Rule 10-42. Names use common abbreviations
+Rule 10-43. Names use common abbreviations
 
-   [Rule 10-42] (REF, EXT)
+   [Rule 10-43] (REF, EXT)
 
       The schema MUST consistently use approved the acronyms, abbreviations, and word truncations within defined names, as identified by Table Table 10-1, Abbreviations used in NIEM core names.
 
@@ -3608,11 +3621,11 @@ Rule 10-42. Names use common abbreviations
 
    See additional rules constraining the use of the [local terminology appinfo namespace] in Section 10.5.2, The NIEM local terminology namespace, below.
 
-   [Rule 10-43] (REF, EXT)
+   [Rule 10-44] (REF, EXT)
 
       An element term:LocalTerm MUST establish the meaning of a [local term] only within the XML Schema document in which it occurs. There MUST NOT be any transitive inheritance of local terminology within schema documents that import the containing schema document.
 
-   [Rule 10-44] (REF, EXT)
+   [Rule 10-45] (REF, EXT)
 
       An element information item term:LocalTerm MUST establish a term as follows:
 
@@ -3628,25 +3641,25 @@ Rule 10-42. Names use common abbreviations
 
 10.4.6. Word forms
 
-   [Rule 10-45] (REF, EXT)
+   [Rule 10-46] (REF, EXT)
 
       A noun used as a term in the name of an XML Schema component MUST be in singular form unless the concept itself is plural.
 
-   [Rule 10-46] (REF, EXT)
+   [Rule 10-47] (REF, EXT)
 
       A verb used as a term in the name of an XML Schema component MUST be used in the present tense unless the concept itself is past tense.
 
-   [Rule 10-47] (REF, EXT)
+   [Rule 10-48] (REF, EXT)
 
       Articles, conjunctions, and prepositions MUST NOT be used in NIEM component names except where they are required for clarity or by standard convention.
 
    Articles (e.g., a, an, the), conjunctions (e.g., and, or, but), and prepositions (e.g., at, by, for, from, in, of, to) are all disallowed in NIEM component names, unless they are required. For example, PowerOfAttorneyCode requires the preposition. These rules constrain slight variations in word forms and types to improve consistency and reduce potentially ambiguous or confusing component names.
 
-Rule 10-48. Component name follows pattern
+Rule 10-49. Component name follows pattern
 
    Elements in NIEM-conformant schemas are given names that follow a specific pattern. This pattern comes from [ISO 11179-5].
 
-   [Rule 10-48] (REF, EXT)
+   [Rule 10-49] (REF, EXT)
 
       Except as specified elsewhere in this document, any element or attribute defined within the schema MUST have a name that takes the form:
 
@@ -3668,7 +3681,7 @@ Rule 10-48. Component name follows pattern
 
    NIEM adopts an object-oriented approach to representation of data. Object classes represent what [ISO 11179-5] refers to as "things of interest in a universe of discourse that may be found in a model of that universe." An object class or object term is a word that represents a class of real-world entities or concepts. An object-class term describes the applicable context for a NIEM component.
 
-   [Rule 10-49] (REF, EXT)
+   [Rule 10-50] (REF, EXT)
 
       The object-class term of a NIEM component MUST consist of a term identifying a category of concrete concepts or entities.
 
@@ -3684,7 +3697,7 @@ Rule 10-48. Component name follows pattern
 
    Objects or concepts are usually described in terms of their characteristic properties, data attributes, or constituent subparts. Most objects can be described by several characteristics. Therefore, a property term in the name of a data component represents a characteristic or subpartof an object class and generally describes the essence of that data component.
 
-   [Rule 10-50] (REF, EXT)
+   [Rule 10-51] (REF, EXT)
 
       A property term MUST describe or represent a characteristic or subpart of an entity or concept.
 
@@ -3694,15 +3707,15 @@ Rule 10-48. Component name follows pattern
 
    Qualifier terms modify object, property, representation, or other qualifier terms to increase semantic precision and reduce ambiguity. Qualifier terms may precede or succeed the terms they modify. The goal for the placement of qualifier terms is to generally follow the rules of ordinary English while maintaining clarity.
 
-   [Rule 10-51] (REF, EXT)
+   [Rule 10-52] (REF, EXT)
 
       Multiple qualifier terms MAY be used within a component name as necessary to ensure clarity and uniqueness within its namespace and usage context.
 
-   [Rule 10-52] (REF, EXT)
+   [Rule 10-53] (REF, EXT)
 
       The number of qualifier terms SHOULD be limited to the absolute minimum required to make the component name unique and understandable.
 
-   [Rule 10-53] (REF, EXT)
+   [Rule 10-54] (REF, EXT)
 
       The order of qualifiers MUST NOT be used to differentiate names.
 
@@ -3718,7 +3731,7 @@ Rule 10-48. Component name follows pattern
 
       3. It indicates the nature of the value carried by element. Labeling elements and attributes with a notional indicator of the content eases discovery and comprehension.
 
-   [Rule 10-54] (REF, EXT)
+   [Rule 10-55] (REF, EXT)
 
       If any word in the representation term is redundant with any word in the property term, one occurrence SHOULD be deleted.
 
@@ -3776,25 +3789,25 @@ Rule 10-48. Component name follows pattern
 
       |List|A sequence of values. This representation term is used in tandem with another of the listed representation terms.
 
-Rule 10-55. Element with simple content has representation term
+Rule 10-56. Element with simple content has representation term
 
-   [Rule 10-55] (REF, EXT)
+   [Rule 10-56] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of simple content MUST use a representation term found in Table Table 10-2, Representation terms.
 
    This rule is also supported by Rule 11-16, Name of element declaration with simple content has representation term, which provides a test that a top-level declaration has a representation term.
 
-Rule 10-56. Name has representation term when appropriate
+Rule 10-57. Name has representation term when appropriate
 
-   [Rule 10-56] (REF, EXT)
+   [Rule 10-57] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content, and that corresponds to a concept listed in Table Table 10-2, Representation terms, MUST use a representation term from that table.
 
    An element that represents a value listed in the table should have a representation term. It should do so even if its type is complex with multiple parts. For example, a type with multiple fields may represent an audio binary, a date, or a name.
 
-Rule 10-57. Name has representation term only when appropriate
+Rule 10-58. Name has representation term only when appropriate
 
-   [Rule 10-57] (REF, EXT)
+   [Rule 10-58] (REF, EXT)
 
       Within the schema, the name of an element declaration that is of complex content and that does not correspond to a concept listed in Table Table 10-2, Representation terms MUST NOT use a representation term.
 
@@ -3832,9 +3845,9 @@ Rule 10-57. Name has representation term only when appropriate
 
    The majority of uses of application information from the [appinfo namespace] are described in the modeling rules for the specific component.
 
-Rule 10-58. Machine-readable annotations are valid
+Rule 10-59. Machine-readable annotations are valid
 
-   [Rule 10-58] (REF, EXT)
+   [Rule 10-59] (REF, EXT)
 
       Every element information item or attribute information item that appears as a machine-readable annotation in a schema MUST be a valid instance, according to its specification.
 
@@ -3860,17 +3873,17 @@ Rule 10-58. Machine-readable annotations are valid
 
    The definition for [deprecated component] is adapted from [JLS] Section 9.6.4.6, @Deprecated.
 
-Rule 10-59. Component marked as deprecated is deprecated component
+Rule 10-60. Component marked as deprecated is deprecated component
 
-   [Rule 10-59] (REF, EXT)
+   [Rule 10-60] (REF, EXT)
 
       A [schema component] that has an attribute appinfo:deprecated with a value of "true" MUST be a [deprecated component].
 
    Deprecation can allow version management to be more consistent; versions of schema may be incrementally improved without introducing validation problems and incompatibility. As XML Schema lacks a deprecation mechanism, NIEM defines such a mechanism.
 
-Rule 10-60. Deprecated annotates schema component
+Rule 10-61. Deprecated annotates schema component
 
-   [Rule 10-60] (REF, EXT)
+   [Rule 10-61] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:deprecated)]">
@@ -3879,9 +3892,9 @@ Rule 10-60. Deprecated annotates schema component
         </sch:rule>
       </sch:pattern>
 
-Rule 10-61. External import indicator annotates import
+Rule 10-62. External import indicator annotates import
 
-   [Rule 10-61] (REF, EXT)
+   [Rule 10-62] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:externalImportIndicator)]">
@@ -3890,9 +3903,9 @@ Rule 10-61. External import indicator annotates import
         </sch:rule>
       </sch:pattern>
 
-Rule 10-62. External adapter type indicator annotates complex type
+Rule 10-63. External adapter type indicator annotates complex type
 
-   [Rule 10-62] (REF)
+   [Rule 10-63] (REF)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:externalAdapterTypeIndicator)]">
@@ -3903,9 +3916,9 @@ Rule 10-62. External adapter type indicator annotates complex type
 
 10.5.1.2. appinfo:appliesToTypes annotation
 
-Rule 10-63. appinfo:appliesToTypes annotates metadata element
+Rule 10-64. appinfo:appliesToTypes annotates metadata element
 
-   [Rule 10-63] (REF, EXT)
+   [Rule 10-64] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
@@ -3915,9 +3928,9 @@ Rule 10-63. appinfo:appliesToTypes annotates metadata element
         </sch:rule>
       </sch:pattern>
 
-Rule 10-64. appinfo:appliesToTypes references types
+Rule 10-65. appinfo:appliesToTypes references types
 
-   [Rule 10-64] (SET)
+   [Rule 10-65] (SET)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
@@ -3929,9 +3942,9 @@ Rule 10-64. appinfo:appliesToTypes references types
 
 10.5.1.3. appinfo:appliesToElements annotation
 
-Rule 10-65. appinfo:appliesToElements annotates metadata element
+Rule 10-66. appinfo:appliesToElements annotates metadata element
 
-   [Rule 10-65] (REF, EXT)
+   [Rule 10-66] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToElements)]">
@@ -3942,9 +3955,9 @@ Rule 10-65. appinfo:appliesToElements annotates metadata element
         </sch:rule>
       </sch:pattern>
 
-Rule 10-66. appinfo:appliesToElements references elements
+Rule 10-67. appinfo:appliesToElements references elements
 
-   [Rule 10-66] (SET)
+   [Rule 10-67] (SET)
 
       <sch:pattern>
         <sch:rule context="*[exists(@appinfo:appliesToElements)]">
@@ -3956,9 +3969,9 @@ Rule 10-66. appinfo:appliesToElements references elements
 
 10.5.2. The NIEM local terminology namespace
 
-Rule 10-67. term:LocalTerm annotates schema
+Rule 10-68. term:LocalTerm annotates schema
 
-   [Rule 10-67] (REF, EXT)
+   [Rule 10-68] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="term:LocalTerm">
@@ -3967,9 +3980,9 @@ Rule 10-67. term:LocalTerm annotates schema
         </sch:rule>
       </sch:pattern>
 
-Rule 10-68. term:LocalTerm has literal or definition
+Rule 10-69. term:LocalTerm has literal or definition
 
-   [Rule 10-68] (REF, EXT)
+   [Rule 10-69] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="term:LocalTerm">
@@ -4246,7 +4259,7 @@ Rule 11-16. Name of element declaration with simple content has representation t
         </sch:rule>
       </sch:pattern>
 
-   Representation terms are defined by Table Table 10-2, Representation terms, above. This rule supports Rule 10-55, Element with simple content has representation term.
+   Representation terms are defined by Table Table 10-2, Representation terms, above. This rule supports Rule 10-56, Element with simple content has representation term.
 
 11.2.2. Element substitution group
 
@@ -5335,47 +5348,48 @@ Appendix F. Index of rules
    Rule 10-25, Augmentation point reference is unbounded: Section 10.2.4.3, Augmentation point element use
    Rule 10-26, Augmentation point reference must be last particle: Section 10.2.4.3, Augmentation point element use
    Rule 10-27, Element within instance of augmentation type modifies base: Section 10.2.4.4, Augmentation types
-   Rule 10-28, Augmentation type name ends in "AugmentationType": Section 10.2.4.4, Augmentation types
-   Rule 10-29, Augmentation types are derived from augmentation types: Section 10.2.4.4, Augmentation types
-   Rule 10-30, Augmentation element type is an augmentation type: Section 10.2.4.5, Augmentation element declarations
-   Rule 10-31: Section 10.2.5.1, Metadata types
+   Rule 10-28, Only an augmentation type name ends in "AugmentationType": Section 10.2.4.4, Augmentation types
+   Rule 10-29, Schema component with name ending in "AugmentationType" is an augmentation type: Section 10.2.4.4, Augmentation types
+   Rule 10-30, Type derived from augmentation type is an augmentation type: Section 10.2.4.4, Augmentation types
+   Rule 10-31, Augmentation element type is an augmentation type: Section 10.2.4.5, Augmentation element declarations
    Rule 10-32: Section 10.2.5.1, Metadata types
-   Rule 10-33, Metadata types are derived from metadata types: Section 10.2.5.1, Metadata types
-   Rule 10-34, Metadata element type is a metadata type: Section 10.2.5.2.1, Metadata element declarations
-   Rule 10-35: Section 10.4.1, Extension of XSD namespace simple types
-   Rule 10-36: Section 10.4.2, Usage of English
-   Rule 10-37: Section 10.4.3, Characters in names
+   Rule 10-33: Section 10.2.5.1, Metadata types
+   Rule 10-34, Metadata types are derived from metadata types: Section 10.2.5.1, Metadata types
+   Rule 10-35, Metadata element type is a metadata type: Section 10.2.5.2.1, Metadata element declarations
+   Rule 10-36: Section 10.4.1, Extension of XSD namespace simple types
+   Rule 10-37: Section 10.4.2, Usage of English
    Rule 10-38: Section 10.4.3, Characters in names
-   Rule 10-39, Names use camel case: Section 10.4.4, Character case
-   Rule 10-40: Section 10.4.4, Character case
+   Rule 10-39: Section 10.4.3, Characters in names
+   Rule 10-40, Names use camel case: Section 10.4.4, Character case
    Rule 10-41: Section 10.4.4, Character case
-   Rule 10-42, Names use common abbreviations: Section 10.4.5, Use of acronyms and abbreviations
-   Rule 10-43: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
+   Rule 10-42: Section 10.4.4, Character case
+   Rule 10-43, Names use common abbreviations: Section 10.4.5, Use of acronyms and abbreviations
    Rule 10-44: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
-   Rule 10-45: Section 10.4.6, Word forms
+   Rule 10-45: Section 10.4.5.1, Use of Acronyms, Initialisms, Abbreviations, and Jargon
    Rule 10-46: Section 10.4.6, Word forms
    Rule 10-47: Section 10.4.6, Word forms
-   Rule 10-48, Component name follows pattern: Section 10.4, Naming rules
-   Rule 10-49: Section 10.4.7, Object-class term
-   Rule 10-50: Section 10.4.8, Property term
-   Rule 10-51: Section 10.4.9, Qualifier terms
+   Rule 10-48: Section 10.4.6, Word forms
+   Rule 10-49, Component name follows pattern: Section 10.4, Naming rules
+   Rule 10-50: Section 10.4.7, Object-class term
+   Rule 10-51: Section 10.4.8, Property term
    Rule 10-52: Section 10.4.9, Qualifier terms
    Rule 10-53: Section 10.4.9, Qualifier terms
-   Rule 10-54: Section 10.4.10, Representation terms
-   Rule 10-55, Element with simple content has representation term: Section 10.4.10, Representation terms
-   Rule 10-56, Name has representation term when appropriate: Section 10.4.10, Representation terms
-   Rule 10-57, Name has representation term only when appropriate: Section 10.4.10, Representation terms
-   Rule 10-58, Machine-readable annotations are valid: Section 10.5, Machine-readable annotations
-   Rule 10-59, Component marked as deprecated is deprecated component: Section 10.5.1.1, Deprecation
-   Rule 10-60, Deprecated annotates schema component: Section 10.5.1.1, Deprecation
-   Rule 10-61, External import indicator annotates import: Section 10.5.1, The NIEM appinfo namespace
-   Rule 10-62, External adapter type indicator annotates complex type: Section 10.5.1, The NIEM appinfo namespace
-   Rule 10-63, appinfo:appliesToTypes annotates metadata element: Section 10.5.1.2, appinfo:appliesToTypes annotation
-   Rule 10-64, appinfo:appliesToTypes references types: Section 10.5.1.2, appinfo:appliesToTypes annotation
-   Rule 10-65, appinfo:appliesToElements annotates metadata element: Section 10.5.1.3, appinfo:appliesToElements annotation
-   Rule 10-66, appinfo:appliesToElements references elements: Section 10.5.1.3, appinfo:appliesToElements annotation
-   Rule 10-67, term:LocalTerm annotates schema: Section 10.5.2, The NIEM local terminology namespace
-   Rule 10-68, term:LocalTerm has literal or definition: Section 10.5.2, The NIEM local terminology namespace
+   Rule 10-54: Section 10.4.9, Qualifier terms
+   Rule 10-55: Section 10.4.10, Representation terms
+   Rule 10-56, Element with simple content has representation term: Section 10.4.10, Representation terms
+   Rule 10-57, Name has representation term when appropriate: Section 10.4.10, Representation terms
+   Rule 10-58, Name has representation term only when appropriate: Section 10.4.10, Representation terms
+   Rule 10-59, Machine-readable annotations are valid: Section 10.5, Machine-readable annotations
+   Rule 10-60, Component marked as deprecated is deprecated component: Section 10.5.1.1, Deprecation
+   Rule 10-61, Deprecated annotates schema component: Section 10.5.1.1, Deprecation
+   Rule 10-62, External import indicator annotates import: Section 10.5.1, The NIEM appinfo namespace
+   Rule 10-63, External adapter type indicator annotates complex type: Section 10.5.1, The NIEM appinfo namespace
+   Rule 10-64, appinfo:appliesToTypes annotates metadata element: Section 10.5.1.2, appinfo:appliesToTypes annotation
+   Rule 10-65, appinfo:appliesToTypes references types: Section 10.5.1.2, appinfo:appliesToTypes annotation
+   Rule 10-66, appinfo:appliesToElements annotates metadata element: Section 10.5.1.3, appinfo:appliesToElements annotation
+   Rule 10-67, appinfo:appliesToElements references elements: Section 10.5.1.3, appinfo:appliesToElements annotation
+   Rule 10-68, term:LocalTerm annotates schema: Section 10.5.2, The NIEM local terminology namespace
+   Rule 10-69, term:LocalTerm has literal or definition: Section 10.5.2, The NIEM local terminology namespace
    Rule 11-1, Name of type ends in "Type": Section 11.1, Type definition components
    Rule 11-2, Name of type other than proxy type is in upper camel case: Section 11.1, Type definition components
    Rule 11-3, Base type definition defined by conformant schema: Section 11.1.1, Type definition hierarchy

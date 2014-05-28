@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -27,15 +27,15 @@
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-64"><sch:title>appinfo:appliesToTypes references types</sch:title>
+<sch:pattern id="rule_10-65"><sch:title>appinfo:appliesToTypes references types</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
-    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToTypes), ' ') satisfies                         exists(nf:resolve-type(., resolve-QName($item, .)))">Rule 10-64: Every item in @appinfo:appliesToTypes MUST resolve to a type.</sch:assert>
+    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToTypes), ' ') satisfies                         exists(nf:resolve-type(., resolve-QName($item, .)))">Rule 10-65: Every item in @appinfo:appliesToTypes MUST resolve to a type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-66"><sch:title>appinfo:appliesToElements references elements</sch:title>
+<sch:pattern id="rule_10-67"><sch:title>appinfo:appliesToElements references elements</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToElements)]">
-    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies                         count(nf:resolve-element(., resolve-QName($item, .))) = 1">Rule 10-66: Every item in @appinfo:appliesToElements MUST resolve to an element.</sch:assert>
+    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies                         count(nf:resolve-element(., resolve-QName($item, .))) = 1">Rule 10-67: Every item in @appinfo:appliesToElements MUST resolve to an element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
