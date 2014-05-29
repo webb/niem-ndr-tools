@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<xs:schema 
+   ct:conformanceTargets="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument" 
+   targetNamespace="http://example.org/ns1"
+   version="1" 
+   xmlns:appinfo="http://release.niem.gov/niem/appinfo/3.0/" 
+   xmlns:ct="http://release.niem.gov/niem/conformanceTargets/3.0/" 
+   xmlns:niem-xs="http://release.niem.gov/niem/proxy/xsd/3.0/"
+   xmlns:ns1="http://example.org/ns1"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   >
+  <xs:annotation>
+    <xs:documentation>Example schema ns1</xs:documentation>
+  </xs:annotation>
+  <xs:import namespace="http://release.niem.gov/niem/proxy/xsd/3.0/"/>
+
+  <xs:complexType name="DerivedType">
+    <xs:annotation>
+      <xs:documentation>A data type for an extension.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="niem-xs:boolean">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:element name="Derived" type="ns1:DerivedType">
+    <xs:annotation>
+      <xs:documentation>A derived element</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <uri name="http://example.org/ns1" uri="ns1.xsd"/>
+  <nextCatalog catalog="../../clean/xml-catalog.xml"/>
+</catalog>
+

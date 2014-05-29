@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for extension XML Schema documents</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for extension XML Schema documents</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -100,13 +100,13 @@
               
 <sch:pattern id="rule_9-8"><sch:title>No base type of xs:ENTITY</sch:title>
   <sch:rule context="xs:*[exists(@base)]">
-    <sch:assert test="resolve-QName(@base, .) != xs:QName('xs:ENTITY)">Rule 9-8: A schema component MUST NOT have an attribute {}base with a value of xs:ENTITY.</sch:assert>
+    <sch:assert test="resolve-QName(@base, .) != xs:QName('xs:ENTITY')">Rule 9-8: A schema component MUST NOT have an attribute {}base with a value of xs:ENTITY.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-9"><sch:title>No base type of xs:ENTITIES</sch:title>
   <sch:rule context="xs:*[exists(@base)]">
-    <sch:assert test="resolve-QName(@base, .) != xs:QName('xs:ENTITIES)">Rule 9-9: A schema component MUST NOT have an attribute {}base with a value of xs:ENTITIES.</sch:assert>
+    <sch:assert test="resolve-QName(@base, .) != xs:QName('xs:ENTITIES')">Rule 9-9: A schema component MUST NOT have an attribute {}base with a value of xs:ENTITIES.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -148,7 +148,7 @@
               
 <sch:pattern id="rule_9-17"><sch:title>No list item type of xs:ENTITY</sch:title>
   <sch:rule context="xs:*[exists(@itemType)]">
-    <sch:assert test="resolve-QName(@itemType, .) != xs:QName('xs:ENTITY)">Rule 9-17: A schema component MUST NOT have an attribute {}itemType with a value of xs:ENTITY.</sch:assert>
+    <sch:assert test="resolve-QName(@itemType, .) != xs:QName('xs:ENTITY')">Rule 9-17: A schema component MUST NOT have an attribute {}itemType with a value of xs:ENTITY.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -178,13 +178,13 @@
               
 <sch:pattern id="rule_9-22"><sch:title>No union member types of xs:ENTITY</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITY)">Rule 9-22: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITY.</sch:assert>
+    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITY')">Rule 9-22: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITY.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-23"><sch:title>No union member types of xs:ENTITIES</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITIES)">Rule 9-23: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITIES.</sch:assert>
+    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITIES')">Rule 9-23: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITIES.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -237,9 +237,8 @@
 </sch:pattern>
             
 <sch:pattern id="rule_9-33"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
-  <sch:rule context="xs:complexType[       nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))       or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument'))]     /xs:complexContent       /xs:*[(self::xs:restriction or self::xs:extension)             and exists(@base)]">
-    <sch:let name="not-complex-content" value="for $qname in resolve-QName(@base, .),                         $not-structures-qname in $qname[namespace-uri-from-QName(.) != xs:anyURI('http://release.niem.gov/niem/structures/3.0/')],                         $base-type in nf:resolve-type(., $not-structures-qname),                         $base-complex-type in $base-type[self::xs:complexType],                         $base-not-complex-content in $base-complex-type[empty(xs:complexContent)]                     return $base-not-complex-content"/>
-    <sch:assert test="empty($not-complex-content)">Rule 9-33: The base type of complex type that has complex content MUST have complex content.</sch:assert>
+  <sch:rule context="xs:complexType[         nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))         or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument'))       ]/xs:complexContent">
+    <sch:assert test="some $derivation in xs:*[self::xs:extension or self::xs:restriction],                            $base-qname in resolve-QName($derivation/@base, $derivation) satisfies (                          namespace-uri-from-QName($base-qname) = xs:anyURI('http://release.niem.gov/niem/structures/3.0/')                          or (some $base-type in nf:resolve-type($derivation, $base-qname) satisfies                                 $base-type/self::xs:complexType/xs:complexContent))">Rule 9-33: The base type of complex type that has complex content MUST have complex content.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
