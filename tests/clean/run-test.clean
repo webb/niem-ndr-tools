@@ -33,7 +33,6 @@ EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 EOF

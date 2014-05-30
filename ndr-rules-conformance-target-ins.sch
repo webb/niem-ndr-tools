@@ -8,21 +8,15 @@
 <sch:ns prefix="structures" uri="http://release.niem.gov/niem/structures/3.0/"/>
 <sch:ns prefix="term" uri="http://release.niem.gov/niem/localTerminology/3.0/"/>
       
-<sch:pattern id="rule_7-1"><sch:title>Conformance to XML</sch:title>
+<sch:pattern id="rule_7-1"><sch:title>Document is an XML document</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:report test="true()">Rule 7-1: The document MUST be an XML document.</sch:report>
   </sch:rule>
 </sch:pattern>
         
-<sch:pattern id="rule_7-2"><sch:title>Conformance to XML Namespaces</sch:title>
+<sch:pattern id="rule_7-2"><sch:title>Document uses XML namespaces properly</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
-    <sch:report test="true()">Rule 7-2: The document MUST be namespace-well-formed.</sch:report>
-  </sch:rule>
-</sch:pattern>            
-        
-<sch:pattern id="rule_7-3"><sch:title>Conformance to XML Namespaces</sch:title>
-  <sch:rule context="*[. is nf:get-document-element(.)]">
-    <sch:report test="true()">Rule 7-3: The document MUST be namespace-valid.</sch:report>
+    <sch:report test="true()">Rule 7-2: The document MUST be namespace-well-formed and namespace-valid.</sch:report>
   </sch:rule>
 </sch:pattern>            
         
@@ -39,15 +33,15 @@
   </sch:rule>
 </sch:pattern>            
           
-<sch:pattern id="rule_12-15"><sch:title>Attribute structures:metadata references metadata element</sch:title>
+<sch:pattern id="rule_12-14"><sch:title>Attribute structures:metadata references metadata element</sch:title>
   <sch:rule context="*[exists(@structures:metadata)]">
-    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-15: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
+    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:metadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-14: Each item in the value of an attribute structures:metadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         
-<sch:pattern id="rule_12-16"><sch:title>Attribute structures:relationshipMetadata references metadata element</sch:title>
+<sch:pattern id="rule_12-15"><sch:title>Attribute structures:relationshipMetadata references metadata element</sch:title>
   <sch:rule context="*[exists(@structures:relationshipMetadata)]">
-    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-16: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
+    <sch:assert test="every $metadata-ref in tokenize(normalize-space(@structures:relationshipMetadata), ' ') satisfies                         exists(//*[exists(@structures:id[. = $metadata-ref])                                    and ends-with(local-name(), 'Metadata')])">Rule 12-15: Each item in the value of an attribute structures:relationshipMetadata MUST appear as the value of an attribute structures:id with an owner element that is a metadata element.</sch:assert>
   </sch:rule>
 </sch:pattern>
         </sch:schema>
