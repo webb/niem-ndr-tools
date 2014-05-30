@@ -23,7 +23,7 @@ EOF
 
     #### REF
 
-    case "$XSD" in
+    case "$schema" in
         # not ref XSDs; ignore
         ../pkg/niem-release/niem/appinfo/3.0/appinfo.xsd \
             | ../pkg/niem-release/niem/conformanceTargets/3.0/conformanceTargets.xsd \
@@ -35,7 +35,7 @@ EOF
         * )
             # these all run the same way
             # figure out expected output
-            case "$XSD" in
+            case "$schema" in
                 # special checks
                 ../pkg/niem-release/niem/niem-core/3.0/niem-core.xsd )
 
@@ -43,7 +43,6 @@ EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 6036:successful-report:el-representation-is-abstract
@@ -56,7 +55,6 @@ EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 EOF
@@ -65,7 +63,7 @@ EOF
 
             test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report \
                 --rules=ref \
-                "$REPLY"
+                "$schema"
 
             ;;
     esac
