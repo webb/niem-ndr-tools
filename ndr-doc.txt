@@ -1,6 +1,6 @@
 National Information Exchange Model Naming and Design Rules
 
-Version 3.0beta1pre1
+Version 3.0beta1
 
 May 30, 2014
 
