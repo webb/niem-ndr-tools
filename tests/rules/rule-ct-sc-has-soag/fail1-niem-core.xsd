@@ -58,7 +58,6 @@
     </xs:annotation>
     <xs:simpleContent>
       <xs:extension base="nc:PassportCategoryCodeSimpleType">
-        <xs:attributeGroup ref="structures:SimpleObjectAttributeGroup"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>

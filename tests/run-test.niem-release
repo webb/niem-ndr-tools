@@ -8,7 +8,51 @@ cd "$(dirname "$0")"
 
 vecho_location
 
-test_set_stdout <<EOF
+
+while read -rd '' schema
+do 
+    #### SET
+
+    test_set_stdout <<EOF
+EOF
+
+    test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report \
+        --rules=set \
+        -c "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/xml-catalog.xml \
+        "$schema"
+
+    #### REF
+
+    case "$XSD" in
+        # not ref XSDs; ignore
+        ../pkg/niem-release/niem/appinfo/3.0/appinfo.xsd \
+            | ../pkg/niem-release/niem/conformanceTargets/3.0/conformanceTargets.xsd \
+            | ../pkg/niem-release/niem/localTerminology/3.0/localTerminology.xsd \
+            | ../pkg/niem-release/niem/structures/3.0/structures.xsd \
+            | ../pkg/niem-release/niem/external/* ) 
+            true ;;
+
+        * )
+            # these all run the same way
+            # figure out expected output
+            case "$XSD" in
+                # special checks
+                ../pkg/niem-release/niem/niem-core/3.0/niem-core.xsd )
+
+                    test_set_stdout <<EOF
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
+2:successful-report:ns-well-formed
+2:successful-report:target-ns-is-rfc3986
+2:successful-report:well-formed-xml
+6036:successful-report:el-representation-is-abstract
+EOF
+                    ;;
+
+                # everything else
+                * )
+                    test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
@@ -16,21 +60,16 @@ test_set_stdout <<EOF
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 EOF
+                    ;;
+            esac
 
-while read -rd ''
-do 
-    case "$REPLY" in
-        ../pkg/niem-release/niem/appinfo/3.0/appinfo.xsd \
-            | ../pkg/niem-release/niem/conformanceTargets/3.0/conformanceTargets.xsd \
-            | ../pkg/niem-release/niem/localTerminology/3.0/localTerminology.xsd \
-            | ../pkg/niem-release/niem/structures/3.0/structures.xsd \
-            | ../pkg/niem-release/niem/external/* ) true ;;
-        * )
             test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report \
-                --auto-rules \
-                -c "$NDR_TOOLS_ROOT_DIR"/pkg/niem-release/xml-catalog.xml \
-                "$REPLY";;
+                --rules=ref \
+                "$REPLY"
+
+            ;;
     esac
+
 done < <(find ../pkg/niem-release/niem -type f -name '*.xsd' -print0)
 
 test_exit

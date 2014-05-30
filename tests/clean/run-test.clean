@@ -6,13 +6,18 @@
 cd "$(dirname "$0")"
 
 while read -r -d $'\n' XSD; do
+
+    #### SET
+
     test_set_stdout <<EOF
 EOF
 
     test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r set -c xml-catalog.xml "$XSD"
 
+    #### REF
 
     case "$XSD" in
+        # ignore
         subset/niem/appinfo/3.0/appinfo.xsd ) true;;
         subset/niem/structures/3.0/structures.xsd ) true;;
         subset/niem/conformanceTargets/3.0/conformanceTargets.xsd ) true;;
@@ -24,8 +29,6 @@ EOF
         subset/niem/niem-core/3.0/niem-core.xsd | \
         subset/niem/proxy/xsd/3.0/xs.xsd )
 
-            #### REF rules
-
             test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
@@ -35,16 +38,9 @@ EOF
 2:successful-report:well-formed-xml
 EOF
 
-            test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref -c xml-catalog.xml "$XSD"
-
-            #### SET rules
-
-            test_set_stdout <<EOF
-EOF
-
-            test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r set -c xml-catalog.xml "$XSD"
-
+            test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref "$XSD"
             ;;
+
         * ) test_fail "No test for XSD \"$XSD\"" ;;
     esac
 done < <(find subset -type f -name '*.xsd')

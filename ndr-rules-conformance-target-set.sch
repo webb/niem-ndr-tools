@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -8,41 +8,39 @@
 <sch:ns prefix="structures" uri="http://release.niem.gov/niem/structures/3.0/"/>
 <sch:ns prefix="term" uri="http://release.niem.gov/niem/localTerminology/3.0/"/>
       
-<sch:pattern id="rule_9-33"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
+<sch:pattern id="rule_9-34"><sch:title>Base type of complex type with complex content must have complex content (SET)</sch:title>
   <sch:rule context="xs:complexType[         nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))         or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument'))       ]/xs:complexContent">
-    <sch:assert test="some $derivation in xs:*[self::xs:extension or self::xs:restriction],                            $base-qname in resolve-QName($derivation/@base, $derivation) satisfies (                          namespace-uri-from-QName($base-qname) = xs:anyURI('http://release.niem.gov/niem/structures/3.0/')                          or (some $base-type in nf:resolve-type($derivation, $base-qname) satisfies                                 $base-type/self::xs:complexType/xs:complexContent))">Rule 9-33: The base type of complex type that has complex content MUST have complex content.</sch:assert>
+    <sch:assert test="some $derivation in xs:*[self::xs:extension or self::xs:restriction],                            $base-qname in resolve-QName($derivation/@base, $derivation),                            $base-type in nf:resolve-type($derivation, $base-qname) satisfies                          empty($base-type/self::xs:complexType/xs:simpleContent)">Rule 9-34: The base type of complex type that has complex content MUST have complex content.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-35"><sch:title>A complex type with simple content has structures:SimpleObjectAttributeGroup</sch:title>
-  <sch:rule context="xs:simpleContent/xs:extension[       for $base in resolve-QName(@base, .),            $base-namespace in namespace-uri-from-QName($base),           $target-namespace in nf:get-target-namespace(.) return (         $base-namespace = 'http://www.w3.org/2001/XMLSchema'         or (some $type in nf:resolve-type(., $base) satisfies              node-name($type) = xs:QName('xs:simpleType')))]">
-    <sch:assert test="exists(xs:attributeGroup[                         some $ref in @ref satisfies                           resolve-QName($ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')])">Rule 9-35: A complex type definition with simple content schema component with a derivation method of extension that has a base type definition that is a simple type MUST incorporate the attribute group {http://release.niem.gov/niem/structures/3.0/}SimpleObjectAttributeGroup.</sch:assert>
+<sch:pattern id="rule_9-45"><sch:title>Element type is not simple type</sch:title>
+  <sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))                                  or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))                                 and exists(@type)]">
+    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-45: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_10-13"><sch:title>External adapter type not a base type (SET)</sch:title>
+  <sch:rule context="xs:*[(self::xs:extension or self::xs:restriction)                           and (nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))                                or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))                           and (some $base-qname in resolve-QName(@base, .),                                     $base-namespace in namespace-uri-from-QName($base-qname) satisfies                                  not($base-namespace = (nf:get-target-namespace(.), xs:anyURI('http://www.w3.org/2001/XMLSchema'))))]">
+    <sch:assert test="nf:resolve-type(., resolve-QName(@base, .))[                         empty(@appinfo:externalAdapterTypeIndicator)]">Rule 10-13: An external adapter type definition MUST NOT be a base type definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-46"><sch:title>Element type is not simple type</sch:title>
-  <sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))                                  or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))                                 and exists(@type)]">
-    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-46: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
-  </sch:rule>
-</sch:pattern>
-            
-<sch:pattern id="rule_10-65"><sch:title>appinfo:appliesToTypes references types</sch:title>
+<sch:pattern id="rule_10-68"><sch:title>appinfo:appliesToTypes references types</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToTypes)]">
-    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToTypes), ' ') satisfies                         exists(nf:resolve-type(., resolve-QName($item, .)))">Rule 10-65: Every item in @appinfo:appliesToTypes MUST resolve to a type.</sch:assert>
+    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToTypes), ' ') satisfies                         exists(nf:resolve-type(., resolve-QName($item, .)))">Rule 10-68: Every item in @appinfo:appliesToTypes MUST resolve to a type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-67"><sch:title>appinfo:appliesToElements references elements</sch:title>
+<sch:pattern id="rule_10-70"><sch:title>appinfo:appliesToElements references elements</sch:title>
   <sch:rule context="*[exists(@appinfo:appliesToElements)]">
-    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies                         count(nf:resolve-element(., resolve-QName($item, .))) = 1">Rule 10-67: Every item in @appinfo:appliesToElements MUST resolve to an element.</sch:assert>
+    <sch:assert test="every $item in tokenize(normalize-space(@appinfo:appliesToElements), ' ') satisfies                         count(nf:resolve-element(., resolve-QName($item, .))) = 1">Rule 10-70: Every item in @appinfo:appliesToElements MUST resolve to an element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_11-16"><sch:title>Name of element declaration with simple content has representation term</sch:title>
-  <sch:rule context="xs:element[       (nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))        or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))       and exists(@name)        and exists(@type)]">
-    <sch:let name="has-simple-content" value="       some $type in nf:resolve-type(., resolve-QName(@type, .)) satisfies         exists($type[exists(xs:simpleContent)])"/>
-    <sch:let name="name-uses-representation-term" value="       some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies         ends-with(@name, $representation-term)"/>
-    <sch:assert test="if ($has-simple-content) then $name-uses-representation-term else true()">Rule 11-16: the name of an element declaration that is of simple content MUST use a representation term.</sch:assert>
+<sch:pattern id="rule_11-18"><sch:title>Name of element declaration with simple content has representation term (SET)</sch:title>
+  <sch:rule context="xs:element[@name and @type         and (nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))             or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))        and (some $type-qname in resolve-QName(@type, .) satisfies (               nf:get-target-namespace(.) != namespace-uri-from-QName($type-qname)               and nf:resolve-type(., $type-qname)/xs:simpleContent))]">
+    <sch:assert test="some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies                         ends-with(@name, $representation-term)">Rule 11-18: the name of an element declaration that is of simple content MUST use a representation term.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
