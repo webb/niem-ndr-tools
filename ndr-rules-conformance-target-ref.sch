@@ -242,7 +242,7 @@
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-33"><sch:title>Base type of complex type with complex content must have complex content (REF, EXT)</sch:title>
+<sch:pattern id="rule_9-33"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
   <sch:rule context="xs:complexType/xs:complexContent/xs:*[                        (self::xs:extension or self::xs:restriction)                        and (some $base-qname in resolve-QName(@base, .) satisfies                          namespace-uri-from-QName($base-qname) = nf:get-target-namespace(.))]">
     <sch:assert test="some $base-type in nf:resolve-type(., resolve-QName(@base, .)) satisfies                         empty($base-type/self::xs:complexType/xs:simpleContent)">Rule 9-33: The base type of complex type that has complex content MUST be a complex type with complex content.</sch:assert>
   </sch:rule>
@@ -608,7 +608,7 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-11"><sch:title>External adapter type not a base type (REF, EXT)</sch:title>
+<sch:pattern id="rule_10-11"><sch:title>External adapter type not a base type</sch:title>
   <sch:rule context="xs:*[(self::xs:extension or self::xs:restriction)                           and (some $base-qname in resolve-QName(@base, .),                                     $base-namespace in namespace-uri-from-QName($base-qname) satisfies                                  nf:get-target-namespace(.) = $base-namespace)]">
     <sch:assert test="nf:resolve-type(., resolve-QName(@base, .))[                         empty(@appinfo:externalAdapterTypeIndicator)]">Rule 10-11: An external adapter type definition MUST NOT be a base type definition.</sch:assert>
   </sch:rule>
@@ -883,7 +883,7 @@
   </sch:rule>
 </sch:pattern>
 	    
-<sch:pattern id="rule_11-16"><sch:title>Name of element declaration with simple content has representation term (REF, EXT)</sch:title>
+<sch:pattern id="rule_11-16"><sch:title>Name of element declaration with simple content has representation term</sch:title>
   <sch:rule context="xs:element[@name and @type                                 and (some $type-qname in resolve-QName(@type, .) satisfies (                                        nf:get-target-namespace(.) = namespace-uri-from-QName($type-qname)                                        and nf:resolve-type(., $type-qname)/xs:simpleContent))]">
     <sch:assert test="some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies                         ends-with(@name, $representation-term)">Rule 11-16: the name of an element declaration that is of simple content MUST use a representation term.</sch:assert>
   </sch:rule>

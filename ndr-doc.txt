@@ -1,8 +1,8 @@
 National Information Exchange Model Naming and Design Rules
 
-Version 3.0beta1
+Version 3.0beta2pre2
 
-May 30, 2014
+July 2, 2014
 
 NIEM Technical Architecture Committee (NTAC)
 
@@ -528,7 +528,7 @@ Rule 4-2. Schema marked as extension schema document must conform
 
       *  The document element is locally schema-valid.
 
-      *  Each element within the [XML document] that has a [namespace name] matching the target namespace of a [reference schema document] or [extension schema document] is a [conformant element information item].
+      *  Each element information item within the [XML document] that has property [namespace name] matching the target namespace of a [reference schema document] or [extension schema document] is a [conformant element information item].
 
    Schema-validity may be assessed against a single set of schemas or against multiple sets of schemas.
 
@@ -622,11 +622,22 @@ Rule 4-6. Schema claims extension conformance target
 
 5. The NIEM conceptual model
 
-   NIEM provides a concrete data model, in the form of a set of XML Schema documents. These schemas may be used to build messages and information exchanges. The schemas spell out what kinds of objects exist and how those objects may be related. XML data that follows the rules of NIEM imply specific meaning. The varieties of XML Schema components used within NIEM-conformant schemas are selected to clarify the meaning of XML data. That is, schema components that do not have a clear meaning have been avoided. NIEM provides a framework within which XML data has a specific meaning.
+   This section describes aspets of the RDF model, and provides a mapping between NIEM concepts and the RDF model.
 
-   One limitation of XML and XML Schema is that they do not describe the meaning of an XML document. The XML specification defines XML documents and defines their syntax but does not address the meaning of those documents. The XML Schema specification defines the XML Schema definition language, which describes the structure and constrains the contents of XML documents (schemas).
+   * Section 5.1, Purpose of the NIEM conceptual model
+   * Section 5.2, The RDF model
+   * Section 5.3, NIEM in terms of RDF
+   * Section 5.4, Unique identification of data objects
+   * Section 5.5, NIEM data is explicit, not implicit
+   * Section 5.6, Mapping of NIEM concepts to RDF concepts
 
-   In a schema, the meaning of a schema component (e.g., element, attribute, or type) may be described using the xs:documentation element. Or, additional information may be included via the xs:appinfo element. Although this may enable humans to understand XML data, more information is needed to support the machine-understandable meaning of XML data. In addition, inconsistency among the ways that schema components may be put together may be a source of confusion.
+5.1. Purpose of the NIEM conceptual model
+
+   Each release of NIEM provides a concrete data model, in the form of a set of [schema documents]. These schema documents may be used to build messages and information exchanges. The schema documents spell out what kinds of objects exist and how those objects may be related. A set of XML data that follows the rules of NIEM implies specific meaning. The varieties of [schema components] used within conformant schema documents are selected to clarify the meaning of XML data. That is, schema components that do not have a clear meaning have been avoided. NIEM provides a framework within which XML data has a specific meaning.
+
+   One limitation of XML and XML Schema is that they do not describe the meaning of an XML document. The XML specification defines XML documents and defines their syntax but does not address the meaning of those documents. The XML Schema specification defines the XML Schema definition language, which describes the structure and constrains the contents of XML documents through the construction and use of schema components.
+
+   In a schema, the meaning of a schema component may be described using the xs:documentation element, or additional information may be included via use of the xs:appinfo element. Although this may enable humans to understand XML data, more information is needed to support the machine-understandable meaning of XML data. In addition, inconsistency among the ways that schema components may be put together may be a source of confusion.
 
    The RDF Core Working Group of the World Wide Web consortium has developed a simple, consistent conceptual model, the RDF model. The RDF model is described and specified through a set of W3C Recommendations, the Resource Description Framework (RDF) specifications, making it a very well defined standard. The NIEM model and the rules contained in this NDR are based on the RDF model. This provides numerous advantages:
 
@@ -636,7 +647,7 @@ Rule 4-6. Schema claims extension conformance target
 
       *  NIEM's conceptual model provides a consistent basis for relating attributes, elements, types, and other XML Schema components.
 
-      *  NIEM's use of the RDF model defines what a set of NIEM data means. The RDF specification provides a detailed description of what a statement means. See [RDF Semantics] Section 1.3, Intepretations. This meaning is leveraged by NIEM.
+      *  NIEM's use of the RDF model defines what a set of NIEM data means. The RDF specification provides a detailed description of what a statement means. This meaning is leveraged by NIEM.
 
       *  NIEM's use of the RDF model provides a basis for inferencing and reasoning about XML data that uses NIEM. That is, using the rules defined for the RDF model, programs can determine implications of relationships between NIEM-defined objects.
 
@@ -644,130 +655,544 @@ Rule 4-6. Schema claims extension conformance target
 
    The goal of this section is to clarify the meaning of XML data that is NIEM-conformant and to outline the implications of various modeling constructs in NIEM. The rules for NIEM- conformant schemas and instances are in place to ensure that a specific meaning can be derived from data. That is, the data makes specific assertions, which are well understood since they are derived from the rules for NIEM.
 
-   The key concepts underpinning the NIEM conceptual model are discussed in the remainder of this section:
+5.2. The RDF model
 
-      *  NIEM and the RDF Model
+   This section identifies features of RDF and RDFS, in order to establish a mapping between RDF semantics and NIEM. A reader should read the referenced source documents to obtain a full understanding of the concepts mentioned in this section.
 
-      *  NIEM Properties
+   RDF establishes a graph-based data model, as described by [RDF Concepts] Section 1.1, Graph-based Data Model, which states:
 
-      *  Unique Identification of Data Objects
+      The core structure of the abstract syntax is a set of triples, each consisting of a subject, a predicate and an object. A set of such triples is called an RDF graph.
 
-      *  NIEM Data Model Is Explicit, Not Implicit
+   [RDF Concepts] also states:
 
-      *  NIEM Data Model Implementation in XML Schema
+      There can be three kinds of nodes in an RDF graph: IRIs, literals, and blank nodes.
 
-5.1. NIEM and the RDF model
+   [RDF Concepts] Section 1.2, Resources and Statements describes resources:
 
-   NIEM has its foundation in the RDF model. This helps to ensure that NIEM-conformant data has precise meaning. The RDF view of what data means is clarified by [RDF Semantics]:
+      Any IRI or literal denotes something in the world (the "universe of discourse"). These things are called resources. Anything can be a resource, including physical things, documents, abstract concepts, numbers and strings; the term is synonymous with "entity" as it is used in the RDF Semantics specification. The resource denoted by an IRI is called its referent, and the resource denoted by a literal is called its literal value.
 
-      ...asserting a sentence makes a claim about the world...an assertion amounts to stating a constraint on the possible ways the world might be.
+   [RDF Concepts] also describes relationships and blank nodes.
+
+      Asserting an RDF triple says that some relationship, indicated by the predicate, holds between the resources denoted by the subject and object. This statement corresponding to an RDF triple is known as an RDF statement. The predicate itself is an IRI and denotes a property, that is, a resource that can be thought of as a binary relation. (Relations that involve more than two entities can only be indirectly expressed in RDF.)
+
+      Unlike IRIs and literals, blank nodes do not identify specific resources. Statements involving blank nodes say that something with the given relationships exists, without explicitly naming it.
+
+   [RDF Concepts] Section 1.7, Equivalence, Entailment and Inconsistency describes the meaning of an RDF triple:
+
+      An RDF triple encodes a statement--a simple logical expression, or claim about the world. An RDF graph is the conjunction (logical AND) of its triples.
+
+   [RDF Concepts] Section 3.1, Triples defines an RDF triple:
+
+      An RDF triple consists of three components:
+
+         *  the subject, which is an IRI or a blank node
+
+         *  the predicate, which is an IRI
+
+         *  the object, which is an IRI, a literal or a blank node
+
+      An RDF triple is conventionally written in the order subject, predicate, object.
+
+5.3. NIEM in terms of RDF
 
    The RDF view of the meaning of data carries into NIEM: NIEM elements form statements that make claims about the world: that a person has a name, a residence location, a spouse, etc. The assertion of one set of facts does not necessarily rule out other statements: A person could have multiple names, could have moved, or could be divorced. Each statement is a claim asserted to be true by the originator of the statement.
 
-   This NDR discusses NIEM data in terms of objects, a term more accessible than the word used by RDF, resources. RDF defines the world in terms of resources. [RDF Semantics] describes what may constitute a resource:
-
-      ...no assumptions are made here about the nature of resources; "resource" is treated here as synonymous with "entity", i.e., as a generic term for anything in the universe of discourse.
-
-   RDF resources coincide with NIEM objects and associations. That is, both objects and associations in NIEM are RDF resources with the additional constraints:
-
-      *  A NIEM object or association is an instance of a complex type defined by an XML Schema document.
-
-      *  The XML Schema document that defines a NIEM object is a NIEM-conformant schema.
+   This NDR discusses defines NIEM data in XML terminology, complex types and elements, rather than using RDF terms, resources and properties. NIEM NIEM objects and associations conincide with RDF resources; both objects and associations correspond to RDF resources with additional constraints:
 
    NIEM associations are defined as n-ary properties, as described in [N-ary], "Use Case 3: N-ary relation with no distinguished participant". NIEM associations are defined in Section 10.3, Associations, below. Assertions are made via NIEM-conformant XML data, described by Section 12, XML instance document rules, below.
 
-   The XML Schema types that define NIEM objects and associations are related to each other via elements and attributes. That is, a type contains elements and attributes, and an element or attribute has a value that is an instance of an XML Schema type. In NIEM, these elements and attributes are XML Schema representations of RDF properties, which are described by [RDF Primer], "2.1 Basic Concepts":
+   The XML Schema types that define NIEM objects and associations are related to each other via elements and attributes. That is, a type contains elements and attributes, and an element or attribute has a value that is an instance of an XML Schema type. These elements and attributes are XML Schema representations, which correspond to RDF properties. NIEM-conformant XML Schemas describe things and their properties. NIEM-conformant data contains elements and attributes. These correspond to RDF resources and their properties, which describe their characteristics and relationships.
 
-      "RDF is based on the idea that the things being described have properties which have values, and that resources can be described by making statements...that specify those properties and values."
-
-   This describes how NIEM works: schemas describe things and their properties. NIEM- conformant data specifies objects, the values of their properties, and the relationships between them.
-
-   There are several kinds of assertions that may be made with NIEM-conformant data. Examples include:
-
-      *  An assertion that an object exists. An occurrence of an element commonly establishes the existence of an object. Such an object may be tangible or intangible. For example, the element nc:Person in an exchange implies that a person does or did exist. An element may also express that an object does not exist (e.g., the license plate ABC123 was never issued), but this is an uncommon case.
-
-         Descriptions of objects may carry an implicit assumption that objects exist. Such an assumption is dependent on the message in which such descriptions are made. If an object that is described does not exist, it should be made explicit in the definition of an element containing or referring to the object.
-
-      *  An assertion that an object has a characteristic. A feature or quality of an object is commonly represented by an element appearing within the element that establishes the object. For example, the height of a person is described by the nc:PersonHeightMeasure element. The nc:PersonHeightMeasure element occurs as XML content of the nc:Person element. In some cases, a characteristic may be represented by an attribute owned by an element.
-
-      *  An assertion that an object participates in a relationship. A relationship between objects may be established in any of several ways:
-
-            *  Both objects may be referenced from an association that establishes the relationship. Associations are also useful for expressing n-ary relationships, as well as relationships supported by additional data.
-
-            *  An element may occur within one object that indicates the relationship with the other object. This element may be either a content element or a reference element.
-
-         The NIEM Core schema and some domain schemas have been normalized such that a minimum number of reference or content elements establish relationships. In these cases, use of an association is the more common method for establishing a relationship. However, in an exchange, using a reference or content element to express a relationship may be the simpler, preferred method for expressing a relationship.
-
-5.2. NIEM properties
-
-   NIEM-conformant data describes characteristics of objects and relationships between objects. In RDF, these characteristics and relationships are called properties of objects, which is also how NIEM refers to them. NIEM represents properties with element declarations and attribute declarations.
-
-   Within data, a property relates XML data much as a verb relates nouns in a sentence: a verb has a subject and an object.
-
-      *  The property itself: What relationship is being asserted? For example, the property may say that a weapon has a user, or that someone has hair of a particular color.
-
-      *  The subject: About what object is the property being asserted? This would be the weapon that has the user, or the person whose hair is being described.
-
-      *  The object: What is the value of the property, or with what other object does the relationship exist? This would be the person who is the user of the weapon or the person whose hair has the color brown.
-
-   A property relates two objects. Data will describe an object having a characteristic with a specific value or will describe an object with a particular relationship to another object. All properties are pair-wise: between two objects, or between an object and a value.
-
-   In theory, any relationship that involves more than two objects may be modeled as a set of binary properties. In NIEM, such relationships may be expressed either as a set of properties (i.e., as element and attribute declarations) or as a complex type defining an association.
-
-5.3. Unique identification of data objects
+5.4. Unique identification of data objects
 
    In NIEM, an exchange is generally adhoc. That is, a message may be generated without any persistence. It exists only to exchange data and may not have any universal meaning beyond that specific exchange. As such, a message may or may not have a URI as an identifier. NIEM was designed with the assumption that a given exchange need not have any unique identifier; NIEM does not require a unique identifier. NIEM also does not require any object (data instance) to be identified by a URI. This differs from RDF, in which all entities (other than literal values) are identified by globally meaningful URIs.
 
-   A NIEM-conformant instance uses XML IDs to identify objects within an XML document; The NIEM XML ID is an attribute structures:id of type xs:ID. These IDs are not assumed by NIEM to have any universal significance; they need only be unique within the XML document. The use of an ID is required only when an object must be referenced within the document. NIEM recognizes no correlation between these local IDs and any URI.
+   A NIEM-conformant instance XML document may use XML IDs to identify objects within it; The NIEM XML ID is an attribute structures:id of type xs:ID. These IDs are not assumed by NIEM to have any universal significance; they need only be unique within the XML document. The use of an ID is required only when an object must be referenced within the document. NIEM recognizes no correlation between these local IDs and any URI.
+
+   As a result, the basic mapping of NIEM data to RDF involves the use of blank nodes, not universally-meaningful resource IRIS.
 
    Any given implementation, message, or MPD may be defined to apply a URI or other universally meaningful identifier to an object or message. However, NIEM has no such requirement.
 
-5.4. NIEM data model is explicit, not implicit
+5.5. NIEM data is explicit, not implicit
 
    In NIEM data, that which is not stated is not implied. If data says a person's name is "John," it is not implicitly saying that he does not have other names, or that "John" is his legal name, or that he is different from a person known as "Bob." The only assertion being made is that one of the names by which this person is known is "John".
 
    This is one reason that definitions of NIEM content are so important. The definitions must state exactly what any given statement implies. The concept of "legal name" may be defined that makes additional assertions about a name of a person. Such assertions must be made explicit in the definition of the relationship.
 
-5.5. NIEM data model implementation in XML Schema
+5.6. Mapping of NIEM concepts to RDF concepts
 
-   NIEM defines rules for XML Schema documents that enforce the NIEM conceptual model. The schemas that follow these rules are referred to as NIEM-conformant schemas.
+   This section provides RDF implementations for many aspects of NIEM-conformant scheamas and instance documents.
 
-   As discussed above, NIEM classes and properties are mapped onto XML Schema components. The following is an example of how a NIEM class for a person is rendered as an XML Schema complex type definition:
+5.6.1. Resource IRIs for XML Schema components and information items
 
-   Figure 5-1: Conceptual class rendered as XML Schema complex type
+   The term "qualified name" is defined by [XML Namespaces] Section 2.1, Basic Concepts, which states:
 
-      <xs:complexType name="PersonType">
-        <xs:annotation>
-          <xs:documentation>A data type for a human being.</xs:documentation>
-        </xs:annotation>
-        <xs:complexContent>
-          <xs:extension base="structures:ObjectType">
-            <xs:sequence>
-              <xs:element ref="nc:PersonBirthDate" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="nc:PersonBirthLocation" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="nc:PersonHeightMeasure" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="nc:PersonName" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="nc:PersonRace" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="nc:PersonSex" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="nc:PersonWeightMeasure" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-          </xs:extension>
-        </xs:complexContent>
-      </xs:complexType>
+      A qualified name is a name subject to namespace interpretation.
 
-   Note that the complex type definition incorporates not only the class itself, but also identifies properties that have a range (e.g., rdfs:range) of the class.
+   A Qname is used to represent a qualified name, as described by [XML Schema Datatypes] Section 3.2.18, QName, which states:
 
-   The following is an example of how a property for a conveyance operator is rendered as a NIEM element declaration:
+      The value space of QName is the set of tuples {namespace name, local part}, where namespace name is an anyURI and local part is an NCName.
 
-   Figure 5-2: Conceptual property rendered as element declaration
+   Certain components defined by NIEM schemas and instances have corresponding resource IRIs. Each IRI is taken from a qualified name, as follows:
 
-      <xs:element name="ConveyanceOperator" type="nc:PersonType" nillable="true">
-        <xs:annotation>
-          <xs:documentation>A person who operates or drives a conveyance.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
+      *  If namespace name ends with "#": concatenate(namespace name, local part)
 
-   NIEM also defines rules for XML documents that enforce the NIEM conceptual model. An XML document is a [conformant instance XML document] if it follows the rules specified by the NIEM-conformant schema, as well as additional rules that are NIEM-specific. For example, in a NIEM-conformant XML document, a reference (structures:ref) must refer to a data element that is of an appropriate XML Schema type. If this is not the case, the document may be valid according to the schema, but it will not be a [conformant instance XML document].
+      *  Otherwise: concatenate(namespace name, "#", local part)
+
+   Note that this is only meaningful when the namespace name is not empty and is an absolute URI.
+
+   The corresponding RDF resource IRIs for information items and schema components are:
+
+      *  element information item or attribute information item: the resource IRI is built from the qualified name constructed from its [namespace name] and [local name] properties.
+
+      *  schema component: the resource IRI is built from the qualified name constructed from its {target namespace} and {name} properties.
+
+5.6.2. Blank nodes for instances and schemas
+
+   A blank node may correspond to an occurrence of an element information item, which represents the relationship established by the element.
+
+   A blank node may correspond to the content of an element, which represents an instance of a type. This is distinct from the occurrence of the element itself. This includes resolution of structures:ref to structures:id attributes, in which case the content of the referred-to element is considered the content of the element.
+
+   A blank node may correspond to a combination of factors. For example, a blank node is used for each application of an element to a base object via an augmentation, as a single augmentation may be applied to multiple base objects.
+
+   A blank node may also correspond to the above, but for attributes.
+
+5.6.3. RDF Literals
+
+   A simple value may be incorporated into a [conformant instance XML document] as the value of an attribute information item, or as a child of an element information item. This section describes how a simple value is mapped to an RDF literal. Note that there is no mapping for the simple content of an element that is not a [conformant element information item], nor for attributes defined by non-conformant schema documents, so there is no accommodation of mixed content, untyped values, or other cases outside of what conformant schema documents define.
+
+   For each occurrence of a simple value, the following may be relevant:
+
+      *  The value of the literal, which is a normalized value of an attribute or element information item processed in accordance with [XML] Section 2.10, White Space Handling and [XML Schema Structures] Section 3.1.4, White Space Normalization during Validation.
+
+      *  The occurrence of an attribute xml:lang applicable to the value (described by [XML] Section 2.12, Language Identification), which may entail a language tag on the literal (described by [RDF Concepts] Section 3.3, Literal).
+
+      *  The XML Schema-defined base type of the simple value, which may be an attribute's {type definition}, or a simple type base type of an element's {type definition}.
+
+   The literal for a simple value $value is:
+
+      *  If $value has a base type definition that is derived from type xs:string (and not a XML Schema-defined type derived from xs:string), and a non-empty language specification is applied to $value using xml:lang, as described by [XML] Section 2.12, Language Identification, then the literal is a language-tagged string, as described by [RDF Concepts] Section 3.3, Literals:
+
+            "$lexical-form"@$language-tag
+
+            Where:
+
+               *  $lexical-form is a Unicode string for $value.
+
+               *  $language-tag is the in-scope value of attribute xml:lang.
+
+      *  Otherwise, if $value has a base type definition $base-type that is listed as an RDF-compatible XSD type in [RDF Concepts] Section 5.1, The XML Schema Built-in Datatypes, then the literal is:
+
+            "$lexical-form"^^$datatype-IRI
+
+            Where:
+
+               *  $lexical-form is a Unicode string for $value.
+
+               *  $datatype-IRI is the QName of $base-type.
+
+      *  Otherwise, the literal is a simple literal, which is:
+
+            "$lexical-form"
+
+            Where: $lexical-form is a Unicode string for $value.
+
+5.6.4. Resolved element
+
+   This document defines two attributes, structures:id and structures:ref that, together, define a reference mechanism for conformant elements. This enables the use of references to date in place of directly-contained data, which loops in data graphs, as well as for multiple relationships to be defined to a single object. This mechanism uses XML IDs and IDREFs as provided by the XML Schema language. As this document defines the mechanism, a structures:ref attribute may refer to a structures:id; this reference means that the element that has the structures:ref attribute refers to the element that has the structures:id attribute.
+
+   This section defines an operation, resolving an element information item to obtain whatever element is referred to by it. This is put in terms of taking an element and finding the resolved element to which it refers. In a case where there is no reference, the resolved element is the same as the original element.
+
+   [Definition: resolved element information item]
+
+      Within an XML document $document, for any element information item $element there is a resolved element information item, which is:
+
+         *  If all of the following are true:
+
+               *  $document is a [conformant instance XML document].
+
+               *  $element and $referent are [conformant element information items] within $document.
+
+               *  $element owns attribute information item structures:ref with a value $ref.
+
+               *  $referent owns attribute information item structures:id with a value $id.
+
+               *  $ref is equal to $id.
+
+            Then the resolved element information item for $element is $referent.
+
+         *  Otherwise, the resolved element information item for $element is $element.
+
+5.6.5. NIEM instance mappings to RDF
+
+   This section has the following subsections:
+
+   * Section 5.6.5.1, XML document mapping
+   * Section 5.6.5.2, Content of an element
+   * Section 5.6.5.3, Element as a property with unknown context 
+   * Section 5.6.5.4, Element as a simple property of an object or association
+   * Section 5.6.5.5, Attribute as a simple property of an object or association
+   * Section 5.6.5.6, Elements via an augmentation type
+   * Section 5.6.5.7, Attributes via an augmentation type
+   * Section 5.6.5.8, Elements applied to an object via a metadata type
+   * Section 5.6.5.9, Attributes applied to an object via a metadata type
+   * Section 5.6.5.10, Elements applied to a relationship via a metadata type
+   * Section 5.6.5.11, Attributes applied to a relationship via a metadata type
+
+5.6.5.1. XML document mapping
+
+   A [conformant instance XML document] entails a corresponding RDF graph, which is a set of triples, which are entailed by the mapping of the contents of the XML document to RDF.
+
+5.6.5.2. Content of an element
+
+   A [conformant element information item] $element that has property [type definition] that is an [object type] or an [association type], entails the RDF:
+
+      $content rdf:type $type .
+
+      Where:
+
+         *  $content is a blank node corresponding to the content of $element.
+
+         *  $type is resource IRI for the value of the [type definition] property of $element.
+
+   If $element has a non-empty simple value, then it also entails the RDF:
+
+      $content rdf:value $literal .
+
+      Where:
+
+         *  $content is as above.
+
+         *  $literal is the literal value for $element, as described in Section 5.6.3, RDF Literals, above.
+
+5.6.5.3. Element as a property with unknown context 
+
+   A [conformant element information item] $element that
+
+      *  has [type definition] that is the ur-type, an [object type], or an [association type], and that
+
+      *  has a [parent] that is not an element information item, or that is an element information item that is not a [conformant element information item]
+
+   entails the RDF:
+
+      $element-node rdf:type rdf:Statement .
+      $element-node rdf:subject $blank-node .
+      $element-node rdf:predicate $predicate .
+      $element-node rdf:object $element-content-blank-node .
+
+      Where:
+
+         *  $element-node is a blank node corresponding to $element, to represent the relationship being established.
+
+         *  $blank-node is a blank node, to represent the unknown context in which $element occurs.
+
+         *  $predicate is the IRI for element information item $element, to respresent the semantics of the relationship.
+
+         *  $element-content-blank-node is a blank node corresponding to the content of the resolved element information item for $element.
+
+5.6.5.4. Element as a simple property of an object or association
+
+   A [conformant element information item] $context that is an instance of an [object type] or [association type], and that has a child [conformant element information item] $element that is an instance of an [object type] or an [association type], entails the RDF:
+
+      $element-node rdf:type rdf:Statement .
+      $element-node rdf:subject $subject .
+      $element-node rdf:predicate $predicate .
+      $element-node rdf:object $object .
+
+      Where:
+
+         *  $element-node is a blank node corresponding to $element.
+
+         *  $subject is a blank node corresponding to the content of $context.
+
+         *  $predicate is the IRI for $element.
+
+         *  $object is a blank node corresponding to the content of the [resolved element information item] for $child.
+
+5.6.5.5. Attribute as a simple property of an object or association
+
+   An attribute information item $attribute where:
+
+      *  $attribute is owned by a [conformant element information item] $context that has property [type definition] that is an [object type] or an [association type], and
+
+      *  $attribute has property [attribute declaration] $attribute-declaration that is defined by a [reference schema document] or an [extension schema document]
+
+   entails the RDF:
+
+      $attribute-node rdf:type rdf:Statement .
+      $attribute-node rdf:subject $subject .
+      $attribute-node rdf:predicate $predicate .
+      $attribute-node rdf:object $literal .
+
+      Where:
+
+         *  $attribute-node is a blank node corresponding to $attribute.
+
+         *  $subject is a blank node corresponding to the content of $context.
+
+         *  $predicate is the resource IRI for $attribute-declaration.
+
+         *  $literal is the literal value for $attribute, as described in Section 5.6.3, RDF Literals, above.
+
+5.6.5.6. Elements via an augmentation type
+
+   An element of a augmentation type contains a set of elements and attributes that are applied to some base object or association.
+
+   For each element applied to a type via an augmentation type:
+
+      *  Element information item $base that is an an instance of an [object type] or [association type],
+
+      *  Element information item $augmentation that is a child of $base that has [type definition] that is an [augmentation type],
+
+      *  Element information item $resolved-augmentation that is the [resolved element information item] for $augmentation,
+
+      *  Element information item $element that is a child of $resolved-augmentation, that has [type definition] that is an [object type] or an [association type], and
+
+      *  Element information item $resolved-element that is the [resolved element information item] for $element
+
+   entails the RDF:
+
+      $element-node rdf:type rdf:Statement .
+      $element-node rdf:subject $subject .
+      $element-node rdf:predicate $predicate .
+      $element-node rdf:object $object .
+
+      Where:
+
+         *  $element-node is a blank node corresponding to $element applied to $base via $augmentation.
+
+         *  $subject is a blank node corresponding to the content of $base.
+
+         *  $predicate is a the resource IRI for [element declaration] of $element.
+
+         *  $object is a blank node corresponding to the content of $resolved-element
+
+5.6.5.7. Attributes via an augmentation type
+
+   An element of an augmentation type contains a set of elements and attributes that are applied to some base object or association.
+
+   For each attribute applied to a type via an augmentation type:
+
+      *  Element information item $base that is an an instance of an [object type] or [association type],
+
+      *  Element information item $augmentation that is a child of $base that has [type definition] that is an [augmentation type],
+
+      *  Element information item $resolved-augmentation that is the [resolved element information item] for $augmentation,
+
+      *  Attribute information item $attribute that is owned by $resolved-augmentation, that has an [attribute declaration] that is defined by a [reference schema document] or an [extension schema document]
+
+   entails the RDF:
+
+      $attribute-node rdf:type rdf:Statement .
+      $attribute-node rdf:subject $subject .
+      $attribute-node rdf:predicate $predicate .
+      $attribute-node rdf:object $literal .
+
+      Where:
+
+         *  $attribute-node is a blank node corresponding to $attribute applied to $base via $augmentation.
+
+         *  $subject is a blank node corresponding to the content of $base.
+
+         *  $predicate is a the resource IRI for [attribute declaration] of $attribute.
+
+         *  $literal is the literal value for $attribute, as described in Section 5.6.3, RDF Literals, above.
+
+5.6.5.8. Elements applied to an object via a metadata type
+
+   An element of a metadata type contains a set of elements and attributes that are applied to some base object or association.
+
+   For each element applied to a type via a metadata type:
+
+      *  Element information item $base that is an an instance of an [object type] or [association type],
+
+      *  Each value $metadata-idref that is a value in attribute structures:metadata owned by $base.
+
+      *  Each element information item $metdata that has [type definition] that is a [metadata type], and has attribute structures:id with a value of $metdata-idref.
+
+      *  Element information item $element that is a child of $metdata, that has [type definition] that is an [object type] or an [association type], and
+
+      *  Element information item $resolved-element that is the [resolved element information item] for $element
+
+   entails the RDF:
+
+      $element-node rdf:type rdf:Statement .
+      $element-node rdf:subject $subject .
+      $element-node rdf:predicate $predicate .
+      $element-node rdf:object $object .
+
+      Where:
+
+         *  $element-node is a blank node corresponding to $element applied to $base via $metadata.
+
+         *  $subject is a blank node corresponding to the content of $base.
+
+         *  $predicate is a the resource IRI for [element declaration] of $element.
+
+         *  $object is a blank node corresponding to the content of $resolved-element
+
+5.6.5.9. Attributes applied to an object via a metadata type
+
+   An element of a metadata type contains a set of elements and attributes that are applied to some base object or association.
+
+   For each element applied to a type via a metadata type:
+
+      *  Element information item $base that is an an instance of an [object type] or [association type],
+
+      *  Each value $metadata-idref that is a value in attribute structures:metadata owned by $base.
+
+      *  Each element information item $metdata that has [type definition] that is a [metadata type], and has attribute structures:id with a value of $metdata-idref.
+
+      *  Attribute information item $attribute that is owned by $metdata, that has [attribute declaration] that is defined by a [reference schema document] or an [extension schema document]
+
+   entails the RDF:
+
+      $attribute-node rdf:type rdf:Statement .
+      $attribute-node rdf:subject $subject .
+      $attribute-node rdf:predicate $predicate .
+      $attribute-node rdf:object $literal .
+
+      Where:
+
+         *  $attribute-node is a blank node corresponding to $attribute applied to $base via $metadata.
+
+         *  $subject is a blank node corresponding to the content of $base.
+
+         *  $predicate is a the resource IRI for [element declaration] of $element.
+
+         *  $literal is the literal value for $attribute, as described in Section 5.6.3, RDF Literals, above.
+
+5.6.5.10. Elements applied to a relationship via a metadata type
+
+   An element of a metadata type contains a set of elements and attributes that are applied to a relationship.
+
+   For each element applied to a type via a metadata type:
+
+      *  Element information item $base that is an an instance of an [object type] or [association type],
+
+      *  Each value $metadata-idref that is a value in attribute structures:relationshipMetadata owned by $base.
+
+      *  Each element information item $metdata that has [type definition] that is a [metadata type], and has attribute structures:id with a value of $metdata-idref.
+
+      *  Element information item $element that is a child of $metdata, that has [type definition] that is an [object type] or an [association type], and
+
+      *  Element information item $resolved-element that is the [resolved element information item] for $element
+
+   entails the RDF:
+
+      $element-node rdf:type rdf:Statement .
+      $element-node rdf:subject $subject .
+      $element-node rdf:predicate $predicate .
+      $element-node rdf:object $object .
+
+      Where:
+
+         *  $element-node is a blank node corresponding to $element applied to $base via $metadata.
+
+         *  $subject is a blank node corresponding to $base.
+
+         *  $predicate is a the resource IRI for [element declaration] of $element.
+
+         *  $object is a blank node corresponding to the content of $resolved-element
+
+5.6.5.11. Attributes applied to a relationship via a metadata type
+
+   An element of a metadata type contains a set of elements and attributes that are applied to a relationship.
+
+   For each element applied to a type via a metadata type:
+
+      *  Element information item $base that is an an instance of an [object type] or [association type],
+
+      *  Each value $metadata-idref that is a value in attribute structures:metadata owned by $base.
+
+      *  Each element information item $metdata that has [type definition] that is a [metadata type], and has attribute structures:id with a value of $metdata-idref.
+
+      *  Attribute information item $attribute that is owned by $metdata, that has [attribute declaration] that is defined by a [reference schema document] or an [extension schema document]
+
+   entails the RDF:
+
+      $attribute-node rdf:type rdf:Statement .
+      $attribute-node rdf:subject $subject .
+      $attribute-node rdf:predicate $predicate .
+      $attribute-node rdf:object $literal .
+
+      Where:
+
+         *  $attribute-node is a blank node corresponding to $attribute applied to $base via $metadata.
+
+         *  $subject is a blank node corresponding to $base.
+
+         *  $predicate is a the resource IRI for [element declaration] of $element.
+
+         *  $literal is the literal value for $attribute, as described in Section 5.6.3, RDF Literals, above.
+
+5.6.6. NIEM complex type definitions to RDF
+
+   The following RDF mappings apply to the content of a [reference schema document] or [extension schema document].
+
+   An [object type] or [association type] $type entails the following RDF:
+
+      $resource rdf:type rdf:Class .
+
+      Where $resource is the resource IRI for $type.
+
+   An [object type] or [association type] $type that has property {base type definition} $base entails the RDF:
+
+      $type-resource rdfs:subClassOf $base-resource
+
+      Where:
+
+         *  $type-resource is the resource IRI for $type.
+
+         *  $base-resource is the resource IRI for $base.
+
+5.6.7. NIEM element declaration mappings to RDF
+
+   The following RDF mappings apply to the content of a [reference schema document] or [extension schema document].
+
+   A top-level element declaration schema component $element-declaration that has property {type definition} that is
+
+      *  the ur-type, or
+
+      *  is, or is derived from, structures:ObjectType, or
+
+      *  is, or is derived from, structures:AssociationType
+
+   entails the RDF:
+
+      $element-resource rdf:type rdf:Property .
+
+      Where $element-resource is the resource IRI for $element-declaration.
+
+   If $element-declaration has property {substitution group affiliation} with a value of element declaration $base, then it entails the RDF:
+
+      $element-resource rdfs:subPropertyOf $base-resource
+
+      Where:
+
+         *  $element-resource is the resource IRI for $element-declaration.
+
+         *  $base-resource is the resource IRI for $base.
+
+   If $element-declaration has property {type definition} with a value $type that is an [object type] or [association type], then it entails the RDF:
+
+      $element-resource rdfs:range $type-resource
+
+      Where:
+
+         *  $element-resource is the resource IRI for $element-declaration.
+
+         *  $type-resource is the resource IRI for $type.
+
+5.6.8. NIEM attribute declarations to RDF
+
+   The following RDF mappings apply to the content of a [reference schema document] or [extension schema document].
+
+   A top-level attribute declaration schema component $attribute-declaration that has property {type definition} that is a simple type definition defined within a [reference schema document] or an [extension schema document], then it entails the RDF:
+
+      $attribute-resource rdf:type rdf:Property .
+
+      Where $attribute-resource is the resource IRI for $attribute-declaration.
 
 6. Guiding principles
 
@@ -1807,7 +2232,7 @@ Rule 9-32. Complex content uses extension
 
    The first rule handles cases that can be determined within a single schema document, while the SET version handles cases that require cross-schema resolution.
 
-Rule 9-33. Base type of complex type with complex content must have complex content (REF, EXT)
+Rule 9-33. Base type of complex type with complex content must have complex content
 
    [Rule 9-33] (REF, EXT)
 
@@ -1822,7 +2247,7 @@ Rule 9-33. Base type of complex type with complex content must have complex cont
         </sch:rule>
       </sch:pattern>
 
-Rule 9-34. Base type of complex type with complex content must have complex content (SET)
+Rule 9-34. Base type of complex type with complex content must have complex content
 
    [Rule 9-34] (SET)
 
@@ -3047,7 +3472,7 @@ Rule 10-10. Element use from external adapter type defined by external schema do
         </sch:rule>
       </sch:pattern>
 
-Rule 10-11. External adapter type not a base type (REF, EXT)
+Rule 10-11. External adapter type not a base type
 
    [Rule 10-11] (REF, EXT)
 
@@ -3064,7 +3489,7 @@ Rule 10-11. External adapter type not a base type (REF, EXT)
 
    Each external adapter type is meant to stand alone; each type expresses a single concept, and is built from schema components from one or more external schema documents.
 
-Rule 10-12. External adapter type not a base type (SET)
+Rule 10-12. External adapter type not a base type
 
    [Rule 10-12] (SET)
 
@@ -3660,7 +4085,7 @@ Rule 10-33. Augmentation element type is an augmentation type
 
    Using the qualifier Augmentation immediately identifies an element as representing an augmentation.
 
-Rule 10-34. Augmentation elements are not used directly (REF)
+Rule 10-34. Augmentation elements are not used directly
 
    [Rule 10-34] (REF, SET)
 
@@ -4147,7 +4572,7 @@ Rule 10-62. Element with simple content has representation term
 
       Within the schema, the name of an element declaration that is of simple content MUST use a representation term found in Table Table 10-2, Representation terms.
 
-   This rule is also supported by Rule 11-16, Name of element declaration with simple content has representation term (REF, EXT) and Rule 11-17, Name of element declaration with simple content has representation term (SET), which provide tests that a top-level declaration has a representation term.
+   This rule is also supported by Rule 11-16, Name of element declaration with simple content has representation term and Rule 11-17, Name of element declaration with simple content has representation term, which provide tests that a top-level declaration has a representation term.
 
 Rule 10-63. Name has representation term when appropriate
 
@@ -4641,7 +5066,7 @@ Rule 11-15. Name of element that ends in "Abstract" is abstract
 
    This rule checks all cases that are testable in a single schema document.
 
-Rule 11-16. Name of element declaration with simple content has representation term (REF, EXT)
+Rule 11-16. Name of element declaration with simple content has representation term
 
    [Rule 11-16] (REF, EXT)
 
@@ -4658,7 +5083,7 @@ Rule 11-16. Name of element declaration with simple content has representation t
 
    Representation terms are defined by Table Table 10-2, Representation terms, above. This rule supports Rule 10-62, Element with simple content has representation term.
 
-Rule 11-17. Name of element declaration with simple content has representation term (SET)
+Rule 11-17. Name of element declaration with simple content has representation term
 
    This rule only checks the cases not testable in the (REF, EXT) version.
 
@@ -5405,9 +5830,7 @@ Appendix A. References
 
    [OED]: "Oxford English Dictionary, Third Edition", Oxford University Press, November 2010. http://dictionary.oed.com/.
 
-   [RDF Primer]: "RDF Primer", W3C Recommendation, 10 February 2004. Available from http://www.w3.org/TR/2004/REC-rdf-primer-20040210/.
-
-   [RDF Semantics]: "RDF Semantics", W3C Recommendation, 10 February 2004. Available from http://www.w3.org/TR/2004/REC-rdf-mt-20040210/.
+   [RDF Concepts]: Richard Cyganiak, David Wood, and Markus Lanthaler, eds. "RDF 1.1 Concepts and Abstract Syntax." The World Wide Web Consortium (W3C), February 25, 2014. http://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/.
 
    [RFC 2119]: Bradner, S. "Key words for use in RFCs to Indicate Requirement Levels", IETF RFC 2119, March 1997. Available from http://www.ietf.org/rfc/rfc2119.txt.
 
@@ -5661,8 +6084,8 @@ Appendix F. Index of rules
    Rule 9-30, No mixed content on complex content: Section 9.1.3.2, No mixed content
    Rule 9-31, Complex type content is explicitly simple or complex: Section 9.1.3, Complex type definition
    Rule 9-32, Complex content uses extension: Section 9.1.3.3, Complex content
-   Rule 9-33, Base type of complex type with complex content must have complex content (REF, EXT): Section 9.1.3.3.1, Base type of complex type with complex content must have complex content
-   Rule 9-34, Base type of complex type with complex content must have complex content (SET): Section 9.1.3.3.1, Base type of complex type with complex content must have complex content
+   Rule 9-33, Base type of complex type with complex content must have complex content: Section 9.1.3.3.1, Base type of complex type with complex content must have complex content
+   Rule 9-34, Base type of complex type with complex content must have complex content: Section 9.1.3.3.1, Base type of complex type with complex content must have complex content
    Rule 9-35, Simple content uses extension: Section 9.1.3.4, Simple content
    Rule 9-36, No complex type disallowed substitutions: Section 9.1.3, Complex type definition
    Rule 9-37, No complex type disallowed derivation: Section 9.1.3, Complex type definition
@@ -5734,8 +6157,8 @@ Appendix F. Index of rules
    Rule 10-8: Section 10.2.3.2, External adapter types
    Rule 10-9, Structure of external adapter type definition follows pattern: Section 10.2.3.2, External adapter types
    Rule 10-10, Element use from external adapter type defined by external schema documents: Section 10.2.3.2, External adapter types
-   Rule 10-11, External adapter type not a base type (REF, EXT): Section 10.2.3.2, External adapter types
-   Rule 10-12, External adapter type not a base type (SET): Section 10.2.3.2, External adapter types
+   Rule 10-11, External adapter type not a base type: Section 10.2.3.2, External adapter types
+   Rule 10-12, External adapter type not a base type: Section 10.2.3.2, External adapter types
    Rule 10-13, External attribute use only in external adapter type: Section 10.2.3.3, External attribute use
    Rule 10-14, External attribute use has data definition: Section 10.2.3.3, External attribute use
    Rule 10-15, External attribute use not an ID: Section 10.2.3.3, External attribute use
@@ -5757,7 +6180,7 @@ Appendix F. Index of rules
    Rule 10-31, Schema component with name ending in "AugmentationType" is an augmentation type: Section 10.4.4, Augmentation types
    Rule 10-32, Type derived from augmentation type is an augmentation type: Section 10.4.4, Augmentation types
    Rule 10-33, Augmentation element type is an augmentation type: Section 10.4.5, Augmentation element declarations
-   Rule 10-34, Augmentation elements are not used directly (REF): Section 10.4.5, Augmentation element declarations
+   Rule 10-34, Augmentation elements are not used directly: Section 10.4.5, Augmentation element declarations
    Rule 10-35: Section 10.5.1, Metadata types
    Rule 10-36: Section 10.5.1, Metadata types
    Rule 10-37, Metadata types are derived from metadata types: Section 10.5.1, Metadata types
@@ -5815,8 +6238,8 @@ Appendix F. Index of rules
    Rule 11-13, Element type does not have a simple type name: Section 11.2.1, Element declaration
    Rule 11-14, Element type is from conformant namespace: Section 11.2.1, Element declaration
    Rule 11-15, Name of element that ends in "Abstract" is abstract: Section 11.2.1, Element declaration
-   Rule 11-16, Name of element declaration with simple content has representation term (REF, EXT): Section 11.2.1.1, Object element declarations
-   Rule 11-17, Name of element declaration with simple content has representation term (SET): Section 11.2.1.1, Object element declarations
+   Rule 11-16, Name of element declaration with simple content has representation term: Section 11.2.1.1, Object element declarations
+   Rule 11-17, Name of element declaration with simple content has representation term: Section 11.2.1.1, Object element declarations
    Rule 11-18, Element substitution group defined by conformant schema: Section 11.2.2, Element substitution group
    Rule 11-19, Attribute type defined by conformant schema: Section 11.2.3, Attribute declaration
    Rule 11-20, Attribute name uses representation term: Section 11.2.3, Attribute declaration
