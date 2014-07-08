@@ -1,0 +1,33 @@
+
+Notes on installing the NIEM NDR tools
+
+Installing on Windows 7
+  
+  Install Cygwin. 
+
+  In Cygwin, install packages:
+
+    git
+    make
+    curl
+    unzip
+    patch
+
+  Clone the repository using git:
+
+    In a Cygwin terminal:
+
+       cd
+       git clone https://github.com/webb/niem-ndr-tools.git
+        
+  Build the toolset:
+
+    Make sure you're on the Internet.
+
+    In a Cygwin terminal:
+
+      cd ~/niem-ndr-tools
+      make all
+
+
+
