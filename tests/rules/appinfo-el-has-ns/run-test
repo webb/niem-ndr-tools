@@ -48,5 +48,3 @@ test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -a error1.niem-core.xsd
 test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -a error2.niem-core.xsd
 
 test_exit
-
-
