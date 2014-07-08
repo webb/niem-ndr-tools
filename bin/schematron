@@ -133,7 +133,7 @@ if [[ "$FORCE_REBUILD" = true || "$XSL" -ot "$ABSTRACT" ]]
 then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- \
     -o:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$XSL")" \
     -xsl:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$TO_SVRL_XSL")" \
-    "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ABSTRACT")"
+    "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ABSTRACT")" \
     allow-foreign=true full-path-notation=4
 else vecho "No need to rebuild \"$XSL\""
 fi
