@@ -22,9 +22,4 @@ EOF
 
 test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=set -c xml-catalog.xml invalid-niem-core.xsd
 
-
-
-
-
-
-
+test_exit
