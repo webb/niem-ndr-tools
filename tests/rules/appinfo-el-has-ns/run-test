@@ -10,11 +10,10 @@ test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:failed-assert:req-ct
 2:failed-assert:req-ct-ref
 2:failed-assert:req-target-ns
-2:failed-assert:sch-has-dd
+2:failed-assert:rule-schema-has-dd
 2:successful-report:well-formed-xml
 3:failed-assert:el-has-dd
 3:failed-assert:el-is-nillable
@@ -28,7 +27,6 @@ test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 EOF
