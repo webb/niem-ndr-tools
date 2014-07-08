@@ -3,6 +3,8 @@
 . "$(dirname "$0")"/../../../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_test.bash
 
+cd "$(dirname "$0")"
+
 test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
@@ -12,7 +14,7 @@ test_set_stdout <<EOF
 2:successful-report:well-formed-xml
 EOF
 
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref edxl-cap.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref edxl-cap.xsd
 
 test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document

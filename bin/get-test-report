@@ -123,9 +123,16 @@ vrun "${COMMAND[@]}" > "$SVRL_RESULTS"
 
 temp_make_file ANNOTATED_SVRL_RESULTS UNSORTED_TEST_REPORT
 
-vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -L -XSL "$ANNOTATE_SVRL_XSL"  -IN "$SVRL_RESULTS" -PARAM ndr-id-map "$NDR_ID_MAP" -OUT "$ANNOTATED_SVRL_RESULTS"
+vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -L \
+    -XSL "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATE_SVRL_XSL")" \
+    -IN "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$SVRL_RESULTS")" \
+    -PARAM ndr-id-map "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$NDR_ID_MAP")" \
+    -OUT "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATED_SVRL_RESULTS")"
 
-vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -XSL "$ANNOTATED_SVRL_TO_TEXT_XSL" -IN "$ANNOTATED_SVRL_RESULTS" -OUT "$UNSORTED_TEST_REPORT"
+vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- \
+    -XSL "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATED_SVRL_TO_TEXT_XSL")" \
+    -IN "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATED_SVRL_RESULTS")" \
+    -OUT "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$UNSORTED_TEST_REPORT")"
 
 vrun sort --field-separator=: --key=1n --key=3f --key=2f "$UNSORTED_TEST_REPORT"
 

@@ -39,6 +39,6 @@ shift $((OPTIND-1))
 ensure "Need one argument" test $# = 1
 ensure_file_exists "$1"
 
-"$NDR_TOOLS_ROOT_DIR/bin/xalan" -- -XSL "$GET_CONFORMANCE_TARGET_URIS_XSL" -IN "$1"
-
-
+"$NDR_TOOLS_ROOT_DIR/bin/xalan" -- \
+    -XSL "$( "NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$GET_CONFORMANCE_TARGET_URIS_XSL" )" \
+    -IN "$( "NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$1" )"
