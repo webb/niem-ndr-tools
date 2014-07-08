@@ -163,18 +163,31 @@ distclean: clean
 TEST_SCRIPTS =     $(shell find tests -type f -name 'run-test*' ! -name '*~'   -perm -500)
 BAD_TEST_SCRIPTS = $(shell find tests -type f -name 'run-test*' ! -name '*~' ! -perm -500)
 TEST_TOKENS = $(patsubst %,$(TOKENS_DIR)/ran-test/%,$(TEST_SCRIPTS))
+.PRECIOUS: $(TEST_TOKENS)
 
 check:
 	@ for s in $(BAD_TEST_SCRIPTS); do printf "Bad permission on %s\n" "$$s"; done
 
-retest:
-	@ $(RM) $(TEST_TOKENS)
-	@ $(MAKE) test
+
+untest:
+	@ $(RM) -rf $(TOKENS_DIR)/ran-test $(TOKENS_DIR)/running
 
 test: $(TEST_TOKENS)
+	true
 
+report: $(TEST_TOKENS)
+	@ for file in $(TEST_TOKENS); \
+	do if test -s $$file; \
+	   then printf "===============================================\nFile %s\n" $$file; \
+	     cat $$file; \
+	   fi; \
+	done
+
+# This is built so that it can be parallelized (e.g., run with make -j 8)
 $(TOKENS_DIR)/ran-test/%: %
 	@ mkdir -p $(dir $@)
-	if ! bin/run-tests $< > $@; then rm $@; fi
-
+	@ mkdir -p $(TOKENS_DIR)/running
+	@ A=$<; touch $(TOKENS_DIR)/running/$${A//\//_}
+	@- bin/run-tests $<  2>&1 | tee $@
+	@ A=$<; rm $(TOKENS_DIR)/running/$${A//\//_}
 
