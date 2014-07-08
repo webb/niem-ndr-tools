@@ -53,7 +53,7 @@ opt_param () {
 
 #HELP:  --xml-catalog=$xml-catalog | -c $xml-catalog: Use XML catalog for cross-references
 opt_xml_catalog () {
-    PARAMS+=("+xml-catalog=$1")
+    PARAMS+=("+xml-catalog=$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$1")")
 }
 
 OPTIND=1
@@ -114,22 +114,35 @@ ABSTRACT=$SCHEMA_DIR/tmp.$SCHEMA_BASE.abstract.xml
 XSL=$SCHEMA_DIR/tmp.$SCHEMA_BASE.xsl
 
 if [[ "$FORCE_REBUILD" = true || "$INCLUDE" -ot "$SCHEMA" ]]
-then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- -o:"$INCLUDE" -xsl:"$INCLUDE_XSL" "$SCHEMA"
+then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- \
+    -o:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$INCLUDE")" \
+    -xsl:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$INCLUDE_XSL")" \
+    "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$SCHEMA")"
 else vecho "No need to rebuild \"$INCLUDE\""
 fi
 
 if [[ "$FORCE_REBUILD" = true || "$ABSTRACT" -ot "$INCLUDE" ]]
-then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- -o:"$ABSTRACT" -xsl:"$ABSTRACT_XSL" "$INCLUDE"
+then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- \
+    -o:"("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ABSTRACT")" \
+    -xsl:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ABSTRACT_XSL")" \
+    "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$INCLUDE")"
 else vecho "No need to rebuild \"$ABSTRACT\""
 fi
 
 if [[ "$FORCE_REBUILD" = true || "$XSL" -ot "$ABSTRACT" ]]
-then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- -o:"$XSL" -xsl:"$TO_SVRL_XSL" "$ABSTRACT" allow-foreign=true full-path-notation=4
+then vrun "$NDR_TOOLS_ROOT_DIR"/bin/saxon -- \
+    -o:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$XSL")" \
+    -xsl:"("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$TO_SVRL_XSL")" \
+    "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ABSTRACT")"
+    allow-foreign=true full-path-notation=4
 else vecho "No need to rebuild \"$XSL\""
 fi
 
 vecho "Validating file \"$1\" against schema \"$SCHEMA\"" 
-COMMAND=("$NDR_TOOLS_ROOT_DIR"/bin/saxon --catalog="$NDR_TOOLS_ROOT_DIR/xml-catalog.xml" -- -l:on -xsl:"$XSL" "$1")
+COMMAND=( "$NDR_TOOLS_ROOT_DIR"/bin/saxon --catalog="$NDR_TOOLS_ROOT_DIR/xml-catalog.xml" -- -l:on \
+    -xsl:"$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$XSL")" \
+    "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$1")" )
+
 if (( ${#PARAMS[@]} > 0 ))
 then COMMAND+=("${PARAMS[@]}")
 fi

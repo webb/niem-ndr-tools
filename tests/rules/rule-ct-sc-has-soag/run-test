@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "$0")"
 
-. ../../../lib/common.bash
+
+. "$(dirname "$0")"/../../../lib/common.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_test.bash
+
+cd "$(dirname "$0")"
 
 test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document

@@ -10,6 +10,7 @@
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
 . "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
 
 vecho "in $0"
 
@@ -19,12 +20,18 @@ opt_saxon_help () {
     exit
 }
 
-SAXON_CLASSPATH="$NDR_TOOLS_ROOT_DIR"/pkg/saxon/saxon9he.jar
-
 run_saxon_java () {
-    COMMAND=(vrun java -classpath "$SAXON_CLASSPATH" net.sf.saxon.Transform)
+    SAXON_CLASSPATH="$NDR_TOOLS_ROOT_DIR/pkg/saxon/saxon9he.jar"
     if (( ${#CATALOGS} > 0 ))
-    then COMMAND+=( "-catalog:$CATALOGS"  )
+    then SAXON_CLASSPATH+=":$NDR_TOOLS_ROOT_DIR/pkg/xml-commons-resolver/resolver.jar"
+    fi
+
+    COMMAND=(vrun java \
+        -classpath "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-classpath "$SAXON_CLASSPATH")" \
+        net.sf.saxon.Transform)
+
+    if (( ${#CATALOGS} > 0 ))
+    then COMMAND+=("-catalog:$CATALOGS")
     fi
     COMMAND+=("$@")
     vrun "${COMMAND[@]}"
@@ -35,11 +42,11 @@ run_saxon_java () {
 
 CATALOGS=""
 opt_catalog () {
-    if (( ${#CATALOGS} == 0 ))
-    then SAXON_CLASSPATH+=":$NDR_TOOLS_ROOT_DIR/pkg/xml-commons-resolver/resolver.jar"
-        CATALOGS="$1"
-    else CATALOGS+=";$1"
+    ensure_file_exists "$1"
+    if (( ${#CATALOGS} > 0 ))
+    then CATALOGS+=";"
     fi
+    CATALOGS+="$1"
 }
 
 OPTIND=1

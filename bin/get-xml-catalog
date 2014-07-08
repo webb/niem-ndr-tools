@@ -40,7 +40,9 @@ EOF
 
 for NAME
 do 
-    SCHEMA_NAMESPACE=$("$NDR_TOOLS_ROOT_DIR/bin/xalan" -- -XSL "$NDR_TOOLS_ROOT_DIR/lib/get-xsd-target-namespace.xsl" -IN "$NAME")
+    SCHEMA_NAMESPACE=$( "$NDR_TOOLS_ROOT_DIR/bin/xalan" -- \
+        -XSL "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$NDR_TOOLS_ROOT_DIR/lib/get-xsd-target-namespace.xsl")" \
+        -IN "$("NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$NAME")" )
     printf "  <uri name=\"%s\" uri=\"%s\"/>\n" "$SCHEMA_NAMESPACE" "$NAME"
 done
 

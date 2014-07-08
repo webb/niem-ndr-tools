@@ -8,6 +8,7 @@ if test is-set != "${NDR_TOOLS_LOADED_COMMON_BASH:+is-set}"
 then NDR_TOOLS_LOADED_COMMON_BASH=true
 
     set -o nounset -o errexit
+    unset CDPATH
 
     if test is-set = "${NDR_TOOLS_ROOT_DIR:+is-set}"
     then printf "Warning: you don't need to set \$NDR_TOOLS_ROOT_DIR in %s\n" "${BASH_SOURCE[*]:1}" >&2

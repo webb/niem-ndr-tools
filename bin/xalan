@@ -13,7 +13,7 @@
 
 vecho "in $0"
 
-CLASSPATH=$("$NDR_TOOLS_ROOT_DIR"/bin/join-strings --separator=":" "$NDR_TOOLS_ROOT_DIR"/pkg/xalan/*.jar)
+XALAN_CLASSPATH=$("$NDR_TOOLS_ROOT_DIR"/bin/join-strings --separator=":" "$NDR_TOOLS_ROOT_DIR"/pkg/xalan/*.jar)
 
 #HELP:  --xalan-help: print Xalan Java's help
 opt_xalan_help () {
@@ -21,7 +21,7 @@ opt_xalan_help () {
 }
 
 run_xalan_java () {
-    vrun java -classpath "$CLASSPATH" org.apache.xalan.xslt.Process "$@"
+    vrun java -classpath "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-classpath "$XALAN_CLASSPATH")" org.apache.xalan.xslt.Process "$@"
 }
 
 OPTIND=1
