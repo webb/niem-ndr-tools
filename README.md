@@ -21,17 +21,17 @@ Available on github at https://github.com/webb/niem-ndr-tools
   
   In a Cygwin terminal:
 
-  ````
+  ```bash
 cd
 git clone https://github.com/webb/niem-ndr-tools.git
-````
+```
 3. Build the toolset:
 
   Make sure you're on the Internet.
 
   In a Cygwin terminal:
 
-    ````
+    ```bash
 cd ~/niem-ndr-tools
 make all
 ````
