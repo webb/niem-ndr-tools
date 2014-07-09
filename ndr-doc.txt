@@ -1,8 +1,8 @@
 National Information Exchange Model Naming and Design Rules
 
-Version 3.0beta2pre2
+Version 3.0beta2pre3
 
-July 2, 2014
+July 11, 2014
 
 NIEM Technical Architecture Committee (NTAC)
 
