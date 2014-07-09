@@ -13,7 +13,14 @@ EXIT_STATUS=0
 
 temp_make_file RULES RULE_DIRS TESTS
 
-"$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -IN "$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml -XSL "$NDR_TOOLS_ROOT_DIR"/lib/get-rule-descriptive-ids.xsl | sort -u > "$RULES"
+"$NDR_TOOLS_ROOT_DIR"/bin/xalan -- \
+	-IN "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml)" \
+	-XSL "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$NDR_TOOLS_ROOT_DIR"/lib/get-rule-descriptive-ids.xsl)" \
+	| sort -u > "$RULES"
+
+if "$NDR_TOOLS_ROOT_DIR"/bin/is-cygin
+then sed -i -e 's/\r//' "$RULES"
+fi
 
 find rules -maxdepth 1 -mindepth 1 -type d | sed -e 's%^rules/%%' | sort -u > "$RULE_DIRS"
 
@@ -24,6 +31,9 @@ done < <(comm -23 "$RULES" "$RULE_DIRS")
 while read -r -d $'\n'
 do test_fail "Rule test dir exists for nonexistent rule \"$REPLY\""
 done < <(comm -13 "$RULES" "$RULE_DIRS")
+
+echo comm -13 "$RULES" "$RULE_DIRS"
+comm -13 "$RULES" "$RULE_DIRS"
 
 while read -r -d $'\n'
 do 
