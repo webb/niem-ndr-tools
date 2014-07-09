@@ -115,9 +115,9 @@ vecho "Validating against Schematron schema \"$1\""
 
 COMMAND=("$NDR_TOOLS_ROOT_DIR"/bin/schematron --schematron-schema="$SCHEMA")
 if [[ ${XML_CATALOG:+is-set} ]]
-then COMMAND+=(--param=+xml-catalog="$XML_CATALOG")
+then COMMAND+=(--param=+xml-catalog="$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$XML_CATALOG")")
 fi
-COMMAND+=("$1")
+COMMAND+=("$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$1")")
 
 vrun "${COMMAND[@]}" > "$SVRL_RESULTS"
 
