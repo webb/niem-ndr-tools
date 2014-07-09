@@ -5,6 +5,10 @@ A set of tools for testing and using the NIEM Naming and Design Rules Schematron
 
 Available on github at https://github.com/webb/niem-ndr-tools
 
+There are several [NIEM NDR versions](http://reference.niem.gov/niem/specification/naming-and-design-rules/).
+
+
+
 # Installing the NIEM NDR tools
 
 ## Installing on Windows 7 with Cygwin
