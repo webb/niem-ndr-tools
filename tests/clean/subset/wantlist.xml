@@ -33,10 +33,21 @@
     <w:Facet w:facet="enumeration" w:value="Official"/>
   </w:Type>
   <w:Type w:name="nc:PassportCategoryCodeType" w:isRequested="true"/>
+  <w:Type w:name="nc:PersonNameType" w:isRequested="false">
+    <w:ElementInType w:name="nc:PersonFullName" w:isReference="false"
+      w:minOccurs="0" w:maxOccurs="unbounded"/>
+    <w:ElementInType w:name="nc:PersonNameAugmentationPoint"
+      w:isReference="false" w:minOccurs="0" w:maxOccurs="unbounded"/>
+  </w:Type>
   <w:Type w:name="nc:PersonType" w:isRequested="false">
     <w:ElementInType w:name="nc:PersonBirthDate" w:isReference="false"
       w:minOccurs="0" w:maxOccurs="unbounded"/>
+    <w:ElementInType w:name="nc:PersonName" w:isReference="false"
+      w:minOccurs="0" w:maxOccurs="unbounded"/>
     <w:ElementInType w:name="nc:PersonAugmentationPoint"
       w:isReference="false" w:minOccurs="0" w:maxOccurs="unbounded"/>
+  </w:Type>
+  <w:Type w:name="nc:TextType" w:isRequested="false">
+    <w:AttributeInType w:name="nc:truncationIndicator" w:minOccurs="0" w:maxOccurs="1"/>
   </w:Type>
 </w:WantList>
