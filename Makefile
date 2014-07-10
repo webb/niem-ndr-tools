@@ -188,6 +188,6 @@ $(TOKENS_DIR)/ran-test/%: %
 	@ mkdir -p $(dir $@)
 	@ mkdir -p $(TOKENS_DIR)/running
 	@ A=$<; touch $(TOKENS_DIR)/running/$${A//\//_}
-	@- bin/run-tests $<  2>&1 | tee $@
+	@ bin/run-tests $< 2>&1 | tee $@
 	@ A=$<; rm $(TOKENS_DIR)/running/$${A//\//_}
 
