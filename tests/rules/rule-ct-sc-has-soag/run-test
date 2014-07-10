@@ -11,18 +11,22 @@ test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
+2:successful-report:target-ns-is-rfc3986
+2:successful-report:well-formed-xml
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref ok.xsd
+
+test_set_stdout <<EOF
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 60:failed-assert:rule-ct-sc-has-soag
 EOF
 
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref -c fail1-xml-catalog.xml fail1-niem-core.xsd
-
-test_set_stdout <<EOF
-EOF
-
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=set -c fail1-xml-catalog.xml fail1-niem-core.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref no-soag.xsd
 
 
 
