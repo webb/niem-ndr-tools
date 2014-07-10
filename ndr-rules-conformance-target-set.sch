@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for XML Schema document sets</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -8,15 +8,15 @@
 <sch:ns prefix="structures" uri="http://release.niem.gov/niem/structures/3.0/"/>
 <sch:ns prefix="term" uri="http://release.niem.gov/niem/localTerminology/3.0/"/>
       
-<sch:pattern id="rule_9-34"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
+<sch:pattern id="rule_9-31"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
   <sch:rule context="xs:complexType[         nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))         or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument'))       ]/xs:complexContent">
-    <sch:assert test="some $derivation in xs:*[self::xs:extension or self::xs:restriction],                            $base-qname in resolve-QName($derivation/@base, $derivation),                            $base-type in nf:resolve-type($derivation, $base-qname) satisfies                          empty($base-type/self::xs:complexType/xs:simpleContent)">Rule 9-34: The base type of complex type that has complex content MUST have complex content.</sch:assert>
+    <sch:assert test="some $derivation in xs:*[self::xs:extension or self::xs:restriction],                            $base-qname in resolve-QName($derivation/@base, $derivation),                            $base-type in nf:resolve-type($derivation, $base-qname) satisfies                          empty($base-type/self::xs:complexType/xs:simpleContent)">Rule 9-31: The base type of complex type that has complex content MUST have complex content.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_9-45"><sch:title>Element type is not simple type</sch:title>
+<sch:pattern id="rule_9-41"><sch:title>Element type is not simple type</sch:title>
   <sch:rule context="xs:element[(nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ReferenceSchemaDocument'))                                  or nf:has-effective-conformance-target-identifier(., xs:anyURI('http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument')))                                 and exists(@type)]">
-    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-45: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
+    <sch:assert test="every $type-qname in resolve-QName(@type, .) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (some $type in nf:resolve-type(., $type-qname) satisfies                               empty($type/self::xs:simpleType)))">Rule 9-41: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
