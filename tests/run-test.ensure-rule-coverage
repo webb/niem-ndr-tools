@@ -32,9 +32,6 @@ while read -r -d $'\n'
 do test_fail "Rule test dir exists for nonexistent rule \"$REPLY\""
 done < <(comm -13 "$RULES" "$RULE_DIRS")
 
-echo comm -13 "$RULES" "$RULE_DIRS"
-comm -13 "$RULES" "$RULE_DIRS"
-
 while read -r -d $'\n'
 do 
     rule_dir=rules/$REPLY
