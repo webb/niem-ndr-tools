@@ -9,7 +9,6 @@ test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 EOF
@@ -20,12 +19,11 @@ test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 28:failed-assert:rule-owner-of-appinfo-externaladaptertypeindicator
 EOF
 
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref invalid.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ref element-has-indicator.xsd
 
 
