@@ -9,23 +9,24 @@ test_set_stdout <<EOF
 2:successful-report:is-ctas-conformant-document
 2:successful-report:is-schema-doc
 2:successful-report:ns-valid
-2:successful-report:ns-well-formed
+2:successful-report:target-ns-is-rfc3986
+2:successful-report:well-formed-xml
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref ok.xsd
+
+test_set_stdout <<EOF
+2:successful-report:is-ctas-conformant-document
+2:successful-report:is-schema-doc
+2:successful-report:ns-valid
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
 7:failed-assert:rule-external-import-has-dd
 EOF
 
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref -c fail1-xml-catalog.xml fail1-edxl-cap.xsd
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref -c fail2-xml-catalog.xml fail2-edxl-cap.xsd
-
-test_set_stdout <<EOF
-EOF
-
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=set -c fail1-xml-catalog.xml fail1-edxl-cap.xsd
-test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=set -c fail2-xml-catalog.xml fail2-edxl-cap.xsd
-
-
-
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref no-annotation.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref no-doc.xsd
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref empty-doc.xsd
 
 
 
