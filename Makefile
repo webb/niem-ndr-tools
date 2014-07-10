@@ -173,7 +173,7 @@ untest:
 	@ $(RM) -rf $(TOKENS_DIR)/ran-test $(TOKENS_DIR)/running
 
 test: $(TEST_TOKENS)
-	true
+	@ true
 
 report: $(TEST_TOKENS)
 	@ for file in $(TEST_TOKENS); \
