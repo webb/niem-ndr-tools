@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" queryBinding="xslt2"><sch:title>Rules for reference XML Schema documents</sch:title><xsl:include href="ndr-functions.xsl"/>
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?><sch:schema xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"><sch:title>Rules for reference XML Schema documents</sch:title><xsl:include href="ndr-functions.xsl"/>
 <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
 <sch:ns prefix="xsl" uri="http://www.w3.org/1999/XSL/Transform"/>
 <sch:ns prefix="nf" uri="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#NDRFunctions"/>
@@ -118,7 +118,7 @@
             
 <sch:pattern id="rule_9-12"><sch:title>Simple type has data definition</sch:title>
   <sch:rule context="xs:simpleType">
-    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-12: A simple type MUST be have a data definition.</sch:assert>
+    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-12: A simple type MUST have a data definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
     
@@ -184,7 +184,7 @@
               
 <sch:pattern id="rule_9-23"><sch:title>Enumeration has data definition</sch:title>
   <sch:rule context="xs:enumeration">
-    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-23: An enumeration facet MUST be have a data definition.</sch:assert>
+    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-23: An enumeration facet MUST have a data definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
     
@@ -196,7 +196,7 @@
             
 <sch:pattern id="rule_9-25"><sch:title>Complex type has data definition</sch:title>
   <sch:rule context="xs:complexType">
-    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-25: A complex type MUST be have a data definition.</sch:assert>
+    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-25: A complex type MUST have a data definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
     
@@ -256,7 +256,7 @@
             
 <sch:pattern id="rule_9-36"><sch:title>Element declaration has data definition</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-36: An element declaration MUST be have a data definition.</sch:assert>
+    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-36: An element declaration MUST have a data definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
     
@@ -322,7 +322,7 @@
             
 <sch:pattern id="rule_9-48"><sch:title>Attribute declaration has data definition</sch:title>
   <sch:rule context="xs:attribute[exists(@name)]">
-    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-48: An attribute declaration MUST be have a data definition.</sch:assert>
+    <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies                         string-length(normalize-space(string($definition))) &gt; 0">Rule 9-48: An attribute declaration MUST have a data definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
     
@@ -574,7 +574,7 @@
                 
 <sch:pattern id="rule_10-10"><sch:title>Element use from external adapter type defined by external schema documents</sch:title>
   <sch:rule context="xs:element[@ref                                 and exists(ancestor::xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)])]">
-    <sch:assert test="some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies (                         $ref-namespace != nf:get-target-namespace(.)                         and nf:get-document-element(.)/self::xs:schema/xs:import[                               $ref-namespace = xs:anyURI(@namespace)                               and @appinfo:externalImportIndicator])">Rule 10-10: An element reference that appears within an external adapter type MUST have a target namespace that is imported as external.</sch:assert>
+    <sch:assert test="some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies                         nf:get-document-element(.)/xs:import[                           $ref-namespace = xs:anyURI(@namespace)                           and @appinfo:externalImportIndicator]">Rule 10-10: An element reference that appears within an external adapter type MUST have a target namespace that is imported as external.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -708,7 +708,7 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-38"><sch:title>Metadata element type is a metadata type</sch:title>
+<sch:pattern id="rule_10-38"><sch:title>Metadata element declaration type is a metadata type</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
     <sch:assert test="exists(@type[ends-with(., 'MetadataType')])                       = exists(@name[ends-with(., 'Metadata')])">Rule 10-38: An element MUST have a name that ends in 'Metadata' if and only if it has a type that is a metadata type.</sch:assert>
   </sch:rule>
@@ -899,24 +899,36 @@
   </sch:rule>
 </sch:pattern>
           
-<sch:pattern id="rule_11-36"><sch:title>Structures imported as conformant</sch:title>
+<sch:pattern id="rule_11-32"><sch:title>Standard opening phrase for abstract element</sch:title>
+  <sch:rule context="xs:element[xs:boolean(@abstract) = true()                                 and (ends-with(@name, 'Association')                                      or (every $suffix in ('Metadata', 'AugmentationPoint', 'Augmentation')                                            satisfies not(ends-with(@name, $suffix))))                        ]/xs:annotation/xs:documentation[1]">
+    <sch:assert test="starts-with(normalize-space(.), 'A data concept for ')">Rule 11-32: The data defintion for an abstract element MUST begin with the standard opening phrase "A data concept for ".</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_11-33"><sch:title>Standard opening phrase for association element</sch:title>
+  <sch:rule context="xs:element[empty(@abstract)                                  and ends-with(@name, 'Association')                        ]/xs:annotation/xs:documentation[1]">
+    <sch:assert test="some $phrase in ('A relationship ', 'An association ')                         satisfies starts-with(normalize-space(.), $phrase)">Rule 11-33: The data defintion for an association element that is not abstract MUST begin with the standard opening phrase "A relationship " or "An association ".</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_11-38"><sch:title>Structures imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                 and xs:anyURI(@namespace) = xs:anyURI('http://release.niem.gov/niem/structures/3.0/')]">
-    <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-36: An import of the structures namespace MUST NOT be labeled as an external import.</sch:assert>
+    <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-38: An import of the structures namespace MUST NOT be labeled as an external import.</sch:assert>
   </sch:rule>
 </sch:pattern>          
             
-<sch:pattern id="rule_11-37"><sch:title>XML namespace imported as conformant</sch:title>
+<sch:pattern id="rule_11-39"><sch:title>XML namespace imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                and xs:anyURI(@namespace) = xs:anyURI('http://www.w3.org/XML/1998/namespace')]">
-    <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-37: An import of the XML namespace MUST NOT be labeld as an external import.</sch:assert>
+    <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-39: An import of the XML namespace MUST NOT be labeld as an external import.</sch:assert>
   </sch:rule>
 </sch:pattern>          
             
-<sch:pattern id="rule_11-39"><sch:title>Consistently marked namespace imports</sch:title>
+<sch:pattern id="rule_11-41"><sch:title>Consistently marked namespace imports</sch:title>
   <sch:rule context="xs:import">
     <sch:let name="namespace" value="@namespace"/>
     <sch:let name="is-conformant" value="empty(@appinfo:externalImportIndicator)"/>
     <sch:let name="first" value="exactly-one(parent::xs:schema/xs:import[@namespace = $namespace][1])"/>
-    <sch:assert test=". is $first                       or $is-conformant = empty($first/@appinfo:externalImportIndicator)">Rule 11-39: All xs:import elements that have the same namespace MUST have the same conformance marking via appinfo:externalImportIndicator.</sch:assert>
+    <sch:assert test=". is $first                       or $is-conformant = empty($first/@appinfo:externalImportIndicator)">Rule 11-41: All xs:import elements that have the same namespace MUST have the same conformance marking via appinfo:externalImportIndicator.</sch:assert>
   </sch:rule>
 </sch:pattern>
           </sch:schema>

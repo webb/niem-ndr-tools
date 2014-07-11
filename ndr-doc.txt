@@ -1943,7 +1943,7 @@ Rule 9-12. Simple type has data definition
         <sch:rule context="xs:simpleType">
           <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies
                               string-length(normalize-space(string($definition))) &gt; 0"
-            >A simple type MUST be have a data definition.</sch:assert>
+            >A simple type MUST have a data definition.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2091,7 +2091,7 @@ Rule 9-23. Enumeration has data definition
         <sch:rule context="xs:enumeration">
           <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies
                               string-length(normalize-space(string($definition))) &gt; 0"
-            >An enumeration facet MUST be have a data definition.</sch:assert>
+            >An enumeration facet MUST have a data definition.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2120,7 +2120,7 @@ Rule 9-25. Complex type has data definition
         <sch:rule context="xs:complexType">
           <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies
                               string-length(normalize-space(string($definition))) &gt; 0"
-            >A complex type MUST be have a data definition.</sch:assert>
+            >A complex type MUST have a data definition.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2290,7 +2290,7 @@ Rule 9-36. Element declaration has data definition
         <sch:rule context="xs:element[exists(@name)]">
           <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies
                               string-length(normalize-space(string($definition))) &gt; 0"
-            >An element declaration MUST be have a data definition.</sch:assert>
+            >An element declaration MUST have a data definition.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -2461,7 +2461,7 @@ Rule 9-48. Attribute declaration has data definition
         <sch:rule context="xs:attribute[exists(@name)]">
           <sch:assert test="some $definition in xs:annotation/xs:documentation[1] satisfies
                               string-length(normalize-space(string($definition))) &gt; 0"
-            >An attribute declaration MUST be have a data definition.</sch:assert>
+            >An attribute declaration MUST have a data definition.</sch:assert>
         </sch:rule>
       </sch:pattern>
 
@@ -3339,7 +3339,7 @@ Rule 10-6. Instance of RoleOf element indicates a role object
 
    To construct such a component, a NIEM-conformant schema must import the namespace defined by the [external schema document].
 
-   Rule 11-34, Reference schema imports reference schema and Rule 11-35, Extension schema document imports reference or extension schema require that xs:import elements be consistent with an importing [schema document].
+   Rule 11-36, Reference schema imports reference schema and Rule 11-37, Extension schema document imports reference or extension schema require that xs:import elements be consistent with an importing [schema document].
 
    A NIEM-conformant schema has well-known documentation points. Therefore, a schema that imports a NIEM-conformant namespace need not provide additional documentation. However, when an external schema document is imported, appropriate documentation must be provided at the point of import because documentation associated with external schema documents is undefined and variable. In this particular case, documentation of external schema documents is required at their point of use in NIEM.
 
@@ -3393,11 +3393,10 @@ Rule 10-10. Element use from external adapter type defined by external schema do
       <sch:pattern>
         <sch:rule context="xs:element[@ref
                                       and exists(ancestor::xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)])]">
-          <sch:assert test="some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies (
-                              $ref-namespace != nf:get-target-namespace(.)
-                              and nf:get-document-element(.)/self::xs:schema/xs:import[
-                                    $ref-namespace = xs:anyURI(@namespace)
-                                    and @appinfo:externalImportIndicator])"
+          <sch:assert test="some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies
+                              nf:get-document-element(.)/xs:import[
+                                $ref-namespace = xs:anyURI(@namespace)
+                                and @appinfo:externalImportIndicator]"
             >An element reference that appears within an external adapter type MUST have a target namespace that is imported as external.</sch:assert>
         </sch:rule>
       </sch:pattern>
@@ -3654,7 +3653,11 @@ Rule 10-19. Association element type is an association type
 
    To handle this need, NIEM has adopted augmentations. There are several parts that fit together for the definition and use of augmentations:
 
-      *  Each object type and association type carries an augmentation point element, which provides a place for domain- and extension-specific content in the type. Augmentation points are optional in extension schema documents, but must appear in reference schema documents.
+      *  Each object type and association type carries an augmentation point element, which provides a place for domain- and extension-specific content in the type. Augmentation points are optional in extension schema documents, but must appear in reference schema documents. Augmentation points are also defined for the base types for [object types] and [association types]:
+
+            *  structures:ObjectType has augmentation point structures:ObjectAugmentationPoint.
+
+            *  structures:AssociationType has augmentation point structures:AssociationAugmentationPoint.
 
       *  A developer of a domain or other schema that extends common types may define elements that are substitutable for an augmentation point. Each of these elements expresses an additional characteristic or relationship of the base type.
 
@@ -3768,6 +3771,8 @@ Rule 10-19. Association element type is an association type
       </xs:complexType>
 
    This method can be used by an information exchange developer to define individual attributes that can be applied to any augmentable type.
+
+   Note that the augmentation method can introduce an additional element into every [object type] or [association type] in an exchange, which provides opportunity for some rrors in schema development. It is important that developers of exchanges not introduce elements substitutable for an augmentation point into complex types multiple ways, as it can introduce XML Schema's Unique Particle Attribution errors. A single complex type should not introduce an element via both element substition and element reference. This constraint is also supported by Rule 11-21, Element or attribute declaration introduced only once into a type.
 
 10.4.1. Augmentable types
 
@@ -4027,6 +4032,8 @@ Rule 10-34. Augmentation elements are not used directly
 
 10.5. Metadata
 
+   There are rules for use of metdata in instance in Section 12.3, Instance metadata, below.
+
 10.5.1. Metadata types
 
    Within NIEM, metadata is defined as "data about data." This may include information such as the security of a piece of data or the source of the data. These pieces of metadata may be composed into a metadata type. The types of data to which metadata may be applied may be constrained.
@@ -4063,17 +4070,15 @@ Rule 10-37. Metadata types are derived from metadata types
 
    Using the qualifier Metadata immediately identifies a type as representing metadata.
 
-10.5.2. Metadata elements
+10.5.2. Metadata element declarations
 
-10.5.2.1. Metadata element declarations
+   [Definition: metadata element declaration]
 
-   [Definition: metadata element]
-
-      Within a NIEM-conformant schema, a metadata element is an element with a type that is a metadata type.
+      A metadata element declaration is an element declaration defined by a [reference schema document] or an [extension schema document] that defines a metadata object. A metadata element declaration has a name ending in "Metadata", and a {type definition} that is a [metadata type].
 
     There are limitations on the meaning of a metadata element in an instance; it does not establish existence of an object, nor is it a property of its containing object.
 
-Rule 10-38. Metadata element type is a metadata type
+Rule 10-38. Metadata element declaration type is a metadata type
 
    [Rule 10-38] (REF, EXT)
 
@@ -4550,7 +4555,7 @@ Rule 10-64. Name has representation term only when appropriate
 
    If a component is described as having some [application information], this means that the elements in question appear in an xs:appinfo annotation of the element that defines the component.
 
-   The majority of uses of application information from the [appinfo namespace] are described in the modeling rules for the specific component.
+   The majority of uses of [application information] from the [appinfo namespace] are described in the modeling rules for the specific component.
 
 Rule 10-65. Machine-readable annotations are valid
 
@@ -4686,6 +4691,8 @@ Rule 10-74. term:LocalTerm annotates schema
             >The element term:LocalTerm MUST be application information an an element xs:schema.</sch:assert>
         </sch:rule>
       </sch:pattern>
+
+   This document defines the term [application information].
 
 Rule 10-75. term:LocalTerm has literal or definition
 
@@ -5172,7 +5179,7 @@ Rule 11-24. Schema uses only known attribute groups
 
       1. A text definition of each component. This describes what the component means. The term used in this specification for such a text definition is data definition.
 
-      2. The structural definition of each component. This is made up of XML Schema component definitions, along with certain application information (appinfo).
+      2. The structural definition of each component. This is made up of XML Schema component definitions, along with certain [application information] (via xs:appinfo).
 
    When possible, meaning is expressed via XML Schema mechanisms: type derivation, element substitution, specific types and structures, as well as names that are trivially parseable. Beyond that, NIEM-specific syntax must be used, as discussed in this section.
 
@@ -5274,19 +5281,50 @@ Rule 11-31. Data definition follows 11179-4 recommendations
 
       Each [data definition] SHOULD conform to the recommendations for data definitions provided by [ISO 11179-4] Section 5.3, Recommendations.
 
+11.6.2. Data definition opening phrases
+
+Rule 11-32. Standard opening phrase for abstract element
+
+   [Rule 11-32] (REF, EXT)
+
+      <sch:pattern>
+        <sch:rule context="xs:element[xs:boolean(@abstract) = true()
+                                      and (ends-with(@name, 'Association')
+                                           or (every $suffix in ('Metadata', 'AugmentationPoint', 'Augmentation')
+                                                 satisfies not(ends-with(@name, $suffix))))
+                             ]/xs:annotation/xs:documentation[1]">
+          <sch:assert test="starts-with(normalize-space(.), 'A data concept for ')"
+            >The data defintion for an abstract element MUST begin with the standard opening phrase "A data concept for ".</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+
+Rule 11-33. Standard opening phrase for association element
+
+   [Rule 11-33] (REF, EXT)
+
+      <sch:pattern>
+        <sch:rule context="xs:element[empty(@abstract) 
+                                      and ends-with(@name, 'Association')
+                             ]/xs:annotation/xs:documentation[1]">
+          <sch:assert test="some $phrase in ('A relationship ', 'An association ')
+                              satisfies starts-with(normalize-space(.), $phrase)"
+            >The data defintion for an association element that is not abstract MUST begin with the standard opening phrase "A relationship " or "An association ".</sch:assert>
+        </sch:rule>
+      </sch:pattern>
+
 11.7. Schema as a whole
 
 11.7.1. xs:schema document element restrictions
 
-Rule 11-32. Same namespace means same components
+Rule 11-34. Same namespace means same components
 
-   [Rule 11-32] (REF, EXT)
+   [Rule 11-34] (REF, EXT)
 
       Two XML Schema documents MUST have the same value for attribute targetNamespace carried by the element xs:schema, if and only if they represent the same set of components.
 
-Rule 11-33. Different version means different view
+Rule 11-35. Different version means different view
 
-   [Rule 11-33] (REF, EXT)
+   [Rule 11-35] (REF, EXT)
 
       Two XML Schema documents MUST have the same value for attribute targetNamespace carried by the element xs:schema, and different values for attribute version carried by the element xs:schema if and only if they are different views of the same set of components.
 
@@ -5294,9 +5332,9 @@ Rule 11-33. Different version means different view
 
 11.8. Schema assembly
 
-Rule 11-34. Reference schema imports reference schema
+Rule 11-36. Reference schema imports reference schema
 
-   [Rule 11-34] (SET)
+   [Rule 11-36] (SET)
 
       <sch:pattern>
         <sch:rule context="xs:import[
@@ -5313,9 +5351,9 @@ Rule 11-34. Reference schema imports reference schema
 
    This document defines the term [reference schema document].
 
-Rule 11-35. Extension schema document imports reference or extension schema
+Rule 11-37. Extension schema document imports reference or extension schema
 
-   [Rule 11-35] (SET)
+   [Rule 11-37] (SET)
 
       <sch:pattern>
         <sch:rule context="xs:import[
@@ -5337,9 +5375,9 @@ Rule 11-35. Extension schema document imports reference or extension schema
 
    There are several namespaces that are treated specially by the NIEM NDR. When the following namespaces are imported into a conformant schema document, they must be imported as if they are conformant. That is, the xs:import element must not have an attribute appinfo:externalImportIndicator with a value of "true".
 
-Rule 11-36. Structures imported as conformant
+Rule 11-38. Structures imported as conformant
 
-   [Rule 11-36] (REF, EXT)
+   [Rule 11-38] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:import[exists(@namespace) 
@@ -5349,9 +5387,9 @@ Rule 11-36. Structures imported as conformant
         </sch:rule>
       </sch:pattern>          
 
-Rule 11-37. XML namespace imported as conformant
+Rule 11-39. XML namespace imported as conformant
 
-   [Rule 11-37] (REF, EXT)
+   [Rule 11-39] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:import[exists(@namespace)
@@ -5361,9 +5399,9 @@ Rule 11-37. XML namespace imported as conformant
         </sch:rule>
       </sch:pattern>          
 
-Rule 11-38. Each namespace may have only a single root schema in a schema set
+Rule 11-40. Each namespace may have only a single root schema in a schema set
 
-   [Rule 11-38] (SET)
+   [Rule 11-40] (SET)
 
       <sch:pattern>
         <sch:rule context="xs:schema[exists(@targetNamespace)
@@ -5375,11 +5413,11 @@ Rule 11-38. Each namespace may have only a single root schema in a schema set
         </sch:rule>
       </sch:pattern>
 
-Rule 11-39. Consistently marked namespace imports
+Rule 11-41. Consistently marked namespace imports
 
    XML Schemas allows multiple xs:import elements for the same namespace, which allows for multiple sets of annotations and schema locations. 
 
-   [Rule 11-39] (REF, EXT)
+   [Rule 11-41] (REF, EXT)
 
       <sch:pattern>
         <sch:rule context="xs:import">
@@ -5604,21 +5642,7 @@ Rule 12-7. Empty content has no meaning
 
    NIEM provides the metadata mechanism for giving information about object assertions. An object may have an attribute that refers to one or more metadata objects. A structures:metadata attribute indicates that a data item has the given metadata. A structures:relationshipMetadata attribute asserts that the link (or relationship) established by an element has the given metadata.
 
-   Figure 12-5: Simple example of instance metadata
-
-      <nc:Person>
-        <nc:PersonName structures:metadata="o25" structures:relationshipMetadata="o67">
-          <nc:PersonFullName>John Doe</nc:PersonFullName>
-        </nc:PersonName>
-      </nc:Person>
-      <nc:Metadata structures:id="o25">
-        <nc:SourceText>Adam Barber</nc:SourceText>
-      </nc:Metadata>
-      <nc:Metadata structures:id="o67">
-        <nc:ProbabilityPercent>0.25</nc:ProbabilityPercent>
-      </nc:Metadata>
-
-   Figure 12-6: Example of metadata used in an instance
+   Figure 12-5: Example of metadata used in an instance
 
       <nc:Person>
         <nc:PersonBirthDate structures:metadata="j86">
@@ -5684,29 +5708,23 @@ Rule 12-10. Values of structures:metadata refer to values of structures:id
 
       Given that each IDREF in the value of an attribute structures:metadata must match the value of an ID attribute on some element in the XML document, that ID attribute MUST be an occurrence of the attribute structures:id.
 
-Rule 12-11. Value of structures:metadata refers to instance of a metdata type
+Rule 12-11. Value of structures:relationshipMetadata refers to value of structures:id
 
    [Rule 12-11] (INS)
 
-      Each element that an attribute structures:metadata references MUST have a type definition that is derived from structures:MetadataType.
+      Given that each IDREF in the value of an attribute structures:relationshipMetadata must match the value of an ID attribute on some element in the XML document, that ID attribute MUST be an occurrence of the attribute structures:id.
 
-Rule 12-12. Value of structures:relationshipMetadata refers to value of structures:id
+Rule 12-12. structures:metadata and structures:relationshipMetadata refer to metadata elements
 
    [Rule 12-12] (INS)
 
-      Given that each IDREF in the value of an attribute structures:relationshipMetadata must match the value of an ID attribute on some element in the XML document, that ID attribute MUST be an occurrence of the attribute structures:id.
+      Each element referenced by an attribute structures:metadata or an attribute structures:relationshipMetadata MUST have [element declaration] that is a [metadata element declaration].
 
-Rule 12-13. Relationship metadata refers to metadata type
+   Although not implemented in Schematron, this rule covers the cases not covered by Rule 12-13, Attribute structures:metadata references metadata element.
+
+Rule 12-13. Attribute structures:metadata references metadata element
 
    [Rule 12-13] (INS)
-
-      Each element that an attribute structures:relationshipMetadata references MUST have a type definition that is derived from structures:MetadataType.
-
-   All structures:metadata and structures:relationshipMetadata attributes must refer to metadata objects, and the reference to that object must be established using the structures:id attribute, to facilitate processing of XML documents.
-
-Rule 12-14. Attribute structures:metadata references metadata element
-
-   [Rule 12-14] (INS)
 
       <sch:pattern>
         <sch:rule context="*[exists(@structures:metadata)]">
@@ -5717,11 +5735,11 @@ Rule 12-14. Attribute structures:metadata references metadata element
         </sch:rule>
       </sch:pattern>
 
-   Note that this will NOT catch a scenario in which the element with a name ending in "Metadata" is an external element; additional tests would be required to catch that.
+   Note that this will NOT diagnose a scenario in which the element with a name ending in "Metadata" is an external element; additional tests would be required to catch that.
 
-Rule 12-15. Attribute structures:relationshipMetadata references metadata element
+Rule 12-14. Attribute structures:relationshipMetadata references metadata element
 
-   [Rule 12-15] (INS)
+   [Rule 12-14] (INS)
 
       <sch:pattern>
         <sch:rule context="*[exists(@structures:relationshipMetadata)]">
@@ -5732,11 +5750,11 @@ Rule 12-15. Attribute structures:relationshipMetadata references metadata elemen
         </sch:rule>
       </sch:pattern>
 
-   Note that this will NOT catch a scenario in which the element with a name ending in "Metadata" is an external element; additional tests would be required to catch that.
+   Note that this will NOT diagnose a scenario in which the element with a name ending in "Metadata" is an external element; additional tests would be required to catch that.
 
-Rule 12-16. Metadata is applicable to element
+Rule 12-15. Metadata is applicable to element
 
-   [Rule 12-16] (INS)
+   [Rule 12-15] (INS)
 
       Given that an element $SUBJECT-ELEMENT uses a metadata element $METADATA-ELEMENT through a value in either an attribute structures:metadata or an attribute structures:relationshipMetadata, the element $SUBJECT-ELEMENT MUST be an applicable element for $METADATA-ELEMENT.
 
@@ -6109,8 +6127,8 @@ Appendix F. Index of rules
    Rule 10-35: Section 10.5.1, Metadata types
    Rule 10-36: Section 10.5.1, Metadata types
    Rule 10-37, Metadata types are derived from metadata types: Section 10.5.1, Metadata types
-   Rule 10-38, Metadata element type is a metadata type: Section 10.5.2.1, Metadata element declarations
-   Rule 10-39, Metadata element has applicable elements: Section 10.5.2.1, Metadata element declarations
+   Rule 10-38, Metadata element declaration type is a metadata type: Section 10.5.2, Metadata element declarations
+   Rule 10-39, Metadata element has applicable elements: Section 10.5.2, Metadata element declarations
    Rule 10-40, Name of element that ends in "Representation" is abstract: Section 10.7, The "Representation" pattern
    Rule 10-41, A substitution for a representation element declaration is a value for a type: Section 10, Rules for NIEM modeling, by NIEM concept
    Rule 10-42: Section 10.8.1, Extension of XSD namespace simple types
@@ -6179,14 +6197,16 @@ Appendix F. Index of rules
    Rule 11-29, Data definition uses standard opening phrase: Section 11.6.1, Human-readable documentation
    Rule 11-30, Data definition follows 11179-4 requirements: Section 11.6, Annotation components
    Rule 11-31, Data definition follows 11179-4 recommendations: Section 11.6, Annotation components
-   Rule 11-32, Same namespace means same components: Section 11.7.1, xs:schema document element restrictions
-   Rule 11-33, Different version means different view: Section 11.7.1, xs:schema document element restrictions
-   Rule 11-34, Reference schema imports reference schema: Section 11.8, Schema assembly
-   Rule 11-35, Extension schema document imports reference or extension schema: Section 11.8, Schema assembly
-   Rule 11-36, Structures imported as conformant: Section 11.8.1, Supporting namespaces are imported as conformant
-   Rule 11-37, XML namespace imported as conformant: Section 11.8.1, Supporting namespaces are imported as conformant
-   Rule 11-38, Each namespace may have only a single root schema in a schema set: Section 11.8, Schema assembly
-   Rule 11-39, Consistently marked namespace imports: Section 11.8, Schema assembly
+   Rule 11-32, Standard opening phrase for abstract element: Section 11.6.2, Data definition opening phrases
+   Rule 11-33, Standard opening phrase for association element: Section 11.6.2, Data definition opening phrases
+   Rule 11-34, Same namespace means same components: Section 11.7.1, xs:schema document element restrictions
+   Rule 11-35, Different version means different view: Section 11.7.1, xs:schema document element restrictions
+   Rule 11-36, Reference schema imports reference schema: Section 11.8, Schema assembly
+   Rule 11-37, Extension schema document imports reference or extension schema: Section 11.8, Schema assembly
+   Rule 11-38, Structures imported as conformant: Section 11.8.1, Supporting namespaces are imported as conformant
+   Rule 11-39, XML namespace imported as conformant: Section 11.8.1, Supporting namespaces are imported as conformant
+   Rule 11-40, Each namespace may have only a single root schema in a schema set: Section 11.8, Schema assembly
+   Rule 11-41, Consistently marked namespace imports: Section 11.8, Schema assembly
    Rule 12-1, Instance must be schema-valid: Section 12, XML instance document rules
    Rule 12-2, Element with structures:ref does not have content: Section 12.2, Reference elements
    Rule 12-3, Attribute structures:ref must reference structures:id: Section 12.2, Reference elements
@@ -6197,12 +6217,11 @@ Appendix F. Index of rules
    Rule 12-8, Metadata applies to referring entity: Section 12.3, Instance metadata
    Rule 12-9, Referent of structures:relationshipMetadata annotates relationship: Section 12.3, Instance metadata
    Rule 12-10, Values of structures:metadata refer to values of structures:id: Section 12.3, Instance metadata
-   Rule 12-11, Value of structures:metadata refers to instance of a metdata type: Section 12.3, Instance metadata
-   Rule 12-12, Value of structures:relationshipMetadata refers to value of structures:id: Section 12.3, Instance metadata
-   Rule 12-13, Relationship metadata refers to metadata type: Section 12.3, Instance metadata
-   Rule 12-14, Attribute structures:metadata references metadata element: Section 12.3, Instance metadata
-   Rule 12-15, Attribute structures:relationshipMetadata references metadata element: Section 12.3, Instance metadata
-   Rule 12-16, Metadata is applicable to element: Section 12.3, Instance metadata
+   Rule 12-11, Value of structures:relationshipMetadata refers to value of structures:id: Section 12.3, Instance metadata
+   Rule 12-12, structures:metadata and structures:relationshipMetadata refer to metadata elements: Section 12.3, Instance metadata
+   Rule 12-13, Attribute structures:metadata references metadata element: Section 12.3, Instance metadata
+   Rule 12-14, Attribute structures:relationshipMetadata references metadata element: Section 12.3, Instance metadata
+   Rule 12-15, Metadata is applicable to element: Section 12.3, Instance metadata
 
 Appendix G. General index
 

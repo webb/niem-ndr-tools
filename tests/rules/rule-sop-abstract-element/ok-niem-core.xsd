@@ -5,18 +5,6 @@
   </xs:annotation>
   <xs:import schemaLocation="../../proxy/xsd/3.0/xs.xsd" namespace="http://release.niem.gov/niem/proxy/xsd/3.0/"/>
   <xs:import schemaLocation="../../structures/3.0/structures.xsd" namespace="http://release.niem.gov/niem/structures/3.0/"/>
-  <xs:complexType name="AssociationType">
-    <xs:annotation>
-      <xs:documentation>A data type for an association, connection, relationship, or involvement somehow linking people, things, and/or activities together.</xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="structures:AssociationType">
-        <xs:sequence>
-          <xs:element ref="nc:AssociationAugmentationPoint" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:complexType name="DateType">
     <xs:annotation>
       <xs:documentation>A data type for a calendar date.</xs:documentation>
@@ -73,19 +61,6 @@
         <xs:attributeGroup ref="structures:SimpleObjectAttributeGroup"/>
       </xs:extension>
     </xs:simpleContent>
-  </xs:complexType>
-  <xs:complexType name="PersonAssociationType">
-    <xs:annotation>
-      <xs:documentation>A data type for an association between people.</xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="nc:AssociationType">
-        <xs:sequence>
-          <xs:element ref="nc:Person" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element ref="nc:PersonAssociationAugmentationPoint" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="PersonNameTextType">
     <xs:annotation>
@@ -145,11 +120,6 @@
       <xs:documentation>True if the length of a string is greater than the length of the field within which the string was stored in the exporting system; false otherwise.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
-  <xs:element name="AssociationAugmentationPoint" abstract="true">
-    <xs:annotation>
-      <xs:documentation>An augmentation point for AssociationType.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
   <xs:element name="Date" type="niem-xs:date" substitutionGroup="nc:DateRepresentation" nillable="true">
     <xs:annotation>
       <xs:documentation>A full date.</xs:documentation>
@@ -178,16 +148,6 @@
   <xs:element name="Person" type="nc:PersonType" nillable="true">
     <xs:annotation>
       <xs:documentation>A human being.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PersonAssociation" type="nc:PersonAssociationType" nillable="true">
-    <xs:annotation>
-      <xs:documentation>An association between people.</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PersonAssociationAugmentationPoint" abstract="true">
-    <xs:annotation>
-      <xs:documentation>An augmentation point for PersonAssociationType.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="PersonAugmentationPoint" abstract="true">
