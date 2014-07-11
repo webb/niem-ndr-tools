@@ -51,7 +51,8 @@
    <map:rule descriptiveID="el-top-level" ruleID="rule_9-35"/>
    <map:rule descriptiveID="el-has-dd" ruleID="rule_9-36"/>
    <map:rule descriptiveID="el-with-no-type-is-abstract" ruleID="rule_9-37"/>
-   <map:rule descriptiveID="el-with-type-xs-anysimpletype-is-abstract" ruleID="rule_9-38"/>
+   <map:rule descriptiveID="el-with-type-xs-anysimpletype-is-abstract"
+             ruleID="rule_9-38"/>
    <map:rule descriptiveID="el-type-not-xs" ruleID="rule_9-39"/>
    <map:rule descriptiveID="el-type-ns-not-special" ruleID="rule_9-40"/>
    <map:rule descriptiveID="el-type-not-st" ruleID="rule_9-41"/>
@@ -126,7 +127,8 @@
    <map:rule descriptiveID="rule-association-el-type-is-association-type"
              ruleID="rule_10-19"/>
    <map:rule descriptiveID="augmentable-type-has-aug-point" ruleID="rule_10-20"/>
-   <map:rule descriptiveID="augmentable-type-has-at-most-one-aug-point" ruleID="rule_10-21"/>
+   <map:rule descriptiveID="augmentable-type-has-at-most-one-aug-point"
+             ruleID="rule_10-21"/>
    <map:rule descriptiveID="aug-el-matches-aug-type" ruleID="rule_10-22"/>
    <map:rule descriptiveID="aug-pt-untyped" ruleID="rule_10-23"/>
    <map:rule descriptiveID="aug-pt-no-subst-grp" ruleID="rule_10-24"/>
@@ -137,7 +139,8 @@
    <map:rule descriptiveID="" ruleID="rule_10-29"/>
    <map:rule descriptiveID="aug-type-name" ruleID="rule_10-30"/>
    <map:rule descriptiveID="rule-augmentation-type-structure" ruleID="rule_10-31"/>
-   <map:rule descriptiveID="rule-type-derived-from-augmentation-type" ruleID="rule_10-32"/>
+   <map:rule descriptiveID="rule-type-derived-from-augmentation-type"
+             ruleID="rule_10-32"/>
    <map:rule descriptiveID="rule-augmentation-el-type-is-augmentation-type"
              ruleID="rule_10-33"/>
    <map:rule descriptiveID="rule-aug-el-not-used" ruleID="rule_10-34"/>
@@ -145,7 +148,8 @@
    <map:rule descriptiveID="" ruleID="rule_10-36"/>
    <map:rule descriptiveID="rule-metadata-type-derived-from-metadata-type"
              ruleID="rule_10-37"/>
-   <map:rule descriptiveID="rule-metadata-el-type-is-metadata-type" ruleID="rule_10-38"/>
+   <map:rule descriptiveID="rule-metadata-el-type-is-metadata-type"
+             ruleID="rule_10-38"/>
    <map:rule descriptiveID="rule-metadata-applicable-elements" ruleID="rule_10-39"/>
    <map:rule descriptiveID="el-representation-is-abstract" ruleID="rule_10-40"/>
    <map:rule descriptiveID="" ruleID="rule_10-41"/>
@@ -175,12 +179,15 @@
    <map:rule descriptiveID="" ruleID="rule_10-65"/>
    <map:rule descriptiveID="" ruleID="rule_10-66"/>
    <map:rule descriptiveID="rule-use-of-deprecated" ruleID="rule_10-67"/>
-   <map:rule descriptiveID="rule-owner-of-appinfo-conformantindicator" ruleID="rule_10-68"/>
+   <map:rule descriptiveID="rule-owner-of-appinfo-conformantindicator"
+             ruleID="rule_10-68"/>
    <map:rule descriptiveID="rule-owner-of-appinfo-externaladaptertypeindicator"
              ruleID="rule_10-69"/>
-   <map:rule descriptiveID="rule-owner-of-appinfo-appliestotypes" ruleID="rule_10-70"/>
+   <map:rule descriptiveID="rule-owner-of-appinfo-appliestotypes"
+             ruleID="rule_10-70"/>
    <map:rule descriptiveID="appliestotypes-refs-types" ruleID="rule_10-71"/>
-   <map:rule descriptiveID="rule-owner-of-appinfo-appliestoelements" ruleID="rule_10-72"/>
+   <map:rule descriptiveID="rule-owner-of-appinfo-appliestoelements"
+             ruleID="rule_10-72"/>
    <map:rule descriptiveID="appliestoelements-refs-elements" ruleID="rule_10-73"/>
    <map:rule descriptiveID="lt-schema" ruleID="rule_10-74"/>
    <map:rule descriptiveID="lt-has-defn" ruleID="rule_10-75"/>
@@ -216,7 +223,7 @@
    <map:rule descriptiveID="" ruleID="rule_11-29"/>
    <map:rule descriptiveID="def-11179-4-req" ruleID="rule_11-30"/>
    <map:rule descriptiveID="def-11179-4-rec" ruleID="rule_11-31"/>
-   <map:rule descriptiveID="rule-sop-abstract-element" ruleID="rule_11-32"/>
+   <map:rule descriptiveID="rule-sop-element" ruleID="rule_11-32"/>
    <map:rule descriptiveID="rule-sop-association-element" ruleID="rule_11-33"/>
    <map:rule descriptiveID="" ruleID="rule_11-34"/>
    <map:rule descriptiveID="" ruleID="rule_11-35"/>
@@ -229,7 +236,8 @@
    <map:rule descriptiveID="" ruleID="rule_12-1"/>
    <map:rule descriptiveID="rule-ref-has-no-content" ruleID="rule_12-2"/>
    <map:rule descriptiveID="rule-ref-refs-id" ruleID="rule_12-3"/>
-   <map:rule descriptiveID="rule-ref-and-id-have-same-validation-root" ruleID="rule_12-4"/>
+   <map:rule descriptiveID="rule-ref-and-id-have-same-validation-root"
+             ruleID="rule_12-4"/>
    <map:rule descriptiveID="" ruleID="rule_12-5"/>
    <map:rule descriptiveID="" ruleID="rule_12-6"/>
    <map:rule descriptiveID="" ruleID="rule_12-7"/>
@@ -239,6 +247,7 @@
    <map:rule descriptiveID="" ruleID="rule_12-11"/>
    <map:rule descriptiveID="" ruleID="rule_12-12"/>
    <map:rule descriptiveID="rule-attr-metadata-refs-metadata" ruleID="rule_12-13"/>
-   <map:rule descriptiveID="rule-attr-rel-metadata-refs-metadata" ruleID="rule_12-14"/>
+   <map:rule descriptiveID="rule-attr-rel-metadata-refs-metadata"
+             ruleID="rule_12-14"/>
    <map:rule descriptiveID="" ruleID="rule_12-15"/>
 </map:map>

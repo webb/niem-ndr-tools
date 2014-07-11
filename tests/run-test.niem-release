@@ -8,7 +8,6 @@ cd "$(dirname "$0")"
 
 vecho_location
 
-
 while read -rd '' schema
 do 
     #### SET

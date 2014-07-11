@@ -36,8 +36,9 @@ help:
 	@ echo "  set-shasums: reset the checksums so that the build system expects the zip files that are already on disk"
 	@ echo "  reset-patch: rebuild the patch file so that the build system recreates the ISO Schematron distribution as it is on disk"
 	@ echo "  check: identify badly-permissioned test scripts (must be at least u+rx)"
-	@ echo "  retest: clean up traces of tests and run tests again"
-	@ echo "  test: run tests, if needed"
+	@ echo "  untest: remove traces of running tests"
+	@ echo "  test: run tests"
+	@ echo "      This is parallelizable; run \"make -j 8 test\"."
 	@ echo "  cache: download cached files"
 
 all: $(TOKEN_CHECKSUMS_OK) $(TOKEN_EXTRACTED_SCHEMATRON) $(TOKEN_EXTRACTED_SAXON) $(TOKEN_EXTRACTED_XALAN) $(TOKEN_PATCHED_SCHEMATRON) $(TOKEN_EXTRACTED_NIEM) pkg/oasis/catalog.dtd $(TOKEN_EXTRACTED_RESOLVER)
@@ -167,7 +168,6 @@ TEST_TOKENS = $(patsubst %,$(TOKENS_DIR)/ran-test/%,$(TEST_SCRIPTS))
 
 check:
 	@ for s in $(BAD_TEST_SCRIPTS); do printf "Bad permission on %s\n" "$$s"; done
-
 
 untest:
 	@ $(RM) -rf $(TOKENS_DIR)/ran-test $(TOKENS_DIR)/running

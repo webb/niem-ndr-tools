@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+#HELP:COMMAND_NAME: Turn stdin into grep-compatible output
+#HELP:Usage: COMMAND_NAME $filename-for-grep < $stdin
+
+. "$(dirname "$0")"/../lib/common.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
+. "$NDR_TOOLS_ROOT_DIR"/lib/exit_hook.bash
+
+#HELP:Options:
+#HELP:  --help | -h: print this help
+
+OPTIND=1
+while getopts :h-: OPTION
+do
+    case "$OPTION" in
+        h ) opt_help;;
+        - )
+            case "$OPTARG" in
+                help ) opt_help;;
+                help=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+                *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
+                * ) fail "Unexpected long option \"$OPTARG\"";;
+            esac;;
+        '?' ) fail "Unknown short option \"$OPTARG\"";;
+        : ) fail "Short option \"$OPTARG\" missing argument";;
+        * ) fail "bad state OPTARG=\"$OPTARG\"";;
+    esac
+done
+shift $((OPTIND-1))
+
+ensure "The must be one argument: filename for grep location" test $# = 1
+
+GREPIFY_RESULTS=$(mktemp 'tmp.grepify.XXXXXX.txt')
+
+remove_grepify_results () {
+  rm -f "$GREPIFY_RESULTS"
+}
+add_exit_hook remove_grepify_results		       
+
+while read -rd $'\n' line
+do printf '%s:%s\n' "$1" "$line"
+done >> "$GREPIFY_RESULTS"
+
+# printf '# -*-grep-*-\n' > "$GREPIFY_RESULTS"
+
+cat <<EOF >> "$GREPIFY_RESULTS"
+# Local Variables:
+# mode: grep
+# End:
+EOF
+
+emacsclient "$GREPIFY_RESULTS"
+
