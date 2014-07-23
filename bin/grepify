@@ -44,10 +44,9 @@ while read -rd $'\n' line
 do printf '%s:%s\n' "$1" "$line"
 done >> "$GREPIFY_RESULTS"
 
-# printf '# -*-grep-*-\n' > "$GREPIFY_RESULTS"
-
+NOTVAR=''
 cat <<EOF >> "$GREPIFY_RESULTS"
-# Local Variables:
+# Local ${NOTVAR]Variables:
 # mode: grep
 # End:
 EOF

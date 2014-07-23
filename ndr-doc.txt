@@ -1651,7 +1651,7 @@ Rule 7-4. Document element is xs:schema
         </xs:annotation>
       </xs:element>
 
-   See Rule 11-30, Data definition follows 11179-4 requirements and Rule 11-31, Data definition follows 11179-4 recommendations for application of [ISO 11179-4] to constrain NIEM [data definitions].
+   See Rule 11-29, Data definition follows 11179-4 requirements and Rule 11-30, Data definition follows 11179-4 recommendations for application of [ISO 11179-4] to constrain NIEM [data definitions].
 
 7.5. ISO 11179 Part 5
 
@@ -5185,7 +5185,7 @@ Rule 11-24. Schema uses only known attribute groups
 
 11.6.1. Human-readable documentation
 
-   Note that Rule 11-30, Data definition follows 11179-4 requirements and Rule 11-31, Data definition follows 11179-4 recommendations apply [ISO 11179-4] definition rules to documented components.
+   Note that Rule 11-29, Data definition follows 11179-4 requirements and Rule 11-30, Data definition follows 11179-4 recommendations apply [ISO 11179-4] definition rules to documented components.
 
 Rule 11-25. Data definition does not introduce ambiguity
 
@@ -5217,145 +5217,111 @@ Rule 11-28. Do not leak representation into data definition
 
    A component definition is intended to describe semantic meaning only, not representation or structure. How a component with simple content is represented is indicated through the representation term, but the primary source of representational information should come from the XML Schema definition of the types themselves. A developer should try to keep a component's data definition decoupled from its representation.
 
-Rule 11-29. Data definition uses standard opening phrase
+Rule 11-29. Data definition follows 11179-4 requirements
 
    [Rule 11-29] (REF, EXT)
 
-      A component definition SHOULD begin with a standard opening phrase that depends on the class of the component per Table Table 11-1, Standard opening phrases.
+      Each [data definition] MUST conform to the requirements for data definitions provided by [ISO 11179-4] Section 5.2, Requirements.
 
-   Table 11-1: Standard opening phrases
-
-      Component class|Definition opening phrase
-
-      Abstract element|"A data concept for..."
-
-      Association element|"A relationship..." or "An association..."
-
-      Association type|"A data type for a relationship..." or "A data type for an association..."
-
-      Augmentation point element|"An augmentation point for..."
-
-      Augmentation element|"Supplements..." or "Additional information about..."
-
-      Augmentation type|"A data type that supplements..." or "A data type for additional information about..."
-
-      Metadata element|"Metadata about..." or "Information that further qualifies..."
-
-      Metadata type|"A data type for metadata about..." or "A data type for information that further qualifies..."
-
-      Element with a date representation term|"A date..."
-
-      Element with a quantity representation term|"A (optional adjective) count/number of..."
-
-      Element with a picture representation term|"A(n) (optional adjective) image/picture/photograph of..."
-
-      Element with an indicator representation term|"True if...; false otherwise/if..."
-
-      Element with an identification representation term|"A(n) (optional adjective) identification..."
-
-      Element with an ID representation term|"An identifier..."
-
-      Element with a status representation term|"A(n) (optional adjective) status/state of..."
-
-      Element with a name representation term|"A name of..."
-
-      Element with a "text" representation term, with a qualifier of "category"|"A kind of..."
-
-      Element with a "text" representation term, with a qualifier of "description"|"A description of..."
-
-      Other element|"A(n)..."
-
-      Other type|"A data type for..."
-
-   Standard opening phrases, each based on its component class, help to ensure consistent definitions that are appropriate for the types of components being defined. Each opening phrase also provides cues that facilitate recognition of the particular kind of component.
-
-Rule 11-30. Data definition follows 11179-4 requirements
+Rule 11-30. Data definition follows 11179-4 recommendations
 
    [Rule 11-30] (REF, EXT)
 
-      Each [data definition] MUST conform to the requirements for data definitions provided by [ISO 11179-4] Section 5.2, Requirements.
+      Each [data definition] SHOULD conform to the recommendations for data definitions provided by [ISO 11179-4] Section 5.3, Recommendations.
 
-Rule 11-31. Data definition follows 11179-4 recommendations
+11.6.1.1. Data definition opening phrases
+
+Rule 11-31. Standard opening phrase for element
 
    [Rule 11-31] (REF, EXT)
 
-      Each [data definition] SHOULD conform to the recommendations for data definitions provided by [ISO 11179-4] Section 5.3, Recommendations.
+      <sch:pattern>
+        <sch:rule context="xs:element[ends-with(@name, 'AugmentationPoint')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(starts-with(lower-case(normalize-space(.)), 'an augmentation point '))"
+            >The data definition for an augmentation point element SHOULD begin with standard opening phrase "an augmentation point...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Augmentation')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(some $phrase in ('supplements ', 'additional information about ')
+                                  satisfies starts-with(lower-case(normalize-space(.)), $phrase))"
+            >The data definition for an augmentation element SHOULD begin with the standard opening phrase "supplements..." or "additional information about...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Metadata')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '(metadata about|information that further qualifies)'))"
+            >The data definition for a metadata element SHOULD begin with the standard opening phrase "metadata about..." or "information that further qualifies...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Association') and empty(@abstract) 
+                             ]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), 
+                                        '^an?( .*)? (relationship|association)'))"
+            >The data defintion for an association element that is not abstract SHOULD begin with the standard opening phrase "an (optional adjectives) (relationship|association)...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[xs:boolean(@abstract) = true()
+                             ]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(starts-with(lower-case(normalize-space(.)), 'a data concept'))"
+            >The data defintion for an abstract element SHOULD begin with the standard opening phrase "a data concept...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Date')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^an?( .*)? (date|month|year)'))"
+            >The data defintion for an element with a date representation term SHOULD begin with the standard opening phrase "a(n?) (optional adjectives) (date|month|year)...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Quantity')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^an?( .*)? (count|number)'))"
+            >The data defintion for an element with a quantity representation term SHOULD begin with the standard opening phrase "an (optional adjectives) (count|number)...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Picture')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^an?( .*)? (image|picture|photograph)'))"
+            >The data defintion for an element with a picture representation term SHOULD begin with the standard opening phrase "an (optional adjectives) (image|picture|photograph)".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Indicator')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^true if .*; false (otherwise|if)'))"
+            >The data defintion for an element with an indicator representation term SHOULD begin with the standard opening phrase "true if ...; false (otherwise|if)...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Identification')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^an?( .*)? identification'))"
+            >The data defintion for an element with an identification representation term SHOULD begin with the standard opening phrase "(a|an) (optional adjectives) identification...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[ends-with(@name, 'Name')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^(a|an)( .*)? name'))"
+            >The data defintion for an element with a name representation term SHOULD begin with the standard opening phrase "(a|an) (optional adjectives) name...".</sch:report>
+        </sch:rule>
+        <sch:rule context="xs:element[@name]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^an? '))"
+            >The data defintion for an element declaration with a name SHOULD begin with the standard opening phrase "(a|an)".</sch:report>
+        </sch:rule>
+      </sch:pattern>
 
-11.6.2. Data definition opening phrases
-
-Rule 11-32. Standard opening phrase for element
+Rule 11-32. Standard opening phrase for complex type
 
    [Rule 11-32] (REF, EXT)
 
       <sch:pattern>
-        <sch:rule context="xs:element[ends-with(@name, 'AugmentationPoint')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(starts-with(normalize-space(.), 'An augmentation point for '))"
-            >The data definition for an augmentation point element SHOULD begin with the standard opening phrase "An augmentation point for ".</sch:report>
+        <sch:rule context="xs:complexType[ends-with(@name, 'AssociationType')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^a data type for (a relationship|an association)'))"
+            >The data definition for an association type SHOULD begin with the standard opening phrase "a datatype for (a relationship|an association)...".</sch:report>
         </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Augmentation')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(some $phrase in ('Supplements ', 'Additional information about ')
-                                  satisfies starts-with(normalize-space(.), $phrase))"
-            >The data definition for an augmentation element SHOULD begin with the standard opening phrase "Supplements " or "Additional information about ".</sch:report>
+        <sch:rule context="xs:complexType[ends-with(@name, 'AugmentationType')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^a data type (that supplements|for additional information about)'))"
+            >The data definition for an augmentation type SHOULD begin with the standard opening phrase "a data type (that supplements|for additional information about)...".</sch:report>
         </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Metadata')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(some $phrase in ('Metadata about ', 'Information that further qualifies ')
-                                  satisfies starts-with(normalize-space(.), $phrase))"
-            >The data definition for a metadata element SHOULD begin with the standard opening phrase "Metadata about " or "Information that further qualifies ".</sch:report>
+        <sch:rule context="xs:complexType[ends-with(@name, 'MetadataType')]/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^a data type for (metadata about|information that further qualifies)'))"
+            >The data definition for a metadata type SHOULD begin with the standard opening phrase "a data type for (metdata about|information that further qualifies)...".</sch:report>
         </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Association') and empty(@abstract) 
-                             ]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(some $pattern in ('^A relationship ', '^An association(,| )')
-                                  satisfies matches(normalize-space(.), $pattern))"
-            >The data defintion for an association element that is not abstract SHOULD begin with the standard opening phrase "A relationship" or "An association".</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[xs:boolean(@abstract) = true()
-                             ]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(starts-with(normalize-space(.), 'A data concept for '))"
-            >The data defintion for an abstract element SHOULD begin with the standard opening phrase "A data concept for ".</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Date')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^An?( .*)? (date|month|year)'))"
-            >The data defintion for an element with a date representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Quantity')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^An?( .*)? (count|number) '))"
-            >The data defintion for an element with a quantity representation term SHOULD begin with the standard opening phrase "A date ".</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Picture')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^An?( .*)? (image|picture|photograph) of '))"
-            >The data defintion for an element with a picture representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Indicator')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^True if .*; false (otherwise|if)'))"
-            >The data defintion for an element with an indicator representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Identification')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^A(n)?( .*)? identification '))"
-            >The data defintion for an element with an identification representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[ends-with(@name, 'Name')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^A name of '))"
-            >The data defintion for an element with a name representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[matches(@name, 'Category.*Text$')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^A kind of '))"
-            >The data defintion for an element with a category text representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element[matches(@name, 'Description.*Text$')]/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^A description of '))"
-            >The data defintion for an element with a description text representation term SHOULD begin with a standard opening phrase.</sch:report>
-        </sch:rule>
-        <sch:rule context="xs:element/xs:annotation/xs:documentation[1]">
-          <sch:report test="not(matches(normalize-space(.), '^An? '))"
-            >The data defintion for an element SHOULD begin with a standard opening phrase.</sch:report>
+        <sch:rule context="xs:complexType/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^a data type'))"
+            >The data definition for a type SHOULD begin with the standard opening phrase "a data type...".</sch:report>
         </sch:rule>
       </sch:pattern>
 
-Rule 11-33. Standard opening phrase for association element
+Rule 11-33. Standard opening phrase for simple type
 
    [Rule 11-33] (REF, EXT)
 
       <sch:pattern>
+        <sch:rule context="xs:simpleType/xs:annotation/xs:documentation[1]">
+          <sch:report test="not(matches(lower-case(normalize-space(.)), '^a data type'))"
+            >The data definition for a type SHOULD begin with a standard opening phrase "a data type...".</sch:report>
+        </sch:rule>
       </sch:pattern>
 
 11.7. Schema as a whole
@@ -6240,11 +6206,11 @@ Appendix F. Index of rules
    Rule 11-26, Object class has only one meaning: Section 11.6.1, Human-readable documentation
    Rule 11-27, Data definition of a part does not redefine the whole: Section 11.6.1, Human-readable documentation
    Rule 11-28, Do not leak representation into data definition: Section 11.6.1, Human-readable documentation
-   Rule 11-29, Data definition uses standard opening phrase: Section 11.6.1, Human-readable documentation
-   Rule 11-30, Data definition follows 11179-4 requirements: Section 11.6, Annotation components
-   Rule 11-31, Data definition follows 11179-4 recommendations: Section 11.6, Annotation components
-   Rule 11-32, Standard opening phrase for element: Section 11.6.2, Data definition opening phrases
-   Rule 11-33, Standard opening phrase for association element: Section 11.6.2, Data definition opening phrases
+   Rule 11-29, Data definition follows 11179-4 requirements: Section 11.6.1, Human-readable documentation
+   Rule 11-30, Data definition follows 11179-4 recommendations: Section 11.6.1, Human-readable documentation
+   Rule 11-31, Standard opening phrase for element: Section 11.6.1.1, Data definition opening phrases
+   Rule 11-32, Standard opening phrase for complex type: Section 11.6.1.1, Data definition opening phrases
+   Rule 11-33, Standard opening phrase for simple type: Section 11.6.1.1, Data definition opening phrases
    Rule 11-34, Same namespace means same components: Section 11.7.1, xs:schema document element restrictions
    Rule 11-35, Different version means different view: Section 11.7.1, xs:schema document element restrictions
    Rule 11-36, Reference schema imports reference schema: Section 11.8, Schema assembly
