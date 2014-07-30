@@ -12,6 +12,8 @@ REF_REPORTS = $(patsubst $(SCHEMA_DIR)/%,$(REF_DIR)/%,$(SCHEMAS))
 SET_REPORTS = $(patsubst $(SCHEMA_DIR)/%,$(SET_DIR)/%,$(SCHEMAS))
 REPORTS =$(REF_REPORTS) $(SET_REPORTS)
 
+QUICK_REPORTS = $(REF_DIR)/niem-core/3.0/niem-core.xsd
+
 GET_TEST_REPORT = $(BIN_DIR)/get-test-report
 
 COMMON_DEPENDENCIES = $(TOOLS_DIR)/ndr-functions.xsl $(TOOLS_DIR)/ndr-functions-interface.xsl
@@ -52,6 +54,11 @@ $(REF_DIR)/external/%:
 	@ mkdir -p $(dir $@)
 	> $@
 
+ref-nc: 
+	rm -f $(REF_DIR)/niem-core/3.0/niem-core.xsd
+	$(MAKE) $(REF_DIR)/niem-core/3.0/niem-core.xsd
+	cat $(REF_DIR)/niem-core/3.0/niem-core.xsd
+
 $(REF_DIR)/%: $(SCHEMA_DIR)/% $(REF_DEPENDENCIES)
 	@ mkdir -p $(dir $@)
 	$(GET_TEST_REPORT) --rules=ref $< 2> $@.stderr | sed -e 's!^!$<:!' > $@
@@ -85,3 +92,15 @@ exceptions.sed: exceptions.txt reported-errors.txt unreported-errors.txt
 	rm -f $@
 	cat $^ | sed -e 's!/!\\/!g' -e 's!^!/!' -e 's!$$!/d!' > $@
 	chmod -w $@
+
+.PHONY: quick
+quick: rm-quick quick.txt
+
+rm-quick:
+	$(RM) quick.txt
+
+quick.txt: $(QUICK_REPORTS) exceptions.sed
+	cat $(QUICK_REPORTS) | sed -f exceptions.sed > $@
+	printf '# Local ''Variables:\n' >> $@
+	printf '# mode: grep\n' >> $@
+	printf '# End:\n' >> $@

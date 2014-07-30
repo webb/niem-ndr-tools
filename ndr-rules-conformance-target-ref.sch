@@ -36,19 +36,19 @@
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:report test="true()">Rule 7-2: The document MUST be namespace-well-formed and namespace-valid.</sch:report>
   </sch:rule>
-</sch:pattern>            
+</sch:pattern>
         
 <sch:pattern id="rule_7-3"><sch:title>Document is a schema document</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:report test="true()">Rule 7-3: The document MUST be a schema document.</sch:report>
   </sch:rule>
-</sch:pattern>            
+</sch:pattern>
           
 <sch:pattern id="rule_7-4"><sch:title>Document element is xs:schema</sch:title>
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:assert test="self::xs:schema">Rule 7-4: The [document element] of the XML document MUST have the name xs:schema.</sch:assert>
   </sch:rule>
-</sch:pattern>            
+</sch:pattern>
           
 <sch:pattern id="rule_9-1"><sch:title>No base type in the XML namespace</sch:title>
   <sch:rule context="xs:*[exists(@base)]">
@@ -148,37 +148,37 @@
               
 <sch:pattern id="rule_9-17"><sch:title>No union member types of xs:ID</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ID')">Rule 9-17: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ID.</sch:assert>
+    <sch:assert test="every $type-qname                       in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ID')">Rule 9-17: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ID.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-18"><sch:title>No union member types of xs:IDREF</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:IDREF')">Rule 9-18: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:IDREF.</sch:assert>
+    <sch:assert test="every $type-qname                       in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:IDREF')">Rule 9-18: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:IDREF.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-19"><sch:title>No union member types of xs:IDREFS</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:IDREFS')">Rule 9-19: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:IDREFS.</sch:assert>
+    <sch:assert test="every $type-qname                       in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:IDREFS')">Rule 9-19: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:IDREFS.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-20"><sch:title>No union member types of xs:anySimpleType</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:anySimpleType')">Rule 9-20: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:anySimpleType.</sch:assert>
+    <sch:assert test="every $type-qname                       in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:anySimpleType')">Rule 9-20: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:anySimpleType.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-21"><sch:title>No union member types of xs:ENTITY</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITY')">Rule 9-21: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITY.</sch:assert>
+    <sch:assert test="every $type-qname                       in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITY')">Rule 9-21: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITY.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
 <sch:pattern id="rule_9-22"><sch:title>No union member types of xs:ENTITIES</sch:title>
   <sch:rule context="xs:*[exists(@memberTypes)]">
-    <sch:assert test="every $type-qname                        in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITIES')">Rule 9-22: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITIES.</sch:assert>
+    <sch:assert test="every $type-qname                       in tokenize(normalize-space(@memberTypes), ' ')                       satisfies resolve-QName($type-qname, .) != xs:QName('xs:ENTITIES')">Rule 9-22: A schema component MUST NOT have an attribute {}memberTypes that includes a value of xs:ENTITIES.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -225,7 +225,7 @@
 </sch:pattern>
             
 <sch:pattern id="rule_9-30"><sch:title>Base type of complex type with complex content must have complex content</sch:title>
-  <sch:rule context="xs:complexType/xs:complexContent/xs:*[                        (self::xs:extension or self::xs:restriction)                        and (some $base-qname in resolve-QName(@base, .) satisfies                          namespace-uri-from-QName($base-qname) = nf:get-target-namespace(.))]">
+  <sch:rule context="xs:complexType/xs:complexContent/xs:*[                        (self::xs:extension or self::xs:restriction)                        and (some $base-qname in resolve-QName(@base, .) satisfies                               namespace-uri-from-QName($base-qname) = nf:get-target-namespace(.))]">
     <sch:assert test="some $base-type in nf:resolve-type(., resolve-QName(@base, .)) satisfies                         empty($base-type/self::xs:complexType/xs:simpleContent)">Rule 9-30: The base type of complex type that has complex content MUST be a complex type with complex content.</sch:assert>
   </sch:rule>
 </sch:pattern>
@@ -281,6 +281,12 @@
 <sch:pattern id="rule_9-40"><sch:title>Element type not in the XML namespace</sch:title>
   <sch:rule context="xs:element[exists(@type)]">
     <sch:assert test="namespace-uri-from-QName(resolve-QName(@type, .)) != 'http://www.w3.org/XML/1998/namespace'">Rule 9-40: An element type MUST NOT have a namespace name that is in the XML namespace.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_9-41"><sch:title>Element type is not simple type</sch:title>
+  <sch:rule context="xs:element[@type]">
+    <sch:assert test="every $type-qname in resolve-QName(@type, .),                             $type-ns in namespace-uri-from-QName($type-qname),                             $type-local-name in local-name-from-QName($type-qname) satisfies (                         $type-qname = xs:QName('xs:anySimpleType')                         or (($type-ns = nf:get-target-namespace(.)                              or exists(nf:get-document-element(.)/xs:import[                                          xs:anyURI(@namespace) = $type-ns                                          and empty(@appinfo:externalImportIndicator)]))                             and not(ends-with($type-local-name, 'SimpleType'))))">Rule 9-41: An element type that is not xs:anySimpleType MUST NOT be a simple type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
@@ -404,13 +410,13 @@
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-65"><sch:title>Sequence minimum cardinality</sch:title>
+<sch:pattern id="rule_9-65"><sch:title>Sequence has minimum cardinality 1</sch:title>
   <sch:rule context="xs:sequence">
     <sch:assert test="empty(@minOccurs) or xs:integer(@minOccurs) = 1">Rule 9-65: An element xs:sequence MUST either not have the attribute {}minOccurs, or that attribute MUST have a value of 1.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_9-66"><sch:title>Sequence maximum cardinality</sch:title>
+<sch:pattern id="rule_9-66"><sch:title>Sequence has maximum cardinality 1</sch:title>
   <sch:rule context="xs:sequence">
     <sch:assert test="empty(@maxOccurs) or (@maxOccurs instance of xs:integer                                             and 1 = xs:integer(@maxOccurs))">Rule 9-66: An element xs:sequence MUST either not have the attribute {}maxOccurs, or that attribute MUST have a value of 1.</sch:assert>
   </sch:rule>
@@ -508,7 +514,7 @@
           
 <sch:pattern id="rule_9-84"><sch:title>Schema has version</sch:title>
   <sch:rule context="xs:schema">
-    <sch:assert test="some $version in @version satisfies                        string-length(normalize-space(@version)) &gt; 0">Rule 9-84: An element xs:schema MUST have an attribute {}version that MUST NOT be empty.</sch:assert>
+    <sch:assert test="some $version in @version satisfies                       string-length(normalize-space(@version)) &gt; 0">Rule 9-84: An element xs:schema MUST have an attribute {}version that MUST NOT be empty.</sch:assert>
   </sch:rule>
 </sch:pattern>
           
@@ -542,6 +548,42 @@
   </sch:rule>
 </sch:pattern>
           
+<sch:pattern id="rule_9-91"><sch:title>Namespace referenced by attribute type is imported</sch:title>
+  <sch:rule context="xs:*[@type]">
+    <sch:assert test="every $namespace in namespace-uri-from-QName(resolve-QName(@type, .)) satisfies (                         $namespace = nf:get-target-namespace(.)                         or $namespace = xs:anyURI('http://www.w3.org/2001/XMLSchema')                         or nf:get-document-element(.)/xs:import[xs:anyURI(@namespace) = $namespace])">Rule 9-91: The namespace of a type referenced by @type MUST be the target namespace, the XML Schema namespace, or be imported.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_9-92"><sch:title>Namespace referenced by attribute base is imported</sch:title>
+  <sch:rule context="xs:*[@base]">
+    <sch:assert test="every $namespace in namespace-uri-from-QName(resolve-QName(@base, .)) satisfies (                         $namespace = nf:get-target-namespace(.)                         or $namespace = xs:anyURI('http://www.w3.org/2001/XMLSchema')                         or nf:get-document-element(.)/xs:import[xs:anyURI(@namespace) = $namespace])">Rule 9-92: The namespace of a type referenced by @base MUST be the target namespace, the XML Schema namespace, or be imported.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_9-93"><sch:title>Namespace referenced by attribute itemType is imported</sch:title>
+  <sch:rule context="xs:*[@itemType]">
+    <sch:assert test="every $namespace in namespace-uri-from-QName(resolve-QName(@itemType, .)) satisfies (                         $namespace = nf:get-target-namespace(.)                         or $namespace = xs:anyURI('http://www.w3.org/2001/XMLSchema')                         or nf:get-document-element(.)/xs:import[xs:anyURI(@namespace) = $namespace])">Rule 9-93: The namespace of a type referenced by @itemType MUST be the target namespace, the XML Schema namespace, or be imported.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_9-94"><sch:title>Namespaces referenced by attribute memberTypes is imported</sch:title>
+  <sch:rule context="xs:*[@memberTypes]">
+    <sch:assert test="every $type in tokenize(normalize-space(@memberTypes), ' '),                             $namespace in namespace-uri-from-QName(resolve-QName($type, .)) satisfies (                         $namespace = nf:get-target-namespace(.)                         or $namespace = xs:anyURI('http://www.w3.org/2001/XMLSchema')                         or nf:get-document-element(.)/xs:import[xs:anyURI(@namespace) = $namespace])">Rule 9-94: The namespace of a type referenced by @memberTypes MUST be the target namespace, the XML Schema namespace, or be imported.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_9-95"><sch:title>Namespace referenced by attribute ref is imported</sch:title>
+  <sch:rule context="xs:*[@ref]">
+    <sch:assert test="every $namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies                         $namespace = nf:get-target-namespace(.)                         or nf:get-document-element(.)/xs:import[xs:anyURI(@namespace) = $namespace]">Rule 9-95: The namespace of a component referenced by @ref MUST be the target namespace or be imported.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_9-96"><sch:title>Namespace referenced by attribute substitutionGroup is imported</sch:title>
+  <sch:rule context="xs:*[@substitutionGroup]">
+    <sch:assert test="every $namespace in namespace-uri-from-QName(resolve-QName(@substitutionGroup, .)) satisfies                         $namespace = nf:get-target-namespace(.)                         or nf:get-document-element(.)/xs:import[xs:anyURI(@namespace) = $namespace]">Rule 9-96: The namespace of a component referenced by @substitutionGroup MUST be the target namespace or be imported.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
 <sch:pattern id="rule_10-2"><sch:title>Object type with complex content is derived from object type</sch:title>
   <sch:rule context="xs:complexType[exists(xs:complexContent)                                     and not(ends-with(@name, 'AssociationType')                                         or ends-with(@name, 'MetadataType')                                         or ends-with(@name, 'AugmentationType'))]">
     <sch:assert test="         every $derivation-method in (xs:complexContent/xs:extension, xs:complexContent/xs:restriction),               $base in $derivation-method/@base,               $base-qname in resolve-QName($base, $derivation-method),               $base-local-name in local-name-from-QName($base-qname) satisfies (           $base-qname = xs:QName('structures:ObjectType')           or not(ends-with($base-local-name, 'AssociationType')                  or ends-with($base-local-name, 'MetadataType')                  or ends-with($base-local-name, 'AugmentationType')))">Rule 10-2: An object type with complex content MUST be derived from structures:ObjectType or from another object type.</sch:assert>
@@ -571,7 +613,7 @@
     <sch:assert test="xs:complexContent/xs:extension[                         resolve-QName(@base, .) = xs:QName('structures:ObjectType')                       ]/xs:sequence">Rule 10-9: An external adapter type definition MUST be a complex type definition with complex content that extends structures:ObjectType, and that uses xs:sequence as its top-level compositor.</sch:assert>
   </sch:rule>
 </sch:pattern>
-                
+          
 <sch:pattern id="rule_10-10"><sch:title>Element use from external adapter type defined by external schema documents</sch:title>
   <sch:rule context="xs:element[@ref                                 and exists(ancestor::xs:complexType[exists(@appinfo:externalAdapterTypeIndicator)])]">
     <sch:assert test="some $ref-namespace in namespace-uri-from-QName(resolve-QName(@ref, .)) satisfies                         nf:get-document-element(.)/xs:import[                           $ref-namespace = xs:anyURI(@namespace)                           and @appinfo:externalImportIndicator]">Rule 10-10: An element reference that appears within an external adapter type MUST have a target namespace that is imported as external.</sch:assert>
@@ -610,113 +652,119 @@
   </sch:rule>
 </sch:pattern>
                 
-<sch:pattern id="rule_10-18"><sch:title>Association types is derived from association type</sch:title>
+<sch:pattern id="rule_10-18"><sch:title>Proxy type has designated structure</sch:title>
+  <sch:rule context="xs:complexType[some $name in @name,                                          $extension in xs:simpleContent/xs:extension,                                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                                       $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
+    <sch:assert test="xs:simpleContent[                         xs:extension[                           empty(xs:attribute)                           and count(xs:attributeGroup) = 1                           and xs:attributeGroup[                                 resolve-QName(@ref, .) = xs:QName('structures:SimpleObjectAttributeGroup')]]]">Rule 10-18: A proxy type MUST have the designated structure. It MUST use xs:extension. It MUST NOT use xs:attribute. It MUST include exactly one xs:attributeGroup reference, which must be to structures:SimpleObjectAttributeGroup.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+              
+<sch:pattern id="rule_10-19"><sch:title>Association types is derived from association type</sch:title>
   <sch:rule context="xs:complexType">
     <sch:let name="is-association-type" value="exists(@name[ends-with(., 'AssociationType')])"/>
     <sch:let name="has-association-base-type" value="       exists(xs:complexContent[         exists(xs:*[local-name() = ('extension', 'restriction')                     and exists(@base[ends-with(., 'AssociationType')])])])"/>
-    <sch:assert test="$is-association-type = $has-association-base-type">Rule 10-18: A type MUST have a association type name if and only if it is derived from an association type.</sch:assert>
+    <sch:assert test="$is-association-type = $has-association-base-type">Rule 10-19: A type MUST have a association type name if and only if it is derived from an association type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-19"><sch:title>Association element type is an association type</sch:title>
+<sch:pattern id="rule_10-20"><sch:title>Association element type is an association type</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(@type[ends-with(., 'AssociationType')])                       = exists(@name[ends-with(., 'Association')])">Rule 10-19: An element MUST have a name that ends in 'Association' if and only if it has a type that is an association type.</sch:assert>
+    <sch:assert test="exists(@type[ends-with(., 'AssociationType')])                       = exists(@name[ends-with(., 'Association')])">Rule 10-20: An element MUST have a name that ends in 'Association' if and only if it has a type that is an association type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-20"><sch:title>Augmentable type has augmentation point element</sch:title>
+<sch:pattern id="rule_10-21"><sch:title>Augmentable type has augmentation point element</sch:title>
   <sch:rule context="xs:complexType[                        @name[not(ends-with(., 'MetadataType'))                              and not(ends-with(., 'AugmentationType'))]                        and empty(@appinfo:externalAdapterTypeIndicator)                        and xs:complexContent]">
     <sch:let name="augmentation-point-qname" value="QName(nf:get-target-namespace(.),                           replace(./@name, 'Type$', 'AugmentationPoint'))"/>
-    <sch:assert test="xs:complexContent/xs:extension/xs:sequence/xs:element[                         @ref[resolve-QName(., ..) = $augmentation-point-qname]]">Rule 10-20: An augmentable type MUST contain an element use of its augmentation point element.</sch:assert>
+    <sch:assert test="xs:complexContent/xs:extension/xs:sequence/xs:element[                         @ref[resolve-QName(., ..) = $augmentation-point-qname]]">Rule 10-21: An augmentable type MUST contain an element use of its augmentation point element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-21"><sch:title>Augmentable type has at most one augmentation point element</sch:title>
+<sch:pattern id="rule_10-22"><sch:title>Augmentable type has at most one augmentation point element</sch:title>
   <sch:rule context="xs:complexType[                        @name[not(ends-with(., 'MetadataType'))                              and not(ends-with(., 'AugmentationType'))]                        and empty(@appinfo:externalAdapterTypeIndicator)                        and xs:complexContent]">
     <sch:let name="augmentation-point-qname" value="QName(nf:get-target-namespace(.),                           replace(./@name, 'Type$', 'AugmentationPoint'))"/>
-    <sch:assert test="count(xs:complexContent/xs:extension/xs:sequence/xs:element[                               @ref[resolve-QName(., ..) = $augmentation-point-qname]]) &lt;= 1">Rule 10-21: An augmentable type MUST contain no more than one element use of its augmentation point element.</sch:assert>
+    <sch:assert test="count(xs:complexContent/xs:extension/xs:sequence/xs:element[                               @ref[resolve-QName(., ..) = $augmentation-point-qname]]) &lt;= 1">Rule 10-22: An augmentable type MUST contain no more than one element use of its augmentation point element.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-22"><sch:title>Augmentation point corresponds to augmentable type</sch:title>
+<sch:pattern id="rule_10-23"><sch:title>Augmentation point corresponds to augmentable type</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
     <sch:let name="element-name" value="@name"/>
-    <sch:assert test="exists(                         parent::xs:schema/xs:complexType[                           @name = replace($element-name, 'AugmentationPoint$', 'Type')                           and exists(@name[                                   not(ends-with(., 'MetadataType'))                                   and not(ends-with(., 'AugmentationType'))])                                 and empty(@appinfo:externalAdapterTypeIndicator)                                 and exists(child::xs:complexContent)])">Rule 10-22: A schema document containing an augmentation point element declaration MUST also contain a corresponding augmentable type definition.</sch:assert>
+    <sch:assert test="exists(                         parent::xs:schema/xs:complexType[                           @name = replace($element-name, 'AugmentationPoint$', 'Type')                           and exists(@name[                                   not(ends-with(., 'MetadataType'))                                   and not(ends-with(., 'AugmentationType'))])                                 and empty(@appinfo:externalAdapterTypeIndicator)                                 and exists(child::xs:complexContent)])">Rule 10-23: A schema document containing an augmentation point element declaration MUST also contain a corresponding augmentable type definition.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-23"><sch:title>An augmentation point has no type</sch:title>
+<sch:pattern id="rule_10-24"><sch:title>An augmentation point has no type</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
-    <sch:assert test="empty(@type)">Rule 10-23: An augmentation point element MUST have no type.</sch:assert>
+    <sch:assert test="empty(@type)">Rule 10-24: An augmentation point element MUST have no type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-24"><sch:title>An augmentation point has no substitution group</sch:title>
+<sch:pattern id="rule_10-25"><sch:title>An augmentation point has no substitution group</sch:title>
   <sch:rule context="xs:element[exists(@name[                                  matches(., 'AugmentationPoint$')])]">
-    <sch:assert test="empty(@substitutionGroup)">Rule 10-24: An augmentation point element MUST have no substitution group.</sch:assert>
+    <sch:assert test="empty(@substitutionGroup)">Rule 10-25: An augmentation point element MUST have no substitution group.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-25"><sch:title>Augmentation point element may only be referenced by its type</sch:title>
+<sch:pattern id="rule_10-26"><sch:title>Augmentation point element may only be referenced by its type</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                        matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
 
-    <sch:assert test="QName(nf:get-target-namespace(ancestor::xs:complexType[1]), ancestor::xs:complexType[1]/@name)                       = QName(namespace-uri-from-QName(resolve-QName(@ref, .)),                 replace(local-name-from-QName(resolve-QName(@ref, .)), 'AugmentationPoint$', 'Type'))">Rule 10-25: An augmentation point element MUST only be referenced by its corresponding type.</sch:assert>
-  </sch:rule>
-</sch:pattern>            
-            
-<sch:pattern id="rule_10-26"><sch:title>Augmentation point reference is optional</sch:title>
-  <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
-    <sch:assert test="exists(@minOccurs) and xs:integer(@minOccurs) = 0">Rule 10-26: An augmentation point element particle MUST have attribute minOccurs equal to 0.</sch:assert>
+    <sch:assert test="QName(nf:get-target-namespace(ancestor::xs:complexType[1]), ancestor::xs:complexType[1]/@name)                       = QName(namespace-uri-from-QName(resolve-QName(@ref, .)),                 replace(local-name-from-QName(resolve-QName(@ref, .)), 'AugmentationPoint$', 'Type'))">Rule 10-26: An augmentation point element MUST only be referenced by its corresponding type.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-27"><sch:title>Augmentation point reference is unbounded</sch:title>
+<sch:pattern id="rule_10-27"><sch:title>Augmentation point reference is optional</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
-    <sch:assert test="exists(@maxOccurs) and string(@maxOccurs) = 'unbounded'">Rule 10-27: An augmentation point element particle MUST have attribute maxOccurs set to unbounded.</sch:assert>
+    <sch:assert test="exists(@minOccurs) and xs:integer(@minOccurs) = 0">Rule 10-27: An augmentation point element particle MUST have attribute minOccurs equal to 0.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-28"><sch:title>Augmentation point reference must be last particle</sch:title>
+<sch:pattern id="rule_10-28"><sch:title>Augmentation point reference is unbounded</sch:title>
   <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
-    <sch:assert test="empty(following-sibling::*)">Rule 10-28: An augmentation point element particle MUST be the last element occurrence in its content model.</sch:assert>
+    <sch:assert test="exists(@maxOccurs) and string(@maxOccurs) = 'unbounded'">Rule 10-28: An augmentation point element particle MUST have attribute maxOccurs set to unbounded.</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-31"><sch:title>Schema component with name ending in "AugmentationType" is an augmentation type</sch:title>
+<sch:pattern id="rule_10-29"><sch:title>Augmentation point reference must be last particle</sch:title>
+  <sch:rule context="xs:complexType//xs:element[exists(@ref[                            matches(local-name-from-QName(resolve-QName(., ..)), 'AugmentationPoint$')]) ]">
+    <sch:assert test="empty(following-sibling::*)">Rule 10-29: An augmentation point element particle MUST be the last element occurrence in its content model.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+            
+<sch:pattern id="rule_10-32"><sch:title>Schema component with name ending in "AugmentationType" is an augmentation type</sch:title>
   <sch:rule context="xs:*[ends-with(@name, 'AugmentationType')]">
-    <sch:assert test="self::xs:complexType/xs:complexContent/xs:*[                         (self::xs:extension or self::xs:restriction)                         and ends-with(@base, 'AugmentationType')]">Rule 10-31: An augmentation type definition schema component with {name} ending in 'AugmentationType' MUST be an augmentation type definition that is a complex type definition with complex content that extends or restricts an augmentation type.</sch:assert>
+    <sch:assert test="self::xs:complexType/xs:complexContent/xs:*[                         (self::xs:extension or self::xs:restriction)                         and ends-with(@base, 'AugmentationType')]">Rule 10-32: An augmentation type definition schema component with {name} ending in 'AugmentationType' MUST be an augmentation type definition that is a complex type definition with complex content that extends or restricts an augmentation type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-32"><sch:title>Type derived from augmentation type is an augmentation type</sch:title>
+<sch:pattern id="rule_10-33"><sch:title>Type derived from augmentation type is an augmentation type</sch:title>
   <sch:rule context="xs:*[(self::xs:restriction or self::xs:extension)                           and ends-with(@base, 'AugmentationType')]">
-    <sch:assert test="ancestor::xs:complexType[ends-with(@name, 'AugmentationType')]">Rule 10-32: A type definition derived from an augmentation type MUST be an augmentation type definition</sch:assert>
+    <sch:assert test="ancestor::xs:complexType[ends-with(@name, 'AugmentationType')]">Rule 10-33: A type definition derived from an augmentation type MUST be an augmentation type definition</sch:assert>
   </sch:rule>
 </sch:pattern>
             
-<sch:pattern id="rule_10-33"><sch:title>Augmentation element type is an augmentation type</sch:title>
+<sch:pattern id="rule_10-34"><sch:title>Augmentation element type is an augmentation type</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-33: An element declaration MUST have a name that ends in "Augmentation" if and only if it has a type that is an augmentation type.</sch:assert>
+    <sch:assert test="exists(@type[ends-with(., 'AugmentationType')])                       = exists(@name[ends-with(., 'Augmentation')])">Rule 10-34: An element declaration MUST have a name that ends in "Augmentation" if and only if it has a type that is an augmentation type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-37"><sch:title>Metadata types are derived from metadata types</sch:title>
+<sch:pattern id="rule_10-38"><sch:title>Metadata types are derived from metadata types</sch:title>
   <sch:rule context="xs:complexType">
     <sch:let name="is-metadata-type" value="exists(@name[ends-with(., 'MetadataType')])"/>
     <sch:let name="has-metadata-base-type" value="       exists(xs:complexContent[         exists(xs:*[local-name() = ('extension', 'restriction')                     and exists(@base[ends-with(., 'MetadataType')])])])"/>
-    <sch:assert test="$is-metadata-type = $has-metadata-base-type">Rule 10-37: A type MUST have a metadata type name if an only if it is derived from a metadata type.</sch:assert>
+    <sch:assert test="$is-metadata-type = $has-metadata-base-type">Rule 10-38: A type MUST have a metadata type name if an only if it is derived from a metadata type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-38"><sch:title>Metadata element declaration type is a metadata type</sch:title>
+<sch:pattern id="rule_10-39"><sch:title>Metadata element declaration type is a metadata type</sch:title>
   <sch:rule context="xs:element[exists(@name)]">
-    <sch:assert test="exists(@type[ends-with(., 'MetadataType')])                       = exists(@name[ends-with(., 'Metadata')])">Rule 10-38: An element MUST have a name that ends in 'Metadata' if and only if it has a type that is a metadata type.</sch:assert>
+    <sch:assert test="exists(@type[ends-with(., 'MetadataType')])                       = exists(@name[ends-with(., 'Metadata')])">Rule 10-39: An element MUST have a name that ends in 'Metadata' if and only if it has a type that is a metadata type.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
-<sch:pattern id="rule_10-40"><sch:title>Name of element that ends in "Representation" is abstract</sch:title>
+<sch:pattern id="rule_10-41"><sch:title>Name of element that ends in "Representation" is abstract</sch:title>
   <sch:rule context="xs:element[@name[ends-with(., 'Representation')]]">
-    <sch:report test="empty(@abstract) or xs:boolean(@abstract) = false()">Rule 10-40: An element declaration with a name that ends in 'Representation' SHOULD have the {abstract} property with a value of "true".</sch:report>
+    <sch:report test="empty(@abstract) or xs:boolean(@abstract) = false()">Rule 10-41: An element declaration with a name that ends in 'Representation' SHOULD have the {abstract} property with a value of "true".</sch:report>
   </sch:rule>
 </sch:pattern>
 	  
@@ -763,7 +811,7 @@
 </sch:pattern>
           
 <sch:pattern id="rule_11-1"><sch:title>Name of type ends in "Type"</sch:title>
-  <sch:rule context="xs:complexType[some $name in @name,                          $extension in xs:simpleContent/xs:extension,                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                        $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
+  <sch:rule context="xs:complexType[some $name in @name,                                          $extension in xs:simpleContent/xs:extension,                                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                                       $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
     <sch:report test="false()">Rule 11-1: The name of a proxy type does not end in "Type".</sch:report>
   </sch:rule>
   <sch:rule context="xs:*[(self::xs:simpleType or self::xs:complexType) and exists(@name)]">
@@ -772,7 +820,7 @@
 </sch:pattern>
           
 <sch:pattern id="rule_11-2"><sch:title>Name of type other than proxy type is in upper camel case</sch:title>
-  <sch:rule context="xs:complexType[some $name in @name,                          $extension in xs:simpleContent/xs:extension,                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                        $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
+  <sch:rule context="xs:complexType[some $name in @name,                                          $extension in xs:simpleContent/xs:extension,                                          $base-qname in resolve-QName($extension/@base, $extension) satisfies                                       $base-qname = QName('http://www.w3.org/2001/XMLSchema', @name)]">
     <sch:report test="false()">Rule 11-2: The name of a proxy type is not upper camel case.</sch:report>
   </sch:rule>
   <sch:rule context="xs:*[(self::xs:simpleType or self::xs:complexType) and exists(@name)]">
@@ -855,7 +903,7 @@
 	    
 <sch:pattern id="rule_11-16"><sch:title>Name of element declaration with simple content has representation term</sch:title>
   <sch:rule context="xs:element[@name and @type                                 and (some $type-qname in resolve-QName(@type, .) satisfies (                                        nf:get-target-namespace(.) = namespace-uri-from-QName($type-qname)                                        and nf:resolve-type(., $type-qname)/xs:simpleContent))]">
-    <sch:assert test="some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies                         ends-with(@name, $representation-term)">Rule 11-16: the name of an element declaration that is of simple content MUST use a representation term.</sch:assert>
+    <sch:assert test="some $representation-term in ('Amount', 'BinaryObject', 'Graphic', 'Picture', 'Sound', 'Video', 'Code', 'DateTime', 'Date', 'Time', 'Duration', 'ID', 'URI', 'Indicator', 'Measure', 'Numeric', 'Value', 'Rate', 'Percent', 'Quantity', 'Text', 'Name', 'List') satisfies                         ends-with(@name, $representation-term)">Rule 11-16: The name of an element declaration that is of simple content MUST use a representation term.</sch:assert>
   </sch:rule>
 </sch:pattern>
               
@@ -909,8 +957,8 @@
   <sch:rule context="xs:element[ends-with(@name, 'Metadata')]/xs:annotation/xs:documentation[1]">
     <sch:report test="not(matches(lower-case(normalize-space(.)), '(metadata about|information that further qualifies)'))">Rule 11-31: The data definition for a metadata element SHOULD begin with the standard opening phrase "metadata about..." or "information that further qualifies...".</sch:report>
   </sch:rule>
-  <sch:rule context="xs:element[ends-with(@name, 'Association') and empty(@abstract)                         ]/xs:annotation/xs:documentation[1]">
-    <sch:report test="not(matches(lower-case(normalize-space(.)),                                    '^an?( .*)? (relationship|association)'))">Rule 11-31: The data defintion for an association element that is not abstract SHOULD begin with the standard opening phrase "an (optional adjectives) (relationship|association)...".</sch:report>
+  <sch:rule context="xs:element[ends-with(@name, 'Association') and empty(@abstract)                        ]/xs:annotation/xs:documentation[1]">
+    <sch:report test="not(matches(lower-case(normalize-space(.)),                                   '^an?( .*)? (relationship|association)'))">Rule 11-31: The data defintion for an association element that is not abstract SHOULD begin with the standard opening phrase "an (optional adjectives) (relationship|association)...".</sch:report>
   </sch:rule>
   <sch:rule context="xs:element[xs:boolean(@abstract) = true()                        ]/xs:annotation/xs:documentation[1]">
     <sch:report test="not(starts-with(lower-case(normalize-space(.)), 'a data concept'))">Rule 11-31: The data defintion for an abstract element SHOULD begin with the standard opening phrase "a data concept...".</sch:report>
@@ -960,16 +1008,16 @@
 </sch:pattern>
             
 <sch:pattern id="rule_11-38"><sch:title>Structures imported as conformant</sch:title>
-  <sch:rule context="xs:import[exists(@namespace)                                 and xs:anyURI(@namespace) = xs:anyURI('http://release.niem.gov/niem/structures/3.0/')]">
+  <sch:rule context="xs:import[exists(@namespace)                                and xs:anyURI(@namespace) = xs:anyURI('http://release.niem.gov/niem/structures/3.0/')]">
     <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-38: An import of the structures namespace MUST NOT be labeled as an external import.</sch:assert>
   </sch:rule>
-</sch:pattern>          
+</sch:pattern>
             
 <sch:pattern id="rule_11-39"><sch:title>XML namespace imported as conformant</sch:title>
   <sch:rule context="xs:import[exists(@namespace)                                and xs:anyURI(@namespace) = xs:anyURI('http://www.w3.org/XML/1998/namespace')]">
     <sch:assert test="empty(@appinfo:externalImportIndicator)">Rule 11-39: An import of the XML namespace MUST NOT be labeld as an external import.</sch:assert>
   </sch:rule>
-</sch:pattern>          
+</sch:pattern>
             
 <sch:pattern id="rule_11-41"><sch:title>Consistently marked namespace imports</sch:title>
   <sch:rule context="xs:import">

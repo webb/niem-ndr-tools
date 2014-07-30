@@ -46,7 +46,7 @@ done >> "$GREPIFY_RESULTS"
 
 NOTVAR=''
 cat <<EOF >> "$GREPIFY_RESULTS"
-# Local ${NOTVAR]Variables:
+# Local ${NOTVAR}Variables:
 # mode: grep
 # End:
 EOF

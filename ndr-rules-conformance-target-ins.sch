@@ -18,20 +18,20 @@
   <sch:rule context="*[. is nf:get-document-element(.)]">
     <sch:report test="true()">Rule 7-2: The document MUST be namespace-well-formed and namespace-valid.</sch:report>
   </sch:rule>
-</sch:pattern>            
+</sch:pattern>
         
 <sch:pattern id="rule_12-2"><sch:title>Element with structures:ref does not have content</sch:title>
   <sch:rule context="*[@structures:ref]">
     <sch:assert test="empty(element() | text())">Rule 12-2: An element that has attribute structures:ref MUST NOT have element or text content.</sch:assert>
   </sch:rule>
-</sch:pattern>            
+</sch:pattern>
           
 <sch:pattern id="rule_12-3"><sch:title>Attribute structures:ref must reference structures:id</sch:title>
   <sch:rule context="*[@structures:ref]">
     <sch:let name="ref" value="@structures:ref"/>
     <sch:assert test="exists(//*[@structures:id = $ref])">Rule 12-3: The value of an attribute structures:ref MUST match the value of an attribute structures:id of some element in the XML document.</sch:assert>
   </sch:rule>
-</sch:pattern>            
+</sch:pattern>
           
 <sch:pattern id="rule_12-13"><sch:title>Attribute structures:metadata references metadata element</sch:title>
   <sch:rule context="*[exists(@structures:metadata)]">

@@ -21,7 +21,7 @@ test_set_stdout <<EOF
 2:successful-report:ns-valid
 2:successful-report:target-ns-is-rfc3986
 2:successful-report:well-formed-xml
-135:failed-assert:rule-sop-abstract-element
+135:successful-report:rule-sop-element
 EOF
 
 test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report --rules=ref has-bad-definition.xsd
