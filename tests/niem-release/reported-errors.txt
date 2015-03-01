@@ -1,3 +1,0 @@
-../../pkg/niem-release/niem/codes/cbrncl/3.0/cbrncl.xsd:1190:successful-report:rule-sop-simple-type:
-../../pkg/niem-release/niem/codes/cbrncl/3.0/cbrncl.xsd:441:successful-report:rule-sop-simple-type:
-../../pkg/niem-release/niem/codes/cbrncl/3.0/cbrncl.xsd:1131:successful-report:rule-sop-simple-type:
