@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<w:WantList w:release="3.0-with-domain-updates" w:product="NIEM"
-  w:nillableDefault="true" xmlns:w="http://niem.gov/niem/wantlist/2.2"
-  xmlns:cap="urn:oasis:names:tc:emergency:cap:1.1" xmlns:edxl-cap="http://release.niem.gov/niem/adapters/edxl-cap/3.0/">
-  <w:Type w:name="edxl-cap:AlertAdapterType" w:isRequested="true">
-    <w:ElementInType w:name="cap:alert" w:isReference="false"
-      w:minOccurs="1" w:maxOccurs="1"/>
-  </w:Type>
-</w:WantList>
