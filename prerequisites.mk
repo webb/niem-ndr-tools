@@ -53,7 +53,6 @@ repo_dir_niem_ndr_artifacts = $(repos_dir)/niem_ndr_artifacts.git
 touch = mkdir -p $(dir $(1)) && touch $(1)
 
 all: $(setup_tokens)
-	mkdir -p $(root_dir)
 
 sync: $(synced_tokens)
 
@@ -146,9 +145,9 @@ $(synced_token_niem_ndr_artifacts):
 	$(call touch,$@)
 
 $(setup_token_niem_ndr_artifacts): $(synced_token_niem_ndr_artifacts)
-	mkdir -p $(root_dir)/share/niem-ndr-artifacts
+	mkdir -p $(root_dir)/share/niem-ndr-artifacts/ndr-3.0
 	(cd $(repo_dir_niem_ndr_artifacts) \
-		&& find . \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 tar cf -) \
-		| (cd $(root_dir)/share/niem-ndr-artifacts && tar xf -)
+			&& git archive master) \
+		| tar -x -C $(root_dir)/share/niem-ndr-artifacts/ndr-3.0
 	$(call touch,$@)
 

@@ -1,0 +1,56 @@
+
+SHELL = @bash@ -o pipefail
+
+PACKAGE_NAME = @PACKAGE_NAME@
+PACKAGE_VERSION = @PACKAGE_VERSION@
+dist_name = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
+
+TOKENS_DIR = tmp/tokens
+
+.PHONY: default
+default: help
+
+.PHONY: help
+help:
+	@ echo "Pick a target:"
+	@ echo "  all: build all the usual suspects"
+	@ echo "  clean: clean up the basics: remove tokens and redo a lot of stuff"
+	@ echo "  distclean: nuke the package distribution zips and otherwise clean everything you can"
+	@ echo "  set-shasums: reset the checksums so that the build system expects the zip files that are already on disk"
+	@ echo "  reset-patch: rebuild the patch file so that the build system recreates the ISO Schematron distribution as it is on disk"
+	@ echo "  check: identify badly-permissioned test scripts (must be at least u+rx)"
+	@ echo "  untest: remove traces of running tests"
+	@ echo "  test: run tests"
+	@ echo "      This is parallelizable; run \"make -j 8 test\"."
+	@ echo "  cache: download cached files"
+
+all: 
+
+.PHONY: cache
+cache: $(CACHED_FILES)
+
+##################################################################
+# cleanup
+
+clean:
+	rm -rf tmp pkg
+	find . -type f -name 'tmp.*' -print0 | xargs -0 rm -f
+
+distclean: clean
+	rm -rf var
+	find . -type f -name '*~' -print0 | xargs -0 rm -f
+
+
+#############################################################################
+# zip
+
+.PHONY: zip
+zip: tmp/$(dist_name).zip
+
+tmp/$(dist_name).zip: all
+	$(MAKE) -f prerequisites.mk
+	$(RM) -r tmp/$(dist_name)
+	$(MKDIR_P) tmp/$(dist_name)
+	(cd tmp/all && $(tar) cf - .) | (cd tmp/$(dist_name) && $(tar) xf -)
+	(cd tmp/prerequisites && $(tar) cf - .) | (cd tmp/$(dist_name) && $(tar) xf -)
+	cd tmp && $(zip) -9 -r $(dist_name).zip $(dist_name)
