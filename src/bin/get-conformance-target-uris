@@ -6,14 +6,17 @@
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 
-. "$(dirname "$0")"/../lib/common.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
+set -o nounset -o errexit
 
-GET_CONFORMANCE_TARGET_URIS_XSL=$NDR_TOOLS_ROOT_DIR/lib/get-conformance-target-uris.xsl
-ensure_file_exists "$GET_CONFORMANCE_TARGET_URIS_XSL"
+root_dir=$(dirname "$0")/..
+. "$root_dir"/share/wrtools-core/opt_help.bash
+. "$root_dir"/share/wrtools-core/opt_verbose.bash
+. "$root_dir"/share/wrtools-core/fail.bash
+. "$root_dir"/share/wrtools-core/temp.bash
+
+GET_CONFORMANCE_TARGET_URIS_XSL=$root_dir/share/MACRO_PACKAGE_NAME/get-conformance-target-uris.xsl
+[[ -f $GET_CONFORMANCE_TARGET_URIS_XSL && -r $GET_CONFORMANCE_TARGET_URIS_XSL ]] \
+  || fail "Can't read file \"$GET_CONFORMANCE_TARGET_URIS_XSL\""
 
 OPTIND=1
 while getopts :hv-: OPTION
@@ -26,7 +29,6 @@ do
                 help ) opt_help;;
                 verbose ) opt_verbose;;
                 help=* | verbose=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
-                *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
                 * ) fail "Unexpected long option \"$OPTARG\"";;
             esac;;
         '?' ) fail "Unknown short option \"$OPTARG\"";;
@@ -36,9 +38,7 @@ do
 done
 shift $((OPTIND-1))
 
-ensure "Need one argument" test $# = 1
-ensure_file_exists "$1"
+(( $# == 1 )) || fail "Need 1 file argument (got $#)"
+[[ -f $1 && -r $1 ]] || fail "Argument must be a readable file: $1"
 
-"$NDR_TOOLS_ROOT_DIR/bin/xalan" -- \
-    -XSL "$( "$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$GET_CONFORMANCE_TARGET_URIS_XSL" )" \
-    -IN "$( "$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$1" )"
+vrun xalan --xsl="$GET_CONFORMANCE_TARGET_URIS_XSL" --in="$1"

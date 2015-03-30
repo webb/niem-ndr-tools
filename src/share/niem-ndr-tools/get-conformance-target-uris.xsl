@@ -8,10 +8,11 @@
   <output method="text"/>
 
   <template match="/">
-    <value-of select="concat(
-                        translate(normalize-space(//*[@ct:conformanceTargets][1]/@ct:conformanceTargets),
-                                  ' ', '&#10;'),
-                        '&#10;')"/>
+    <variable name="targets"
+              select="normalize-space(//*[@ct:conformanceTargets][1]/@ct:conformanceTargets)"/>
+    <if test="string-length($targets) != 0">
+      <value-of select="concat(translate($targets, ' ', '&#10;'), '&#10;')"/>
+    </if>
   </template>
 
 </stylesheet>

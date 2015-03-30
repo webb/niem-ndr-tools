@@ -14,6 +14,20 @@
 
   <variable name="map" select="document($ndr-id-map)/map:map"/>
 
+  <template match="/">
+    <if test="0 = string-length($ndr-id-map)">
+      <message terminate="yes"
+               >ERROR: XSLT parameter $ndr-id-map must be set.</message>
+    </if>
+    <if test="not($map)">
+      <message terminate="yes"
+               >ERROR: NDR ID map (<value-of select="$map"/>) is empty.</message>
+    </if>
+    <copy>
+      <apply-templates/>
+    </copy>
+  </template>
+
   <template match="@*|node()" priority="-1">
     <copy>
       <apply-templates select="@*|node()"/>

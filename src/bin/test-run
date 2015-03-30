@@ -1,0 +1,148 @@
+#!/bin/bash
+
+#HELP:COMMAND_NAME: run a command and verify exit status, stdout, and stderr
+
+set -o pipefail -o nounset -o errexit
+unset CDPATH
+
+root_dir=$(dirname "$0")/..
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_help.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_verbose.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/fail.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/temp.bash"
+
+#HELP:Options:
+#HELP:  --help | -h: print this help
+#HELP:  --verbose | -v: print debugging and status output
+#HELP:  --keep-temps | -k: Don't delete temporary files
+
+#HELP:  --stdout=$file | -1 $file: set expected stdout from file
+unset EXPECTED_STDOUT
+opt_stdout () {
+    [[ is-set != ${EXPECTED_STDOUT+is-set} ]] || fail "Option --stdout may only be used once"
+    EXPECTED_STDOUT=$1
+}
+
+#HELP:  --stderr=$file | -2 $file: set expected stderr from file
+unset EXPECTED_STDERR
+opt_stderr () {
+    [[ is-set != ${EXPECTED_STDERR+is-set} ]] || fail "Option --stderr may only be used once"
+    EXPECTED_STDERR=$1
+}
+
+#HELP:  --exit-status=$value | -e $value: set expected exit status/error level to value
+unset EXPECTED_EXIT_STATUS
+opt_exit_status () {
+    [[ is-set != ${EXPECTED_EXIT_STATUS+is-set} ]] || fail "Option --exit-status may only be used once"
+    printf -v EXPECTED_EXIT_STATUS '%d' "$1" || fail "Arg to --exit-status must be a number (was $1)"
+}
+
+#HELP:  --exit-success: always return exit status as if test passed
+EXIT_SUCCESS=false
+opt_exit_success () {
+    (( $# == 0 )) || fail "$FUNCNAME requires 0 args (got $#)"
+    EXIT_SUCCESS=true
+}
+
+#HELP:  --report=$file: save report to file
+unset REPORT
+opt_report () {
+    [[ is-set != ${REPORT+is-set} ]] || fail "Option --report may only be used once"
+    REPORT=$1
+}
+
+OPTIND=1
+while getopts :1:2:e:hkv-: OPTION
+do
+    case "$OPTION" in
+        1 ) opt_stdout "$OPTARG";;
+        2 ) opt_stderr "$OPTARG";;
+        e ) opt_exit_status "$OPTARG";;
+        h ) opt_help;;
+        k ) opt_keep_temps;;
+        v ) opt_verbose;;
+        - )
+            case "$OPTARG" in
+                exit-success ) opt_exit_success;;
+                help ) opt_help;;
+                keep-temps ) opt_keep_temps;;
+                verbose ) opt_verbose;;
+                exit-success=* | help=* | keep-temps=* | verbose=* )
+                    fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+
+                stdout=* ) opt_stdout "${OPTARG#*=}";;
+                stderr=* ) opt_stderr "${OPTARG#*=}";;
+                exit-status=* ) opt_exit_status "${OPTARG#*=}";;
+                report=* ) opt_report "${OPTARG#*=}";;
+                stdout | stderr | exit-status | report )
+                    fail "Missing required argument for long option \"$OPTARG\"";;
+                
+                * ) fail "Unexpected long option \"$OPTARG\"";;
+            esac;;
+        '?' ) fail "Unknown short option \"$OPTARG\"";;
+        : ) fail "Short option \"$OPTARG\" missing argument";;
+        * ) fail "bad state OPTARG=\"$OPTARG\"";;
+    esac
+done
+shift $((OPTIND-1))
+
+temp_make_file ACTUAL_STDOUT ACTUAL_STDERR DIFF_RESULT
+
+if [[ is-set = ${REPORT+is-set} ]]
+then mkdir -p "$(dirname "$REPORT")"
+     exec 1> "$REPORT"
+fi
+
+FAILED=false
+
+for (( i = 1; i <= $#; ++i ))
+do printf "arg[%d]=%s\n" "$i" "${@:i:1}"
+done 
+
+# put the running in an "if" so that it won't blow up -o errexit but still yields exit status
+if "$@" > "$ACTUAL_STDOUT" 2> "$ACTUAL_STDERR"
+then ACTUAL_EXIT_STATUS=0
+else ACTUAL_EXIT_STATUS=$?
+fi
+
+printf "exit status: %d\n" "$ACTUAL_EXIT_STATUS"
+
+if [[ is-set = ${EXPECTED_EXIT_STATUS+is-set} ]]
+then if (( $ACTUAL_EXIT_STATUS != $EXPECTED_EXIT_STATUS ))
+     then printf "fail exit status: Expected exit status %d, got %d\n" "$EXPECTED_EXIT_STATUS" "$ACTUAL_EXIT_STATUS"
+          FAILED=true
+     else printf "pass exit status: Expected exit status %d, got %d\n" "$EXPECTED_EXIT_STATUS" "$ACTUAL_EXIT_STATUS"
+     fi
+else printf "pass exit status: not checked\n"
+fi
+
+if [[ is-set = ${EXPECTED_STDOUT+is-set} ]]
+then if ! diff -u "$EXPECTED_STDOUT" "$ACTUAL_STDOUT" > "$DIFF_RESULT"
+     then printf "fail stdout: Actual stdout differs from expected\n"
+          sed -e 's/^/> /' "$DIFF_RESULT"
+          FAILED=true
+     else printf "pass stdout: Actual stdout same as expected\n"
+     fi
+else printf "pass stdout: not checked\n"
+fi
+
+if [[ is-set = ${EXPECTED_STDERR+is-set} ]]
+then if ! diff -u "$EXPECTED_STDERR" "$ACTUAL_STDERR" > "$DIFF_RESULT"
+     then printf "fail stderr: Actual stderr differs from expected\n"
+          sed -e 's/^/> /' "$DIFF_RESULT"
+          FAILED=true
+     else printf "pass stderr: Actual stderr same as expected\n"
+     fi
+else printf "pass stderr: not checked\n"
+fi
+
+if [[ $FAILED = true ]]
+then printf "fail\n"
+else printf "pass\n"
+fi
+
+if [[ $EXIT_SUCCESS = false && $FAILED = true ]]
+then exit 1
+fi
+
+

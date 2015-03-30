@@ -5,29 +5,65 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 dist_name = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
+prefix = @prefix@
+
+#############################################################################
+# prerequisite packages
+wrtools_core_package_name=wrtools-core
+niem_ndr_artifacts_package_name=niem-ndr-artifacts
+
+#############################################################################
+# tools
+INSTALL = @INSTALL@
+MKDIR_P = @MKDIR_P@
+
+find = @find@
+m4 = @m4@
+tar = @tar@
+zip = @zip@
+
+#############################################################################
+# package folders & files
+
 TOKENS_DIR = tmp/tokens
 
-.PHONY: default
-default: help
+src_files = $(shell find src -type f ! -name '*~')
+artifacts_files = $(shell find niem-ndr-artifacts -type f ! -name '*~' ! -name .git ! -name README.md)
 
-.PHONY: help
-help:
-	@ echo "Pick a target:"
-	@ echo "  all: build all the usual suspects"
-	@ echo "  clean: clean up the basics: remove tokens and redo a lot of stuff"
-	@ echo "  distclean: nuke the package distribution zips and otherwise clean everything you can"
-	@ echo "  set-shasums: reset the checksums so that the build system expects the zip files that are already on disk"
-	@ echo "  reset-patch: rebuild the patch file so that the build system recreates the ISO Schematron distribution as it is on disk"
-	@ echo "  check: identify badly-permissioned test scripts (must be at least u+rx)"
-	@ echo "  untest: remove traces of running tests"
-	@ echo "  test: run tests"
-	@ echo "      This is parallelizable; run \"make -j 8 test\"."
-	@ echo "  cache: download cached files"
+all_files = \
+	$(src_files:src/%=tmp/all/%) \
+	$(artifacts_files:niem-ndr-artifacts/%=tmp/all/share/niem-ndr-artifacts/ndr-3.0/%)
 
-all: 
+#############################################################################
+# functions
 
-.PHONY: cache
-cache: $(CACHED_FILES)
+# invoke with $(call touch,$@)
+touch = mkdir -p $(dir $(1)) && touch $(1)
+
+#############################################################################
+# recipes
+
+all: $(all_files)
+
+tmp/all/%: src/% m4-header.m4
+	$(MKDIR_P) $(dir $@)
+	$(m4) -P \
+		-DMACRO_PACKAGE_NAME=$(PACKAGE_NAME) \
+		-DMACRO_WRTOOLS_CORE_PACKAGE_NAME=$(wrtools_core_package_name) \
+		-DMACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME=$(niem_ndr_artifacts_package_name) \
+		m4-header.m4 $< > $@
+	if [[ -x $< ]]; then chmod uog+x $@; fi
+
+install: all
+	$(MKDIR_P) $(prefix)
+	(cd tmp/all && $(tar) cf - .) | $(tar) -x -C $(prefix)
+
+#############################################################################
+# niem-ndr-artifacts
+
+tmp/all/share/niem-ndr-artifacts/ndr-3.0/%: niem-ndr-artifacts/%
+	mkdir -p $(dir $@)
+	cp $< $@
 
 ##################################################################
 # cleanup
@@ -37,7 +73,7 @@ clean:
 	find . -type f -name 'tmp.*' -print0 | xargs -0 rm -f
 
 distclean: clean
-	rm -rf var
+	rm -rf var stow.mk Makefile
 	find . -type f -name '*~' -print0 | xargs -0 rm -f
 
 

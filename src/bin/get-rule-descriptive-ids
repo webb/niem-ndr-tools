@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -o pipefail -o nounset -o errexit
+
+#HELP:COMMAND_NAME: Get a list of the descriptive IDs of rules in the NDR
+
+root_dir=$(dirname "$0")/..
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_help.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_verbose.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/fail.bash"
+
+NDR_ID_MAP="$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-id-map.xml"
+[[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
+  || fail "Can't read NDR ID map file $NDR_ID_MAP"
+
+GET_IDS_XSL="$root_dir/share/MACRO_PACKAGE_NAME/get-rule-descriptive-ids.xsl"
+[[ -f $GET_IDS_XSL && -r $GET_IDS_XSL ]] \
+  || fail "Can't read XSLT $GET_IDS_XSL"
+
+#HELP:Options:
+#HELP:  --help | -h: print this help
+#HELP:  --verbose | -v: print debugging and status output
+
+
+OPTIND=1
+while getopts :hv-: OPTION
+do
+    case "$OPTION" in
+        h ) opt_help;;
+        v ) opt_verbose;;
+        - )
+            case "$OPTARG" in
+                help ) opt_help;;
+                verbose ) opt_verbose;;
+                help=* | verbose=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+                * ) fail "Unexpected long option \"$OPTARG\"";;
+            esac;;
+        '?' ) fail "Unknown short option \"$OPTARG\"";;
+        : ) fail "Short option \"$OPTARG\" missing argument";;
+        * ) fail "bad state OPTARG=\"$OPTARG\"";;
+    esac
+done
+shift $((OPTIND-1))
+
+(( $# == 0 )) || fail "No arguments expected (got $#)"
+
+vrun xalan \
+     --in="$NDR_ID_MAP" \
+     --xsl="$GET_IDS_XSL" \
+     | sort -u
+
+# output spills to stdout

@@ -3,21 +3,23 @@
 #HELP:COMMAND_NAME: run NDR Schematron rules against an XML document, producing a report
 #HELP:Usage: COMMAND_NAME option* $file-to-test.xml
 
-. "$(dirname "$0")"/../lib/common.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/temp.bash
+root_dir=$(dirname "$0")/..
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_help.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_verbose.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/fail.bash"
+. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/temp.bash"
 
-NDR_ID_MAP="$NDR_TOOLS_ROOT_DIR"/lib/ndr-id-map.xml
-ensure_file_exists "$NDR_ID_MAP"
+NDR_ID_MAP="$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-id-map.xml"
+[[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
+  || fail "Can't read NDR ID map file $NDR_ID_MAP"
 
-ANNOTATE_SVRL_XSL="$NDR_TOOLS_ROOT_DIR"/lib/annotate-svrl.xsl
-ensure_file_exists "$ANNOTATE_SVRL_XSL"
+ANNOTATE_SVRL_XSL="$root_dir/share/MACRO_PACKAGE_NAME/annotate-svrl.xsl"
+[[ -f $ANNOTATE_SVRL_XSL && -r $ANNOTATE_SVRL_XSL ]] \
+  || fail "Can't read SVRL annotation XSLT $ANNOTATE_SVRL_XSL"
 
-ANNOTATED_SVRL_TO_TEXT_XSL="$NDR_TOOLS_ROOT_DIR"/lib/annotated-svrl-to-text.xsl
-ensure_file_exists "$ANNOTATED_SVRL_TO_TEXT_XSL"
+ANNOTATED_SVRL_TO_TEXT_XSL="$root_dir/share/MACRO_PACKAGE_NAME/annotated-svrl-to-text.xsl"
+[[ -f $ANNOTATED_SVRL_TO_TEXT_XSL && -r $ANNOTATED_SVRL_TO_TEXT_XSL ]] \
+  || fail "Can't read SVRL-to-text XSLT $ANNOTATED_SVRL_TO_TEXT_XSL"
 
 #HELP:Options:
 #HELP:  --help | -h: print this help
@@ -26,11 +28,9 @@ ensure_file_exists "$ANNOTATED_SVRL_TO_TEXT_XSL"
 
 #HELP:  --rules=$code | -r $code: use NIEM NDR rule set for conformance target $code
 #HELP:      codes: ref, ext, ins, set
-
 unset RULES
-
 opt_rules () {
-    ensure "You can only use --rules or --auto-rules once" test is-set != "${RULES:+is-set}"
+    [[ is-set != ${RULES+is-set} ]] || fail "Only one of options --rules and --auto-rules may be used"
     case "$1" in 
         ext | ins | ref | set ) RULES="$1";;
         * ) fail "Unknown conformance target code: $1. Expecting ext, ins, ref, or set.";;
@@ -39,21 +39,31 @@ opt_rules () {
 
 #HELP:  --auto-rules | -a: set rules by autodetecting conformance targets
 opt_auto_rules () {
-    ensure "You can only use --rules or --auto-rules once" test is-set != "${RULES:+is-set}"
+    [[ is-set != ${RULES+is-set} ]] || fail "Only one of options --rules and --auto-rules may be used"
     RULES=auto
 }
 
 #HELP:  --xml-catalog=$xml-catalog | -c $xml-catalog: Use XML catalog for cross-references
 unset XML_CATALOG
 opt_xml_catalog () {
+    (( $# == 1 )) || fail "function $FUNCNAME requires 1 arg: an XML catalog file"
+    [[ -f $1 && -r $1 ]] || fail "argument to option --xml-catalog is not a readable file"
     XML_CATALOG=$1
 }
 
+#HELP:  --brief | -b: Yield brief report, for diffs
+BRIEF=false
+opt_brief () {
+    (( $# == 0 )) || fail "function $FUNCNAME requires 0 args (got $#)"
+    BRIEF=true
+}
+
 OPTIND=1
-while getopts :ac:hkr:v-: OPTION
+while getopts :abc:hkr:v-: OPTION
 do
     case "$OPTION" in
         a ) opt_auto_rules;;
+        b ) opt_brief;;
         c ) opt_xml_catalog "$OPTARG";;
         h ) opt_help;;
         k ) opt_keep_temps;;
@@ -62,6 +72,7 @@ do
         - )
             case "$OPTARG" in
                 auto-rules ) opt_auto_rules;;
+                brief ) opt_brief;;
                 help ) opt_help;;
                 keep-temps ) opt_keep_temps;;
                 rules=* ) opt_rules "${OPTARG#*=}";;
@@ -79,11 +90,10 @@ do
 done
 shift $((OPTIND-1))
 
-ensure "You must use one of --rules or --auto-rules" test is-set = "${RULES:+is-set}"
+[[ is-set = ${RULES+is-set} ]] || fail "One of options --rules and --auto-rules must be used"
 
-ensure "No file to validate" test $# -gt 0
-ensure "Only can validate one file" test $# = 1
-ensure_file_exists "$1"
+(( $# == 1 )) || fail "Must have one file to validate (got $#)"
+[[ -f $1 && -r $1 ]] || fail "File to validate \"$1\" must be a readable file"
 
 temp_make_file SVRL_RESULTS
 
@@ -103,38 +113,43 @@ then
                 printf "Warning: ignoring unknown conformance target %q\n" "$REPLY" >&2
                 ;;
         esac
-    done < <("$NDR_TOOLS_ROOT_DIR"/bin/get-conformance-target-uris "$1")
-    ensure "No conformance target identified for file \"$1\"" test is-set = "${RULES:+is-set}"
+    done < <(get-conformance-target-uris "$1")
+    [[ is-set = ${RULES+is-set} ]] || fail "No conformance target identified for file \"$1\""
 fi
 
-ensure "No rules specified for file \"$1\"" test is-set = "${RULES:+is-set}"
+[[ is-set = ${RULES+is-set} ]] || fail "No rules specified for file \"$1\""
 
-SCHEMA=$NDR_TOOLS_ROOT_DIR/ndr-rules-conformance-target-"$RULES".sch
-ensure_file_exists "$SCHEMA"
+SCHEMA=$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-rules-conformance-target-"$RULES".sch
+[[ -f $SCHEMA && -r $SCHEMA ]] || fail "Schematron schema is not a readable file (\"$SCHEMA\")"
 vecho "Validating against Schematron schema \"$1\""
 
-COMMAND=("$NDR_TOOLS_ROOT_DIR"/bin/schematron --schematron-schema="$SCHEMA")
+COMMAND=(schematron --schema="$SCHEMA")
 if [[ ${XML_CATALOG:+is-set} ]]
-then COMMAND+=(--param=+xml-catalog="$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$XML_CATALOG")")
+then COMMAND+=(--param=+xml-catalog="$XML_CATALOG")
 fi
-COMMAND+=("$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$1")")
+COMMAND+=("$1")
 
 vrun "${COMMAND[@]}" > "$SVRL_RESULTS"
 
 temp_make_file ANNOTATED_SVRL_RESULTS UNSORTED_TEST_REPORT
 
-vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- -L \
-    -XSL "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATE_SVRL_XSL")" \
-    -IN "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$SVRL_RESULTS")" \
-    -PARAM ndr-id-map "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$NDR_ID_MAP")" \
-    -OUT "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATED_SVRL_RESULTS")"
+vrun xalan \
+     --in="$SVRL_RESULTS" \
+     --xsl="$ANNOTATE_SVRL_XSL" \
+     --out="$ANNOTATED_SVRL_RESULTS" \
+     --param=ndr-id-map="$NDR_ID_MAP" \
+     -- -L
 
-vrun "$NDR_TOOLS_ROOT_DIR"/bin/xalan -- \
-    -XSL "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATED_SVRL_TO_TEXT_XSL")" \
-    -IN "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$ANNOTATED_SVRL_RESULTS")" \
-    -OUT "$("$NDR_TOOLS_ROOT_DIR"/bin/get-java-pathname "$UNSORTED_TEST_REPORT")"
+vrun xalan \
+     --in="$ANNOTATED_SVRL_RESULTS" \
+     --xsl="$ANNOTATED_SVRL_TO_TEXT_XSL" \
+     --out="$UNSORTED_TEST_REPORT"
 
-vrun sort --field-separator=: --key=1n --key=3f --key=2f "$UNSORTED_TEST_REPORT"
+vrun sort --field-separator=: --key=1n --key=3f --key=2f "$UNSORTED_TEST_REPORT" \
+  | { if [[ $BRIEF = true ]]
+      then cut -d : -f 1,2,3
+      else cat
+      fi; }
 
-# output to stdout
+# output spills to stdout
 

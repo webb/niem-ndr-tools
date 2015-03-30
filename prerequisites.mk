@@ -23,31 +23,29 @@ repo_wrtools_core       = https://github.com/webb/wrtools-core.git
 repo_saxon_cli          = https://github.com/webb/saxon-cli.git
 repo_xalan_cli          = https://github.com/webb/xalan-cli.git
 repo_schematron_cli     = https://github.com/webb/schematron-cli.git
-repo_niem_ndr_artifacts = https://github.com/webb/niem-ndr-artifacts.git
 
 tokens_dir = tmp/tokens
 synced_token_wrtools_core       = $(tokens_dir)/synced/wrtools_core
 synced_token_saxon_cli          = $(tokens_dir)/synced/saxon_cli
 synced_token_xalan_cli          = $(tokens_dir)/synced/xalan_cli
 synced_token_schematron_cli     = $(tokens_dir)/synced/schematron_cli
-synced_token_niem_ndr_artifacts = $(tokens_dir)/synced/niem_ndr_artifacts
 
-synced_tokens = $(synced_token_wrtools_core) $(synced_token_saxon_cli) $(synced_token_xalan_cli) $(synced_token_schematron_cli) $(synced_token_niem_ndr_artifacts)
+synced_tokens = $(synced_token_wrtools_core) $(synced_token_saxon_cli) $(synced_token_xalan_cli) $(synced_token_schematron_cli)
 
 setup_token_wrtools_core       = $(tokens_dir)/setup/wrtools_core
 setup_token_saxon_cli          = $(tokens_dir)/setup/saxon_cli
 setup_token_xalan_cli          = $(tokens_dir)/setup/xalan_cli
 setup_token_schematron_cli     = $(tokens_dir)/setup/schematron_cli
-setup_token_niem_ndr_artifacts = $(tokens_dir)/setup/niem_ndr_artifacts
 
-setup_tokens = $(setup_token_wrtools_core) $(setup_token_saxon_cli) $(setup_token_xalan_cli) $(setup_token_schematron_cli) $(setup_token_niem_ndr_artifacts)
+setup_tokens = $(setup_token_wrtools_core) $(setup_token_saxon_cli) $(setup_token_xalan_cli) $(setup_token_schematron_cli)
 
 repos_dir = tmp/repos
 repo_dir_wrtools_core       = $(repos_dir)/wrtools_core.git
 repo_dir_saxon_cli          = $(repos_dir)/saxon_cli.git
 repo_dir_xalan_cli          = $(repos_dir)/xalan_cli.git
 repo_dir_schematron_cli     = $(repos_dir)/schematron_cli.git
-repo_dir_niem_ndr_artifacts = $(repos_dir)/niem_ndr_artifacts.git
+
+repos = $(repo_dir_wrtools_core) $(repo_dir_saxon_cli) $(repo_dir_xalan_cli) $(repo_dir_schematron_cli)
 
 # invoke with $(call touch,$@)
 touch = mkdir -p $(dir $(1)) && touch $(1)
@@ -59,6 +57,17 @@ sync: $(synced_tokens)
 resync:
 	rm -f $(synced_tokens)
 	$(MAKE) -f unconfigured.mk sync
+
+#############################################################################
+# housekeeping
+
+.PHONY: clean
+clean:
+	$(RM) -r $(root_dir) $(synced_tokens) $(setup_tokens)
+
+.PHONY: distclean
+distclean: clean
+	$(RM) -r $(repos)
 
 #############################################################################
 # wrtools-core
@@ -130,24 +139,5 @@ $(setup_token_schematron_cli): $(synced_token_schematron_cli) $(setup_token_wrto
 	cd $(repo_dir_schematron_cli); ./configure --prefix=$(root_dir_abs)
 	make -C $(repo_dir_schematron_cli)
 	make -C $(repo_dir_schematron_cli) install
-	$(call touch,$@)
-
-#############################################################################
-# niem-ndr-artifacts
-
-$(synced_token_niem_ndr_artifacts):
-	if [[ -d $(repo_dir_niem_ndr_artifacts) ]]; \
-	then cd $(repo_dir_niem_ndr_artifacts); \
-	     git pull; \
-	else mkdir -p $(dir $(repo_dir_niem_ndr_artifacts)); \
-	     git clone $(repo_niem_ndr_artifacts) $(repo_dir_niem_ndr_artifacts); \
-	fi
-	$(call touch,$@)
-
-$(setup_token_niem_ndr_artifacts): $(synced_token_niem_ndr_artifacts)
-	mkdir -p $(root_dir)/share/niem-ndr-artifacts/ndr-3.0
-	(cd $(repo_dir_niem_ndr_artifacts) \
-			&& git archive master) \
-		| tar -x -C $(root_dir)/share/niem-ndr-artifacts/ndr-3.0
 	$(call touch,$@)
 
