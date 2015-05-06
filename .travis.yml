@@ -1,0 +1,15 @@
+language: c
+install:
+- sudo apt-get install gradle
+script: ./configure --prefix="$PWD/root" && make zip dist_name=${TRAVIS_TAG}
+notifications:
+  email: true
+deploy:
+  provider: releases
+  api_key:
+    secure: ZH6uvUzVnUTfXUOe3zuvFcu1FhtWr9zREHkdOM8O1E3vA7Eu6nhzZTWY66csa6FrhpdMZeUwFl5Kl2wpURT/l6kWKPyRUD284dneUnnYy3qC5paHCCyeE5NCmVeDWgdvtLAP3FP4XXaCm2i+IRhKT9jHvFIbqEhki56AQxAS6/A=
+  file: tmp/${TRAVIS_TAG}.zip
+  on:
+    repo: webb/niem-ndr-tools
+    all_branches: true
+    tags: true
