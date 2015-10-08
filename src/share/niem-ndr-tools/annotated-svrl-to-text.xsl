@@ -8,7 +8,7 @@
 
   <template match="svrl:successful-report | svrl:failed-assert">
     <variable name="pattern" select="preceding-sibling::svrl:active-pattern[1]"/>
-    <value-of select="concat(@lineNumber, ':', local-name(), ':', $pattern/@descriptiveID, ':', $pattern/@id, ':', $pattern/@name)"/>
+    <value-of select="concat(@lineNumber, ':', local-name(), ':', $pattern/@descriptiveID, ':', $pattern/@id, ':', normalize-space($pattern/@name))"/>
     <if test="svrl:text">
       <text>:</text>
       <value-of select="normalize-space(svrl:text)"/>
