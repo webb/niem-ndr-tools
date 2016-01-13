@@ -1,10 +1,5 @@
-language: c
-install:
-- sudo apt-get install gradle
-script: ./configure --prefix="$PWD/root" && make
-after_success: if [[ -n ${TRAVIS_TAG} ]]; then make zip dist_name=${TRAVIS_TAG}; fi
-notifications:
-  email: true
+language: java
+script: make -f zip.mk zip release=${TRAVIS_TAG}
 deploy:
   provider: releases
   api_key:

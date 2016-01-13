@@ -76,17 +76,3 @@ distclean: clean
 	rm -rf var stow.mk Makefile
 	find . -type f -name '*~' -print0 | xargs -0 rm -f
 
-
-#############################################################################
-# zip
-
-.PHONY: zip
-zip: tmp/$(dist_name).zip
-
-tmp/$(dist_name).zip: all
-	$(MAKE) -f prerequisites.mk
-	$(RM) -r tmp/$(dist_name)
-	$(MKDIR_P) tmp/$(dist_name)
-	(cd tmp/all && $(tar) cf - .) | (cd tmp/$(dist_name) && $(tar) xf -)
-	(cd tmp/prerequisites && $(tar) cf - .) | (cd tmp/$(dist_name) && $(tar) xf -)
-	cd tmp && $(zip) -9 -r $(dist_name).zip $(dist_name)
