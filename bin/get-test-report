@@ -4,20 +4,23 @@
 #HELP:Usage: COMMAND_NAME option* $file-to-test.xml
 
 root_dir=$(dirname "$0")/..
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_help.bash"
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_verbose.bash"
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/fail.bash"
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/temp.bash"
+. "$root_dir/share/wrtools-core/opt_help.bash"
+. "$root_dir/share/wrtools-core/opt_verbose.bash"
+. "$root_dir/share/wrtools-core/fail.bash"
+. "$root_dir/share/wrtools-core/temp.bash"
 
-NDR_ID_MAP="$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-id-map.xml"
+share_dir=${root_dir}/share/niem-ndr-tools
+ndr_artifacts_dir=${share_dir}/niem-ndr-artifacts
+
+NDR_ID_MAP=${ndr_artifacts_dir}/ndr-id-map.xml
 [[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
   || fail "Can't read NDR ID map file $NDR_ID_MAP"
 
-ANNOTATE_SVRL_XSL="$root_dir/share/MACRO_PACKAGE_NAME/annotate-svrl.xsl"
+ANNOTATE_SVRL_XSL=${share_dir}/annotate-svrl.xsl
 [[ -f $ANNOTATE_SVRL_XSL && -r $ANNOTATE_SVRL_XSL ]] \
   || fail "Can't read SVRL annotation XSLT $ANNOTATE_SVRL_XSL"
 
-ANNOTATED_SVRL_TO_TEXT_XSL="$root_dir/share/MACRO_PACKAGE_NAME/annotated-svrl-to-text.xsl"
+ANNOTATED_SVRL_TO_TEXT_XSL=${share_dir}/annotated-svrl-to-text.xsl
 [[ -f $ANNOTATED_SVRL_TO_TEXT_XSL && -r $ANNOTATED_SVRL_TO_TEXT_XSL ]] \
   || fail "Can't read SVRL-to-text XSLT $ANNOTATED_SVRL_TO_TEXT_XSL"
 
@@ -119,11 +122,11 @@ fi
 
 [[ is-set = ${RULES+is-set} ]] || fail "No rules specified for file \"$1\""
 
-SCHEMA=$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-rules-conformance-target-"$RULES".sch
-[[ -f $SCHEMA && -r $SCHEMA ]] || fail "Schematron schema is not a readable file (\"$SCHEMA\")"
+SCHEMA=${ndr_artifacts_dir}/ndr-rules-conformance-target-"$RULES".sch.xsl
+[[ -f $SCHEMA && -r $SCHEMA ]] || fail "Schematron schema XSLT is not a readable file (\"$SCHEMA\")"
 vecho "Validating against Schematron schema \"$1\""
 
-COMMAND=(schematron --schema="$SCHEMA")
+COMMAND=(schematron-execute --xslt-file="$SCHEMA" --format=svrl)
 if [[ ${XML_CATALOG:+is-set} ]]
 then COMMAND+=(--param=+xml-catalog="$XML_CATALOG")
 fi

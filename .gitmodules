@@ -1,3 +1,4 @@
-[submodule "niem-ndr-artifacts"]
-	path = niem-ndr-artifacts
+[submodule "share/niem-ndr-tools/niem-ndr-artifacts"]
+	path = share/niem-ndr-tools/niem-ndr-artifacts
 	url = https://github.com/webb/niem-ndr-artifacts.git
+	branch = latest-compiled

@@ -12,9 +12,9 @@ root_dir=$(dirname "$0")/..
 . "$root_dir/share/wrtools-core/fail.bash"
 . "$root_dir/share/wrtools-core/temp.bash"
 
-share_dir=$root_dir/share/niem-ndr-tools
+share_dir=${root_dir}/share/niem-ndr-tools
 [[ -d $share_dir ]] || fail "failed to find share dir $share_dir"
-get_xsd_target_namespace_xsl=$share_dir/get-xsd-target-namespace.xsl
+get_xsd_target_namespace_xsl=${share_dir}/get-xsd-target-namespace.xsl
 [[ -f $get_xsd_target_namespace_xsl && -r $get_xsd_target_namespace_xsl ]] || fail "file not readable file: $get_xsd_target_namespace_xsl"
 
 OPTIND=1

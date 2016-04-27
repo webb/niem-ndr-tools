@@ -17,8 +17,8 @@ if [[ is-set != "${NIEM_NDR_TOOLS_LOADED_FN_TEST_BASH+is-set}" ]]
 then NIEM_NDR_TOOLS_LOADED_FN_TEST_BASH=true
 
 NIEM_NDR_TOOLS_TEST_ROOT_DIR=$(dirname "$BASH_SOURCE")/..
-. "$NIEM_NDR_TOOLS_TEST_ROOT_DIR"/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/temp.bash
-. "$NIEM_NDR_TOOLS_TEST_ROOT_DIR"/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_verbose.bash
+. "$NIEM_NDR_TOOLS_TEST_ROOT_DIR"/share/wrtools-core/temp.bash
+. "$NIEM_NDR_TOOLS_TEST_ROOT_DIR"/share/wrtools-core/opt_verbose.bash
 
 temp_make_file NDR_TOOLS_TEST_EXPECTED_STDOUT \
                NDR_TOOLS_TEST_ACTUAL_STDOUT \
