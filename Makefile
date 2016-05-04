@@ -34,14 +34,12 @@ stow_dir = ${root_dir}/stow
 # building some packages requires other packages, so the pile goes on the path, and order matters
 PATH := ${root_dir_abs}/bin:${PATH}
 
+stow = stow -v --no-folding
+
 repos_dir= ${zip_dir}/repos
 tokens_dir = ${zip_dir}/token
 
-# stages are:
-# * sync
-# * configure
-# * make
-# * install
+phases = sync configure make install
 
 # order matters here
 packages = \
@@ -94,6 +92,9 @@ help:
 #############################################################################
 # wrtools-core
 
+.PHONY: wrtools-core
+wrtools-core: ${phases:%=${tokens_dir}/%/wrtools_core}
+
 ${tokens_dir}/sync/wrtools_core:
 	if [[ -d ${stow_dir}/wrtools-core ]]; \
 	then cd ${stow_dir}/wrtools-core && git pull; \
@@ -110,11 +111,14 @@ ${tokens_dir}/make/wrtools_core: ${tokens_dir}/configure/wrtools_core
 	mkdir -p ${dir $@} && touch $@
 
 ${tokens_dir}/install/wrtools_core: ${tokens_dir}/make/wrtools_core
-	mkdir -p ${stow_dir} && cd ${stow_dir} && stow --stow wrtools-core
+	mkdir -p ${stow_dir} && cd ${stow_dir} && ${stow} --stow wrtools-core
 	mkdir -p ${dir $@} && touch $@
 
 #############################################################################
 # self
+
+.PHONY: self
+self: ${phases:%=${tokens_dir}/%/self}
 
 ${tokens_dir}/sync/self:
 	rm -rf ${stow_dir}/self
@@ -129,7 +133,7 @@ ${tokens_dir}/make/self: ${tokens_dir}/configure/self
 	mkdir -p ${dir $@} && touch $@
 
 ${tokens_dir}/install/self: ${tokens_dir}/make/self
-	mkdir -p ${stow_dir} && cd ${stow_dir} && stow --stow self
+	mkdir -p ${stow_dir} && cd ${stow_dir} && ${stow} --stow self
 	mkdir -p ${dir $@} && touch $@
 
 
