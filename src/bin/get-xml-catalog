@@ -44,10 +44,20 @@ cat <<EOF
 EOF
 
 for NAME
-do 
-    SCHEMA_NAMESPACE=$( xalan --xsl="$get_xsd_target_namespace_xsl" \
-                              --in="$NAME" )
-    printf "  <uri name=\"%s\" uri=\"%s\"/>\n" "$SCHEMA_NAMESPACE" "$NAME"
+do
+    case $(basename "$NAME") in
+        *.xsd )
+            SCHEMA_NAMESPACE=$( xalan --xsl="$get_xsd_target_namespace_xsl" \
+                                      --in="$NAME" )
+            printf "  <uri name=\"%s\" uri=\"%s\"/>\n" "$SCHEMA_NAMESPACE" "$NAME"
+            ;;
+        xml-catalog.xml | *-xml-catalog.xml | xml-catalog-*.xml )
+            printf "  <nextCatalog catalog=\"%s\"/>\n" "$NAME"
+            ;;
+        * )
+            fail "Unrecognized file $NAME"
+            ;;
+    esac
 done
 
 cat <<EOF
