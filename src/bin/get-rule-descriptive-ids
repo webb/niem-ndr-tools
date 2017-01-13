@@ -5,9 +5,9 @@ set -o pipefail -o nounset -o errexit
 #HELP:COMMAND_NAME: Get a list of the descriptive IDs of rules in the NDR
 
 root_dir=$(dirname "$0")/..
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_help.bash"
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/opt_verbose.bash"
-. "$root_dir/share/MACRO_WRTOOLS_CORE_PACKAGE_NAME/fail.bash"
+. "$root_dir/share/wrtools-core/opt_help.bash"
+. "$root_dir/share/wrtools-core/opt_verbose.bash"
+. "$root_dir/share/wrtools-core/fail.bash"
 
 NDR_ID_MAP="$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-id-map.xml"
 [[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
