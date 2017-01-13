@@ -63,6 +63,9 @@ all: ${packages:%=${tokens_dir}/make/%}
 .PHONY: install # put stuff in zip dir
 install: ${packages:%=${tokens_dir}/install/%}
 
+.PHONY: configure # configure sub-packages
+configure: ${packages:%=${tokens_dir}/configure/%}
+
 .PHONY: sync # make sure stuff has been gotten from git repos
 sync: ${packages:%=${tokens_dir}/sync/%}
 
@@ -92,6 +95,42 @@ help:
 ${tokens_dir}/sync/self:
 	mkdir -p ${repos_dir}/self
 	tar cf - $$(git ls-files) | ( cd ${repos_dir}/self && tar xf -)
+	mkdir -p ${dir $@} && touch $@
+
+#############################################################################
+# wrtools_core
+
+${tokens_dir}/configure/wrtools_core: ${tokens_dir}/sync/wrtools_core
+	mkdir -p ${dir $@} && touch $@
+
+${tokens_dir}/make/wrtools_core: ${tokens_dir}/configure/wrtools_core
+	mkdir -p ${dir $@} && touch $@
+
+${tokens_dir}/install/wrtools_core: ${tokens_dir}/make/wrtools_core
+	(cd ${repos_dir}/wrtools_core && git ls-files -z) \
+	| rsync --from0 --files-from=- \
+		--exclude='/.stow-local-ignore' \
+		--exclude='/README.md' \
+		--filter='+ .*' \
+	${repos_dir}/wrtools_core ${root_dir}/
+	mkdir -p ${dir $@} && touch $@
+
+#############################################################################
+# schematron-cli
+
+${tokens_dir}/configure/schematron_cli: ${tokens_dir}/sync/schematron_cli
+	mkdir -p ${dir $@} && touch $@
+
+${tokens_dir}/make/schematron_cli: ${tokens_dir}/configure/schematron_cli
+	mkdir -p ${dir $@} && touch $@
+
+${tokens_dir}/install/schematron_cli: ${tokens_dir}/make/schematron_cli
+	(cd ${repos_dir}/schematron_cli && git ls-files -z) \
+	| rsync --from0 --files-from=- \
+		--exclude='/.stow-local-ignore' \
+		--exclude='/README.md' \
+		--filter='+ .*' \
+	${repos_dir}/schematron_cli ${root_dir}/
 	mkdir -p ${dir $@} && touch $@
 
 #############################################################################
