@@ -13,11 +13,11 @@ NDR_ID_MAP="$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-id
 [[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
   || fail "Can't read NDR ID map file $NDR_ID_MAP"
 
-ANNOTATE_SVRL_XSL="$root_dir/share/MACRO_PACKAGE_NAME/annotate-svrl.xsl"
+ANNOTATE_SVRL_XSL="$root_dir/share/niem-ndr-tools/annotate-svrl.xsl"
 [[ -f $ANNOTATE_SVRL_XSL && -r $ANNOTATE_SVRL_XSL ]] \
   || fail "Can't read SVRL annotation XSLT $ANNOTATE_SVRL_XSL"
 
-ANNOTATED_SVRL_TO_TEXT_XSL="$root_dir/share/MACRO_PACKAGE_NAME/annotated-svrl-to-text.xsl"
+ANNOTATED_SVRL_TO_TEXT_XSL="$root_dir/share/niem-ndr-tools/annotated-svrl-to-text.xsl"
 [[ -f $ANNOTATED_SVRL_TO_TEXT_XSL && -r $ANNOTATED_SVRL_TO_TEXT_XSL ]] \
   || fail "Can't read SVRL-to-text XSLT $ANNOTATED_SVRL_TO_TEXT_XSL"
 

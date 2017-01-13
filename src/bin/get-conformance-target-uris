@@ -14,7 +14,7 @@ root_dir=$(dirname "$0")/..
 . "$root_dir"/share/wrtools-core/fail.bash
 . "$root_dir"/share/wrtools-core/temp.bash
 
-GET_CONFORMANCE_TARGET_URIS_XSL=$root_dir/share/MACRO_PACKAGE_NAME/get-conformance-target-uris.xsl
+GET_CONFORMANCE_TARGET_URIS_XSL=$root_dir/share/niem-ndr-tools/get-conformance-target-uris.xsl
 [[ -f $GET_CONFORMANCE_TARGET_URIS_XSL && -r $GET_CONFORMANCE_TARGET_URIS_XSL ]] \
   || fail "Can't read file \"$GET_CONFORMANCE_TARGET_URIS_XSL\""
 
