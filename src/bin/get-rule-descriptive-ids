@@ -9,7 +9,7 @@ root_dir=$(dirname "$0")/..
 . "$root_dir/share/wrtools-core/opt_verbose.bash"
 . "$root_dir/share/wrtools-core/fail.bash"
 
-NDR_ID_MAP="$root_dir/share/MACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME/ndr-3.0/ndr-id-map.xml"
+NDR_ID_MAP="$root_dir/share/niem-ndr-artifacts/ndr-3.0/ndr-id-map.xml"
 [[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
   || fail "Can't read NDR ID map file $NDR_ID_MAP"
 

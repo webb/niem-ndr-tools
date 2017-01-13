@@ -48,7 +48,6 @@ all: $(all_files)
 tmp/all/%: src/% m4-header.m4
 	$(MKDIR_P) $(dir $@)
 	$(m4) -P \
-		-DMACRO_NIEM_NDR_ARTIFACTS_PACKAGE_NAME=$(niem_ndr_artifacts_package_name) \
 		m4-header.m4 $< > $@
 	if [[ -x $< ]]; then chmod uog+x $@; fi
 
