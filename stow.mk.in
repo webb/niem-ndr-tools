@@ -6,7 +6,7 @@ prefix = @prefix@
 
 stow = @stow@
 
-.PHONY: all unstow uninstall install stow rm
+.PHONY: all # clean and rebuild
 all: rm install stow
 
 rm: unstow uninstall
@@ -23,3 +23,8 @@ install:
 stow:
 	$(stow) -d $(prefix)/stow -t $(prefix) --stow --verbose --no-folding $(PACKAGE_NAME)
 
+
+.PHONY: help # Print this help
+help:
+	@ echo Available targets:
+	@ sed -e 's/^.PHONY: *\([^ #]*\) *\# *\(.*\)$$/  \1: \2/p;d' stow.mk
