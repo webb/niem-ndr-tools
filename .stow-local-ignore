@@ -1,6 +1,10 @@
 .*~
-/README\.md
-/\.git
-/\.gitignore
-/\.gitmodules
-/tmp
+LICENSE
+\.git
+\.gitignore
+\.gitmodules
+tmp
+tmp\..*
+/zip\.mk
+\#.*\#       # emacs autosave files
+README.*
