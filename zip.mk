@@ -1,5 +1,5 @@
 
-SHELL = /bin/bash
+SHELL = /bin/bash -o pipefail -o nounset -o errexit
 
 # Copyright 2015 Georgia Tech Research Corporation (GTRC). All rights reserved.
 
@@ -18,6 +18,7 @@ SHELL = /bin/bash
 
 release = ${shell git describe --tags 2> /dev/null}
 
+#HELP:Set variable 'release' to define the name of the zip file
 ifeq (${release},)
 dist_name = niem-ndr-tools-LATEST
 else
@@ -26,22 +27,20 @@ endif
 
 .SECONDARY:
 
-zip_dir = tmp/zip
-root_dir = ${zip_dir}/${dist_name}
+root_dir = tmp/${dist_name}
 override root_dir_abs = ${shell mkdir -p ${root_dir} && cd ${root_dir} && pwd}
 
 # building some packages requires other packages, so the pile goes on the path, and order matters
 PATH := ${root_dir_abs}/bin:${PATH}
 
-repos_dir= ${zip_dir}/repos
-tokens_dir = ${zip_dir}/token
+repos_dir= tmp/repos
+tokens_dir = tmp/tokens
 
 # stages are:
-# * sync
-# * configure
-# * make
-# * install = make install
+#  * sync
+#  * install
 
+#HELP:Set variable "packages" to narrow the focus to specific child packages
 # order matters here
 packages = \
 	wrtools_core \
@@ -57,80 +56,54 @@ wrtools_core_repo         = https://github.com/webb/wrtools-core.git
 xalan_cli_repo            = https://github.com/webb/xalan-cli.git
 xml_schema_validator_repo = https://github.com/webb/xml-schema-validator.git
 
-.PHONY: all # build all products (the default target)
-all: ${packages:%=${tokens_dir}/make/%}
+#HELP:The default target is "zip". Other targets include:
 
-.PHONY: install # put stuff in zip dir
+.PHONY: zip #  create zip file
+zip: ${packages:%=${tokens_dir}/install/%}
+	${RM} tmp/${dist_name}.zip
+	cd tmp && zip -9r ${dist_name}.zip ${dist_name}
+
+# install phase needs to put stuff into ${root_dir}
+.PHONY: install #  Put stuff in zip dir
 install: ${packages:%=${tokens_dir}/install/%}
 
-.PHONY: configure # configure sub-packages
-configure: ${packages:%=${tokens_dir}/configure/%}
-
-.PHONY: sync # make sure stuff has been gotten from git repos
+.PHONY: sync #  Make sure stuff has been fetched from git repos
 sync: ${packages:%=${tokens_dir}/sync/%}
 
-.PHONY: resync # force getting stuff from git repositories
-resync:
-	${RM} -r ${tokens_dir}/sync
-	${MAKE} -f unconfigured.mk sync
-
-.PHONY: clean # clean up build products
+.PHONY: clean #  Clean up build products, but don't erase saved repos
 clean:
-	${RM} -r ${zip_dir}
+	find tmp -mindepth 1 -maxdepth 1 ! -path ${repos_dir} -print0 | xargs -0 rm -rf
 
-.PHONY: zip # create zip file
-zip: ${packages:%=${tokens_dir}/install/%}
-	${RM} ${zip_dir}/${dist_name}.zip
-	cd ${zip_dir} && zip -9r ${dist_name}.zip ${dist_name}
+.PHONY: distclean #  Clean up all build products
+distclean:
+	rm -rf tmp
 
-.PHONY: help # print this help
+.PHONY: help #  print this help
 help:
-	@ echo Established targets:
-	@ sed -e 's/^.PHONY: *\([^ #]*\) *\# *\(.*\)$$/  \1: \2/p;d' zip.mk
-	@ echo set variable 'release' to define name of zip
+	@ sed -e '/^\.PHONY:/s/^\.PHONY: *\([^ #]*\) *\#\( *\)\([^ ].*\)/\2\1: \3/p;/^[^#]*#HELP:/s/[^#]*#HELP:\(.*\)/\1/p;d' zip.mk
 
 #############################################################################
 # self
 
 ${tokens_dir}/sync/self:
-	mkdir -p ${repos_dir}/self
-	tar cf - $$(git ls-files) | ( cd ${repos_dir}/self && tar xf -)
+	mkdir -p ${dir $@} && touch $@
+
+${tokens_dir}/install/self:
+	stow --no-folding --dir=.. --target=${root_dir} --stow ${shell basename ${PWD}}
 	mkdir -p ${dir $@} && touch $@
 
 #############################################################################
 # wrtools_core
 
-${tokens_dir}/configure/wrtools_core: ${tokens_dir}/sync/wrtools_core
-	mkdir -p ${dir $@} && touch $@
-
-${tokens_dir}/make/wrtools_core: ${tokens_dir}/configure/wrtools_core
-	mkdir -p ${dir $@} && touch $@
-
-${tokens_dir}/install/wrtools_core: ${tokens_dir}/make/wrtools_core
-	(cd ${repos_dir}/wrtools_core && git ls-files -z) \
-	| rsync --from0 --files-from=- \
-		--exclude='/.stow-local-ignore' \
-		--exclude='/README.md' \
-		--filter='+ .*' \
-	${repos_dir}/wrtools_core ${root_dir}/
+${tokens_dir}/install/wrtools_core: ${tokens_dir}/sync/wrtools_core
+	stow --no-folding --dir=${repos_dir} --target=${root_dir} --stow wrtools_core
 	mkdir -p ${dir $@} && touch $@
 
 #############################################################################
 # schematron-cli
 
-${tokens_dir}/configure/schematron_cli: ${tokens_dir}/sync/schematron_cli
-	mkdir -p ${dir $@} && touch $@
-
-${tokens_dir}/make/schematron_cli: ${tokens_dir}/configure/schematron_cli
-	mkdir -p ${dir $@} && touch $@
-
-${tokens_dir}/install/schematron_cli: ${tokens_dir}/make/schematron_cli
-	(cd ${repos_dir}/schematron_cli && git ls-files -z) \
-	| rsync --from0 --files-from=- \
-		--exclude='/.stow-local-ignore' \
-		--exclude='/README.md' \
-		--filter='+ .*' \
-	${repos_dir}/schematron_cli ${root_dir}/
+${tokens_dir}/install/schematron_cli: ${tokens_dir}/sync/schematron_cli
+	stow --no-folding --dir=${repos_dir} --target=${root_dir} --stow schematron_cli
 	mkdir -p ${dir $@} && touch $@
 
 #############################################################################
