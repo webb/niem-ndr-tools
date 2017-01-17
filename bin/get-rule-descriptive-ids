@@ -9,18 +9,13 @@ root_dir=$(dirname "$0")/..
 . "$root_dir/share/wrtools-core/opt_verbose.bash"
 . "$root_dir/share/wrtools-core/fail.bash"
 
-NDR_ID_MAP="$root_dir/share/niem-ndr-artifacts/ndr-3.0/ndr-id-map.xml"
-[[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
-  || fail "Can't read NDR ID map file $NDR_ID_MAP"
+NDR_ID_MAP="$root_dir/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-id-map.xml"
 
 GET_IDS_XSL="$root_dir/share/niem-ndr-tools/get-rule-descriptive-ids.xsl"
-[[ -f $GET_IDS_XSL && -r $GET_IDS_XSL ]] \
-  || fail "Can't read XSLT $GET_IDS_XSL"
 
 #HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
-
 
 OPTIND=1
 while getopts :hv-: OPTION
@@ -48,5 +43,3 @@ vrun xalan \
      --in="$NDR_ID_MAP" \
      --xsl="$GET_IDS_XSL" \
      | sort -u
-
-# output spills to stdout
