@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+#HELP:COMMAND_NAME: Check to see if file dependencies are consistent
+#HELP:    Returns true if "out" files are newer than "in" files
+#HELP:Usage: COMMAND_NAME --out=$out1 --out=$out2 ... $in1 $in2 ...
+
+set -o nounset -o errexit -o pipefail
+
+root_dir=$(dirname "$0")/..
+. "$root_dir"/share/wrtools-core/opt_help.bash
+. "$root_dir"/share/wrtools-core/opt_verbose.bash
+. "$root_dir"/share/wrtools-core/fail.bash
+. "$root_dir"/share/wrtools-core/temp.bash
+
+#HELP:Options:
+#HELP:  --help | -h: Print this help
+#HELP:  --verbose, -v: Print additional diagnostics
+
+#HELP:  --out=$file | -o $file: set file as an "out" file
+#HELP:    "out" files are derived, destination files, and should be newer than "in" files.
+unset oldest_new_file
+opt_out () {
+    (( $# == 1 )) || fail_assert "$FUNCAME requires one arg (got $#)"
+    if [[ is-set != ${oldest_new_file+is-set} || $1 -ot $oldest_new_file ]]
+    then oldest_new_file=$1
+    fi
+}
+
+OPTIND=1
+while getopts :ho:v-: OPTION
+do
+    case "$OPTION" in
+        h ) opt_help;;
+        o ) opt_out "$OPTARG";;
+        v ) opt_verbose;;
+        - )
+            case "$OPTARG" in
+                help ) opt_help;;
+                out=* ) opt_out "${OPTARG#*=}";;
+                verbose ) opt_verbose;;
+                help=* | verbose=* )
+                    fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+                out )
+                    fail "Argument expected for long option \"${OPTARG}\"";;
+                *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
+                * ) fail "Unexpected long option \"$OPTARG\"";;
+            esac;;
+        '?' ) fail "Unknown short option \"$OPTARG\"";;
+        : ) fail "Short option \"$OPTARG\" missing argument";;
+        * ) fail "bad state OPTARG=\"$OPTARG\"";;
+    esac
+done
+shift $((OPTIND-1))
+
+
+# just make sure all the "in" files are older than the oldest new file
+if [[ is-set = ${oldest_new_file+is-set} ]]
+then while (( $# > 0 ))
+     do if [[ $1 -nt $oldest_new_file ]]
+        then exit 1
+        fi
+        shift
+     done
+fi

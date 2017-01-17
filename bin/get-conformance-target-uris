@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #HELP:COMMAND_NAME: Get a list of conformance target URIs for an XML file
-#HELP:Usage: COMMAND_NAME option* $file.xml
+#HELP:Usage: COMMAND_NAME $file.xml
 #HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
@@ -14,9 +14,7 @@ root_dir=$(dirname "$0")/..
 . "$root_dir"/share/wrtools-core/fail.bash
 . "$root_dir"/share/wrtools-core/temp.bash
 
-GET_CONFORMANCE_TARGET_URIS_XSL=$root_dir/share/niem-ndr-tools/get-conformance-target-uris.xsl
-[[ -f $GET_CONFORMANCE_TARGET_URIS_XSL && -r $GET_CONFORMANCE_TARGET_URIS_XSL ]] \
-  || fail "Can't read file \"$GET_CONFORMANCE_TARGET_URIS_XSL\""
+xsl=$root_dir/share/niem-ndr-tools/get-conformance-target-uris.xsl
 
 OPTIND=1
 while getopts :hv-: OPTION
@@ -39,6 +37,5 @@ done
 shift $((OPTIND-1))
 
 (( $# == 1 )) || fail "Need 1 file argument (got $#)"
-[[ -f $1 && -r $1 ]] || fail "Argument must be a readable file: $1"
 
-vrun xalan --xsl="$GET_CONFORMANCE_TARGET_URIS_XSL" --in="$1"
+vrun xalan --xsl="$xsl" --in="$1"

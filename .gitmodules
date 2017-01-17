@@ -1,3 +1,0 @@
-[submodule "niem-ndr-artifacts"]
-	path = share/niem-ndr-artifacts
-	url = https://github.com/webb/niem-ndr-artifacts.git
