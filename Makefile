@@ -49,7 +49,7 @@ compile: ${dest_xsl}
 #HELP:Additional targets include:
 
 .PHONY: distclean #    Remove all build products
-clean: clean
+distclean: clean
 	rm -rf tmp
 
 .PHONY: help #    Print this help
