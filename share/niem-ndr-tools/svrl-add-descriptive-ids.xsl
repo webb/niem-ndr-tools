@@ -43,7 +43,7 @@
 
   <template name="put-descriptive-id">
     <variable name="id" select="@id"/>
-    <attribute name="ann:descriptiveID">
+    <attribute name="ann:descriptive-id">
       <value-of select="$map/map:rule[@ruleID = $id]/@descriptiveID"/>
     </attribute>
   </template>

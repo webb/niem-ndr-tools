@@ -9,17 +9,10 @@ root_dir=$(dirname "$0")/..
 . "$root_dir/share/wrtools-core/fail.bash"
 . "$root_dir/share/wrtools-core/temp.bash"
 
-NDR_ID_MAP="$root_dir/share/niem-ndr-artifacts/ndr-3.0/ndr-id-map.xml"
-[[ -f $NDR_ID_MAP && -r $NDR_ID_MAP ]] \
-  || fail "Can't read NDR ID map file $NDR_ID_MAP"
+share_dir="$root_dir"/share/niem-ndr-tools
 
-ANNOTATE_SVRL_XSL="$root_dir/share/niem-ndr-tools/annotate-svrl.xsl"
-[[ -f $ANNOTATE_SVRL_XSL && -r $ANNOTATE_SVRL_XSL ]] \
-  || fail "Can't read SVRL annotation XSLT $ANNOTATE_SVRL_XSL"
-
-ANNOTATED_SVRL_TO_TEXT_XSL="$root_dir/share/niem-ndr-tools/annotated-svrl-to-text.xsl"
-[[ -f $ANNOTATED_SVRL_TO_TEXT_XSL && -r $ANNOTATED_SVRL_TO_TEXT_XSL ]] \
-  || fail "Can't read SVRL-to-text XSLT $ANNOTATED_SVRL_TO_TEXT_XSL"
+ndr_id_map="$root_dir"/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-id-map.xml
+[[ -f $ndr_id_map && -r $ndr_id_map ]] || fail "Can't read file NDR ID map file \"$ndr_id_map\""
 
 #HELP:Options:
 #HELP:  --help | -h: print this help
@@ -119,33 +112,37 @@ fi
 
 [[ is-set = ${RULES+is-set} ]] || fail "No rules specified for file \"$1\""
 
-SCHEMA=$root_dir/share/niem-ndr-artifacts/ndr-3.0/ndr-rules-conformance-target-"$RULES".sch
-[[ -f $SCHEMA && -r $SCHEMA ]] || fail "Schematron schema is not a readable file (\"$SCHEMA\")"
-vecho "Validating against Schematron schema \"$1\""
+SCHEMA=$root_dir/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-rules-conformance-target-"$RULES".sch
+[[ -f $SCHEMA && -r $SCHEMA ]] || fail "Schematron schema is not a readable file ($SCHEMA)"
+schema_xsl="$SCHEMA".xsl
+[[ -f $schema_xsl && -r $schema_xsl ]] || fail "Schematron schema XSLT is not a readable file ($schema_xsl)"
+vecho "Validating against Schematron schema XSLT \"$schema_xsl\""
 
-COMMAND=(schematron --schema="$SCHEMA")
+# stage 1: run Schematron on $1; generate svrl with line numbers
+
+temp_make_file svrl_with_line_numbers
+COMMAND=(schematron-execute --format=svrl --xslt-file="$schema_xsl" --output-file="$svrl_with_line_numbers")
 if [[ ${XML_CATALOG:+is-set} ]]
 then COMMAND+=(--param=+xml-catalog="$XML_CATALOG")
 fi
 COMMAND+=("$1")
+vrun "${COMMAND[@]}"
 
-vrun "${COMMAND[@]}" > "$SVRL_RESULTS"
+# stage 2: add descriptive IDs on SVRL
 
-temp_make_file ANNOTATED_SVRL_RESULTS UNSORTED_TEST_REPORT
+temp_make_file svrl_with_descriptive_ids
+vrun xsltproc --stringparam ndr-id-map "$ndr_id_map" --output "$svrl_with_descriptive_ids" \
+     "$share_dir"/svrl-add-descriptive-ids.xsl "$svrl_with_line_numbers"
 
-vrun xalan \
-     --in="$SVRL_RESULTS" \
-     --xsl="$ANNOTATE_SVRL_XSL" \
-     --out="$ANNOTATED_SVRL_RESULTS" \
-     --param=ndr-id-map="$NDR_ID_MAP" \
-     -- -L
+# stage 3: generate text report
 
-vrun xalan \
-     --in="$ANNOTATED_SVRL_RESULTS" \
-     --xsl="$ANNOTATED_SVRL_TO_TEXT_XSL" \
-     --out="$UNSORTED_TEST_REPORT"
+temp_make_file unsorted_text_report
+vrun xsltproc --output "$unsorted_text_report" \
+     "$share_dir"/annotated-svrl-to-text.xsl "$svrl_with_descriptive_ids"
 
-vrun sort --field-separator=: --key=1n --key=3f --key=2f "$UNSORTED_TEST_REPORT" \
+# sort and trim text report
+
+vrun sort --field-separator=: --key=1n --key=3f --key=2f "$unsorted_text_report" \
   | { if [[ $BRIEF = true ]]
       then cut -d : -f 1,2,3
       else cat

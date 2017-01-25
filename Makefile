@@ -46,13 +46,11 @@ export:
 .PHONY: compile #        Compile Schematron files into XSLT
 compile: ${dest_xsl}
 
-#HELP:Additional targets include:
-
-.PHONY: distclean #    Remove all build products
+.PHONY: distclean #  Remove all build products
 distclean: clean
 	rm -rf tmp
 
-.PHONY: help #    Print this help
+.PHONY: help #  Print this help
 help:
 	@ sed -e '/^\.PHONY:/s/^\.PHONY: *\([^ #]*\) *\#\( *\)\([^ ].*\)/\2\1: \3/p;/^[^#]*#HELP:/s/[^#]*#HELP:\(.*\)/\1/p;d' ${this_makefile}
 
