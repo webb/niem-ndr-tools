@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 
-#HELP:COMMAND_NAME: run tests of NDR rules
-#HELP:Usage: COMMAND_NAME option* filename* ...
+set -o pipefail -o nounset -o errexit
+unset CDPATH
+
+#HELP:COMMAND_NAME: run tests of NDR rules found under indicated directory
+#HELP:Usage: COMMAND_NAME option* $dir...
+#HELP:    Default directory is "."
 #HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 #HELP:  --keep-temps | -k: Don't delete temporary files
 
-. "$(dirname "$0")"/../lib/common.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_fail.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/temp.bash
+root_dir=$(dirname "$0")/..
+. "$root_dir"/share/wrtools-core/opt_help.bash
+. "$root_dir"/share/wrtools-core/opt_verbose.bash
+. "$root_dir"/share/wrtools-core/fail.bash
+. "$root_dir"/share/wrtools-core/temp.bash
 
 OPTIND=1
 while getopts :hkv-: OPTION
@@ -37,37 +40,49 @@ do
 done
 shift $((OPTIND-1))
 
-TESTS=()
-
-add_tests_in_dir () {
-    ensure "Require 1 arg" test $# = 1
-    ensure "Require 1 directory" test -d "$1"
-    while read -r -d $'\0'
-    do TESTS+=("$REPLY")
-    done < <(find "$1" -type f -name 'run-test*' ! -name '*~' -perm -500 -print0)
-}
-
-if (( $# > 0 ))
-then 
-    for ARG in "$@"
-    do if [[ -d "$ARG" ]]
-        then add_tests_in_dir "$ARG"
-        else TESTS+=( "$(cd "$(dirname "$ARG")"; pwd)/$(basename "$ARG")" )
-        fi
-    done
-else add_tests_in_dir "$NDR_TOOLS_ROOT_DIR"/tests
+if (( $# == 0 ))
+then set .
 fi
 
-ensure "No tests found" test ${#TESTS[@]} != 0
+exit_status=0
 
-RESULT=0
-for TEST in "${TESTS[@]}"
-do printf "Test %q\n" "$TEST" >&2
-    if vrun "$TEST" 
-    then true
-    else RESULT=$?
-    fi
+for dir in "$@"
+do while read -r -d ''
+   do test=$REPLY
+      test_base=$(basename "$test")
+      test_dir=$(dirname "$test")
+      case $test_base in
+          *.xsd.*.results.txt )
+              echo results: $test_base
+              # test_base = niem-core.xsd.ref.results.txt
+              part1=${test_base%.results.txt}
+              echo part1=$part1
+              # part1 = niem-core.xsd.ref
+              rule_set=${part1##*.}
+              echo rule_set=$rule_set
+              # ref = ref
+              subject_file_base=${part1%.ref}
+              echo subject_file_base=$subject_file_base
+
+              test-run \
+                --exit-success \
+                --exit-status=0 \
+                --stderr=/dev/null \
+                --stdout="$test" \
+                -- \
+                get-test-report --rules="$rule_set" --brief "$test_dir"/"$subject_file_base"
+          ;;
+          test.*.bash )
+              echo test-bash: $test
+              pushd "$test_dir"
+              bash "$test_base"
+              popd
+          ;;
+          * ) fail "unknown test format ($test)" ;;
+      esac
+   done < <(find "$dir" -type f '(' -name '*.results.txt' -o -name 'test.*.bash' ')' -print0)
 done
+      
+exit $exit_status
 
-exit $RESULT
 

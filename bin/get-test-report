@@ -51,13 +51,21 @@ opt_brief () {
     BRIEF=true
 }
 
+#HELP:  --grep | -g: Yield output like grep
+unset grep
+opt_grep () {
+    (( $# == 0 )) || fail "function $FUNCNAME requires 0 args (got $#)"
+    grep=true
+}
+
 OPTIND=1
-while getopts :abc:hkr:v-: OPTION
+while getopts :abc:ghkr:v-: OPTION
 do
     case "$OPTION" in
         a ) opt_auto_rules;;
         b ) opt_brief;;
         c ) opt_xml_catalog "$OPTARG";;
+        g ) opt_grep;;
         h ) opt_help;;
         k ) opt_keep_temps;;
         r ) opt_rules "$OPTARG";;
@@ -66,13 +74,14 @@ do
             case "$OPTARG" in
                 auto-rules ) opt_auto_rules;;
                 brief ) opt_brief;;
+                grep ) opt_grep;;
                 help ) opt_help;;
                 keep-temps ) opt_keep_temps;;
                 rules=* ) opt_rules "${OPTARG#*=}";;
                 verbose ) opt_verbose;;
                 xml-catalog=* ) opt_xml_catalog "${OPTARG#*=}";;
                 rules | xml-catalog ) fail "Missing required argument for long option \"$OPTARG\"";;
-                help=* | verbose=* | auto-rules=* | keep-temps=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
+                grep=* | help=* | verbose=* | auto-rules=* | keep-temps=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
                 *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
                 * ) fail "Unexpected long option \"$OPTARG\"";;
             esac;;
@@ -143,10 +152,19 @@ vrun xsltproc --output "$unsorted_text_report" \
 # sort and trim text report
 
 vrun sort --field-separator=: --key=1n --key=3f --key=2f "$unsorted_text_report" \
-  | { if [[ $BRIEF = true ]]
-      then cut -d : -f 1,2,3
-      else cat
-      fi; }
+  | {
+    if [[ $BRIEF = true ]]
+    then cut -d : -f 1,2,3
+    else cat
+    fi
+} | {
+    if [[ -n ${grep+is-set} ]]
+    then while read -r -d $'\n' line
+         do printf '%s:%s\n' "$1" "$line"
+         done
+    else cat
+    fi
+}
 
 # output spills to stdout
 

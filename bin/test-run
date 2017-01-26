@@ -6,10 +6,10 @@ set -o pipefail -o nounset -o errexit
 unset CDPATH
 
 root_dir=$(dirname "$0")/..
-. "$root_dir/share/wrtools-core/opt_help.bash"
-. "$root_dir/share/wrtools-core/opt_verbose.bash"
-. "$root_dir/share/wrtools-core/fail.bash"
-. "$root_dir/share/wrtools-core/temp.bash"
+. "$root_dir"/share/wrtools-core/opt_help.bash
+. "$root_dir"/share/wrtools-core/opt_verbose.bash
+. "$root_dir"/share/wrtools-core/fail.bash
+. "$root_dir"/share/wrtools-core/temp.bash
 
 #HELP:Options:
 #HELP:  --help | -h: print this help
