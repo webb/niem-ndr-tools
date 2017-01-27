@@ -53,16 +53,14 @@ do while read -r -d ''
       test_dir=$(dirname "$test")
       case $test_base in
           *.xsd.*.results.txt )
-              echo results: $test_base
               # test_base = niem-core.xsd.ref.results.txt
               part1=${test_base%.results.txt}
-              echo part1=$part1
               # part1 = niem-core.xsd.ref
               rule_set=${part1##*.}
-              echo rule_set=$rule_set
               # ref = ref
               subject_file_base=${part1%.ref}
-              echo subject_file_base=$subject_file_base
+
+              printf 'file %s -> rules %s on subject %s\n' "$test" "$rule_set" "$test_dir"/"$subject_file_base" >&2
 
               test-run \
                 --exit-success \
@@ -73,10 +71,11 @@ do while read -r -d ''
                 get-test-report --rules="$rule_set" --brief "$test_dir"/"$subject_file_base"
           ;;
           test.*.bash )
-              echo test-bash: $test
-              pushd "$test_dir"
+              printf 'file %s -> running in dir "$test_dir"\n' >&2
+
+              pushd "$test_dir" > /dev/null
               bash "$test_base"
-              popd
+              popd > /dev/null
           ;;
           * ) fail "unknown test format ($test)" ;;
       esac

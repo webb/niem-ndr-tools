@@ -95,10 +95,6 @@ fi
 
 FAILED=false
 
-for (( i = 1; i <= $#; ++i ))
-do printf "arg[%d]=%s\n" "$i" "${@:i:1}"
-done 
-
 # put the running in an "if" so that it won't blow up -o errexit but still yields exit status
 if "$@" > "$ACTUAL_STDOUT" 2> "$ACTUAL_STDERR"
 then ACTUAL_EXIT_STATUS=0
