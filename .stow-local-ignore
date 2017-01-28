@@ -8,3 +8,4 @@ tmp\..*
 /zip\.mk
 \#.*\#       # emacs autosave files
 README.*
+\.DS_Store

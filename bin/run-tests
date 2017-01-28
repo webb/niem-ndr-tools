@@ -46,40 +46,65 @@ fi
 
 exit_status=0
 
-for dir in "$@"
-do while read -r -d ''
-   do test=$REPLY
-      test_base=$(basename "$test")
-      test_dir=$(dirname "$test")
-      case $test_base in
-          *.xsd.*.results.txt )
-              # test_base = niem-core.xsd.ref.results.txt
-              part1=${test_base%.results.txt}
-              # part1 = niem-core.xsd.ref
-              rule_set=${part1##*.}
-              # ref = ref
-              subject_file_base=${part1%.ref}
+process_test_file () {
+    test=$1
+    test_base=$(basename "$test")
+    test_dir=$(dirname "$test")
+    case $test_base in
+        *.xsd.*.results.txt )
+            # test_base = niem-core.xsd.ref.results.txt
+            # part1 = niem-core.xsd.ref :
+            part1=${test_base%.results.txt}
+            # rule_set = ref :
+            rule_set=${part1##*.}
+            # subject_file_base = niem-core.xsd : 
+            subject_file_base=${part1%.$rule_set}
+            
+            printf 'file %s -> rules %s on subject %s\n' "$test" "$rule_set" "$test_dir"/"$subject_file_base" >&2
 
-              printf 'file %s -> rules %s on subject %s\n' "$test" "$rule_set" "$test_dir"/"$subject_file_base" >&2
-
-              test-run \
-                --exit-success \
-                --exit-status=0 \
-                --stderr=/dev/null \
-                --stdout="$test" \
-                -- \
-                get-test-report --rules="$rule_set" --brief "$test_dir"/"$subject_file_base"
-          ;;
-          test.*.bash )
-              printf 'file %s -> running in dir "$test_dir"\n' >&2
-
-              pushd "$test_dir" > /dev/null
-              bash "$test_base"
-              popd > /dev/null
-          ;;
-          * ) fail "unknown test format ($test)" ;;
-      esac
-   done < <(find "$dir" -type f '(' -name '*.results.txt' -o -name 'test.*.bash' ')' -print0)
+            case $rule_set in
+                ext | ref )
+                    if ! test-run \
+                         --exit-success \
+                         --exit-status=0 \
+                         --stderr=/dev/null \
+                         --stdout="$test" \
+                         -- \
+                         get-test-report --rules="$rule_set" --brief "$test_dir"/"$subject_file_base"
+                    then exit_status=1
+                    fi ;;
+                set )
+                    if ! test-run \
+                         --exit-success \
+                         --exit-status=0 \
+                         --stderr=/dev/null \
+                         --stdout="$test" \
+                         -- \
+                         get-test-report --rules=set --brief --xml-catalog="$test_dir"/xml-catalog.xml "$test_dir"/"$subject_file_base"
+                    then exit_status=1
+                    fi ;;
+                * ) fail "unknown rule set ($rule_set)" ;;
+            esac
+            ;;
+        test.*.bash )
+            printf 'file %s -> running in dir "%s"\n' "$test" "$test_dir" >&2
+            pushd "$test_dir" > /dev/null
+            if ! bash "$test_base"
+            then exit_status=1
+            fi
+            popd > /dev/null
+            ;;
+        * ) fail "unknown test format ($test)" ;;
+    esac
+}
+    
+for path in "$@"
+do if [[ -d $path ]]
+   then while read -r -d ''
+        do process_test_file "$REPLY"
+        done < <(find "$path" -type f '(' -name '*.results.txt' -o -name 'test.*.bash' ')' -print0)
+   else process_test_file "$REPLY"
+   fi
 done
       
 exit $exit_status
