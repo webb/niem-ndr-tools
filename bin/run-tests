@@ -47,6 +47,8 @@ fi
 exit_status=0
 
 process_test_file () {
+    printf '#############################################################################\n'
+    printf '# %s\n' "$1"
     test=$1
     test_base=$(basename "$test")
     test_dir=$(dirname "$test")
@@ -59,11 +61,12 @@ process_test_file () {
             rule_set=${part1##*.}
             # subject_file_base = niem-core.xsd : 
             subject_file_base=${part1%.$rule_set}
-            
-            printf 'file %s -> rules %s on subject %s\n' "$test" "$rule_set" "$test_dir"/"$subject_file_base" >&2
 
             case $rule_set in
                 ext | ref )
+                    printf 'file %s -> rules %s on subject %s\n' \
+                           "$test" "$rule_set" "$test_dir"/"$subject_file_base" >&2
+
                     if ! test-run \
                          --exit-success \
                          --exit-status=0 \
@@ -74,18 +77,40 @@ process_test_file () {
                     then exit_status=1
                     fi ;;
                 set )
+                    printf 'file %q -> rules set on subject %q with XML catalog %q \n' \
+                           "$test" "$test_dir"/"$subject_file_base" "$test_dir"/xml-catalog >&2
+
                     if ! test-run \
                          --exit-success \
                          --exit-status=0 \
                          --stderr=/dev/null \
                          --stdout="$test" \
                          -- \
-                         get-test-report --rules=set --brief --xml-catalog="$test_dir"/xml-catalog.xml "$test_dir"/"$subject_file_base"
+                         get-test-report --rules=set --brief --xml-catalog="$test_dir"/xml-catalog.xml \
+                             "$test_dir"/"$subject_file_base"
                     then exit_status=1
                     fi ;;
                 * ) fail "unknown rule set ($rule_set)" ;;
-            esac
-            ;;
+            esac ;;
+
+        *.xml.valid.results.txt )
+            # test_base = instance.xml.valid.results.txt
+            # subject_file_base = instance.xml
+            subject_file_base=${test_base%.valid.results.txt}
+
+            printf 'file %q -> schema validation of subject %q with XML catalog %q\n' \
+                   "$test" "$test_dir"/"$subject_file_base" "$test_dir"/xml-catalog >&2
+
+            if ! test-run \
+                 --exit-success \
+                 --exit-status=0 \
+                 --stderr=/dev/null \
+                 --stdout="$test" \
+                 -- \
+                 xs-validate --catalog="$test_dir"/xml-catalog.xml "$test_dir"/"$subject_file_base"
+            then exit_status=1
+            fi ;;
+
         test.*.bash )
             printf 'file %s -> running in dir "%s"\n' "$test" "$test_dir" >&2
             pushd "$test_dir" > /dev/null
@@ -103,7 +128,7 @@ do if [[ -d $path ]]
    then while read -r -d ''
         do process_test_file "$REPLY"
         done < <(find "$path" -type f '(' -name '*.results.txt' -o -name 'test.*.bash' ')' -print0)
-   else process_test_file "$REPLY"
+   else process_test_file "$path"
    fi
 done
       

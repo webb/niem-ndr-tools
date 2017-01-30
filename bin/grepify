@@ -3,11 +3,11 @@
 #HELP:COMMAND_NAME: Turn stdin into grep-compatible output
 #HELP:Usage: COMMAND_NAME $filename-for-grep < $stdin
 
-. "$(dirname "$0")"/../lib/common.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_help.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_opt_verbose.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/fn_ensure.bash
-. "$NDR_TOOLS_ROOT_DIR"/lib/exit_hook.bash
+root_dir=$(dirname "$0")/..
+. "$root_dir/share/wrtools-core/opt_help.bash"
+. "$root_dir/share/wrtools-core/opt_verbose.bash"
+. "$root_dir/share/wrtools-core/fail.bash"
+. "$root_dir/share/wrtools-core/temp.bash"
 
 #HELP:Options:
 #HELP:  --help | -h: print this help
@@ -31,25 +31,9 @@ do
 done
 shift $((OPTIND-1))
 
-ensure "The must be one argument: filename for grep location" test $# = 1
-
-GREPIFY_RESULTS=$(mktemp 'tmp.grepify.XXXXXX.txt')
-
-remove_grepify_results () {
-  rm -f "$GREPIFY_RESULTS"
-}
-add_exit_hook remove_grepify_results		       
+(( $# ==1 )) || fail "Expected one argument, filename for grep location (got $#)"
 
 while read -rd $'\n' line
 do printf '%s:%s\n' "$1" "$line"
-done >> "$GREPIFY_RESULTS"
-
-NOTVAR=''
-cat <<EOF >> "$GREPIFY_RESULTS"
-# Local ${NOTVAR}Variables:
-# mode: grep
-# End:
-EOF
-
-emacsclient "$GREPIFY_RESULTS"
-
+done \
+  | emacsclientgrep
