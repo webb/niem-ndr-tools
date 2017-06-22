@@ -5,6 +5,7 @@ LICENSE
 \.gitmodules
 tmp
 tmp\..*
+/Makefile
 /zip\.mk
 \#.*\#       # emacs autosave files
 README.*

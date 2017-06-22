@@ -11,29 +11,50 @@ root_dir=$(dirname "$0")/..
 
 share_dir="$root_dir"/share/niem-ndr-tools
 
-ndr_id_map="$root_dir"/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-id-map.xml
-[[ -f $ndr_id_map && -r $ndr_id_map ]] || fail "Can't read file NDR ID map file \"$ndr_id_map\""
+default_ndr_id_map="$root_dir"/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-id-map.xml
 
 #HELP:Options:
 #HELP:  --help | -h: print this help
 #HELP:  --verbose | -v: print debugging and status output
 #HELP:  --keep-temps | -k: Don't delete temporary files
 
+got_rules=false
+
+#HELP:  --xsl=$rules.xsl | -x $rules.xsl: use XSLT file $file.xsl as Schematron rules
+unset xsl
+opt_xsl () {
+    [[ $got_rules = false ]] || fail "Only one of options --xsl, --rules, or --auto-rules may be used"
+    [[ -s "$1" ]] || fail "arg to --xsl must exist: $1"
+    xsl="$1"
+    got_rules=true
+    default_ndr_id_map=$(realpath "$(dirname "$1")/ndr-id-map.xml")
+}
+
 #HELP:  --rules=$code | -r $code: use NIEM NDR rule set for conformance target $code
 #HELP:      codes: ref, ext, ins, set
 unset RULES
 opt_rules () {
-    [[ is-set != ${RULES+is-set} ]] || fail "Only one of options --rules and --auto-rules may be used"
+    [[ $got_rules = false ]] || fail "Only one of options --xsl, --rules, or --auto-rules may be used"
     case "$1" in 
         ext | ins | ref | set ) RULES="$1";;
         * ) fail "Unknown conformance target code: $1. Expecting ext, ins, ref, or set.";;
     esac
+    got_rules=true
 }
 
 #HELP:  --auto-rules | -a: set rules by autodetecting conformance targets
 opt_auto_rules () {
-    [[ is-set != ${RULES+is-set} ]] || fail "Only one of options --rules and --auto-rules may be used"
+    [[ $got_rules = false ]] || fail "Only one of options --xsl, --rules, or --auto-rules may be used"
     RULES=auto
+    got_rules=true
+}
+
+#HELP:  --id-map=$id-map.xml: use $id-map.xml to describe rules
+unset id_map
+opt_id_map () {
+    (( $# = 1 )) || fail_assert "1 argument is required"
+    [[ -r $1 && -f $1 && -s $1 ]] || fail "argument to --id-map must be a readable file (got $1)"
+    id_map=$(realpath "$1")
 }
 
 #HELP:  --xml-catalog=$xml-catalog | -c $xml-catalog: Use XML catalog for cross-references
@@ -59,7 +80,7 @@ opt_grep () {
 }
 
 OPTIND=1
-while getopts :abc:ghkr:v-: OPTION
+while getopts :abc:ghkr:vx:-: OPTION
 do
     case "$OPTION" in
         a ) opt_auto_rules;;
@@ -70,6 +91,7 @@ do
         k ) opt_keep_temps;;
         r ) opt_rules "$OPTARG";;
         v ) opt_verbose;;
+        x ) opt_xsl "$OPTARG";;
         - )
             case "$OPTARG" in
                 auto-rules ) opt_auto_rules;;
@@ -80,6 +102,7 @@ do
                 rules=* ) opt_rules "${OPTARG#*=}";;
                 verbose ) opt_verbose;;
                 xml-catalog=* ) opt_xml_catalog "${OPTARG#*=}";;
+                xsl=* ) opt_xsl "${OPTARG#*=}";;
                 rules | xml-catalog ) fail "Missing required argument for long option \"$OPTARG\"";;
                 grep=* | help=* | verbose=* | auto-rules=* | keep-temps=* ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
                 *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
@@ -92,14 +115,23 @@ do
 done
 shift $((OPTIND-1))
 
-[[ is-set = ${RULES+is-set} ]] || fail "One of options --rules and --auto-rules must be used"
+[[ $got_rules = true ]] || fail "One of options --xsl, --rules, or --auto-rules must be used"
+
+if [[ is-set = ${id_map+is-set} ]]
+then ndr_id_map=$id_map
+else ndr_id_map=$default_ndr_id_map
+fi
+
+vecho "Using NDR ID map \"$ndr_id_map\""
+
+[[ -f $ndr_id_map && -r $ndr_id_map ]] || fail "Can't read file NDR ID map file \"$ndr_id_map\""
 
 (( $# == 1 )) || fail "Must have one file to validate (got $#)"
 [[ -f $1 && -r $1 ]] || fail "File to validate \"$1\" must be a readable file"
 
 temp_make_file SVRL_RESULTS
 
-if [[ $RULES = auto ]]
+if [[ ${RULES-unset} = auto ]]
 then
     unset RULES
     while read -rd $'\n'
@@ -119,11 +151,16 @@ then
     [[ is-set = ${RULES+is-set} ]] || fail "No conformance target identified for file \"$1\""
 fi
 
-[[ is-set = ${RULES+is-set} ]] || fail "No rules specified for file \"$1\""
-
-SCHEMA=$root_dir/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-rules-conformance-target-"$RULES".sch
-[[ -f $SCHEMA && -r $SCHEMA ]] || fail "Schematron schema is not a readable file ($SCHEMA)"
-schema_xsl="$SCHEMA".xsl
+if [[ ${RULES+is-set} ]]
+then
+  SCHEMA=$root_dir/share/niem-ndr-artifacts/niem-ndr-3-latest/ndr-rules-conformance-target-"$RULES".sch
+  [[ -f $SCHEMA && -r $SCHEMA ]] || fail_assert "Schematron schema is not a readable file ($SCHEMA)"
+  schema_xsl="$SCHEMA".xsl
+else
+    [[ ${xsl+is-set} = is-set ]] || fail_assert \$xsl should be set, but wasn\'t
+    schema_xsl="$xsl"
+fi
+    
 [[ -f $schema_xsl && -r $schema_xsl ]] || fail "Schematron schema XSLT is not a readable file ($schema_xsl)"
 vecho "Validating against Schematron schema XSLT \"$schema_xsl\""
 

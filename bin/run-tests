@@ -17,21 +17,31 @@ root_dir=$(dirname "$0")/..
 . "$root_dir"/share/wrtools-core/fail.bash
 . "$root_dir"/share/wrtools-core/temp.bash
 
+unset rules_dir
+#HELP:  --rules-dir=$dir | -d $dir: Pull rules from directory $dir
+opt_rules_dir () {
+    (( $# == 1 ))
+    [[ -d "$1" ]] || fail "arg to --rules-dir must be directory: $1"
+    rules_dir="$1"
+}
+
 OPTIND=1
-while getopts :hkv-: OPTION
+while getopts :d:hkv-: OPTION
 do
     case "$OPTION" in
+        d ) opt_rules_dir "$OPTARG";;
         h ) opt_help;;
         k ) opt_keep_temps;;
         v ) opt_verbose;;
         - )
             case "$OPTARG" in
                 help ) opt_help;;
-                verbose ) opt_verbose;;
                 keep-temps ) opt_keep_temps;;
-                help=* | verbose=* | keep-temps ) fail "No argument expected for long option \"${OPTARG%%=*}\"";;
-                *=* ) fail "Unexpected long option (with argument) \"${OPTARG%%=*}\"";;
-                * ) fail "Unexpected long option \"$OPTARG\"";;
+                rules-dir=* ) opt_rules_dir "${OPTARG#*=}";;
+                verbose ) opt_verbose;;
+                help=* | verbose=* | keep-temps=* )
+                    fail "Long option missing argument: \"${OPTARG%%=*}\"";;
+                * ) fail "Unexpected long option \"${OPTARG%%=*}\"";;
             esac;;
         '?' ) fail "Unknown short option \"$OPTARG\"";;
         : ) fail "Short option \"$OPTARG\" missing argument";;
@@ -67,27 +77,29 @@ process_test_file () {
                     printf 'file %s -> rules %s on subject %s\n' \
                            "$test" "$rule_set" "$test_dir"/"$subject_file_base" >&2
 
-                    if ! test-run \
-                         --exit-success \
-                         --exit-status=0 \
-                         --stderr=/dev/null \
-                         --stdout="$test" \
-                         -- \
-                         get-test-report --rules="$rule_set" --brief "$test_dir"/"$subject_file_base"
+                    command=( test-run --exit-success --exit-status=0 --stderr=/dev/null --stdout="$test"
+                              -- get-test-report )
+                    if [[ ${rules_dir+is-set} = is-set ]]
+                    then command+=( "--xsl=$rules_dir/ndr-rules-conformance-target-${rule_set}.sch.xsl" )
+                    else command+=( "--rules=$rule_set" )
+                    fi
+                    command+=( --brief "$test_dir"/"$subject_file_base" )
+                    if ! vrun "${command[@]}"
                     then exit_status=1
                     fi ;;
                 set )
                     printf 'file %q -> rules set on subject %q with XML catalog %q \n' \
                            "$test" "$test_dir"/"$subject_file_base" "$test_dir"/xml-catalog >&2
 
-                    if ! test-run \
-                         --exit-success \
-                         --exit-status=0 \
-                         --stderr=/dev/null \
-                         --stdout="$test" \
-                         -- \
-                         get-test-report --rules=set --brief --xml-catalog="$test_dir"/xml-catalog.xml \
-                             "$test_dir"/"$subject_file_base"
+                    command=( test-run --exit-success --exit-status=0 --stderr=/dev/null --stdout="$test"
+                              -- get-test-report )
+                    if [[ ${rules_dir+is-set} = is-set ]]
+                    then command+=( "--xsl=${rules_dir}/ndr-rules-conformance-target-${rule_set}.sch.xsl" )
+                    else command+=( --rules=set )
+                    fi
+                    command+=( --brief --xml-catalog="$test_dir"/xml-catalog.xml
+                               "$test_dir"/"$subject_file_base" )
+                    if ! vrun "${command[@]}"
                     then exit_status=1
                     fi ;;
                 * ) fail "unknown rule set ($rule_set)" ;;
