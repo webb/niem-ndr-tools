@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<xs:schema
+  ct:conformanceTargets="http://reference.niem.gov/niem/specification/naming-and-design-rules/3.0/#ExtensionSchemaDocument"
+  targetNamespace="http://example.org/test1" xmlns:ct="http://release.niem.gov/niem/conformanceTargets/3.0/"
+  xmlns:structures="http://release.niem.gov/niem/structures/3.0/"
+  xmlns:nc="http://release.niem.gov/niem/niem-core/3.0/"
+  xmlns:appinfo="http://release.niem.gov/niem/appinfo/3.0/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  version="1" xmlns:test1="http://example.org/test1">
+  
+  <xs:annotation>
+    <xs:documentation>This is a schema.</xs:documentation>
+  </xs:annotation>
+  
+  <xs:import namespace="http://release.niem.gov/niem/structures/3.0/" schemaLocation="niem/structures/3.0/structures.xsd" />
+  <xs:import namespace="http://release.niem.gov/niem/niem-core/3.0/" schemaLocation="niem/niem-core/3.0/niem-core.xsd" />
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+  
+  <xs:element name="ThingObjectdata" type="test1:ThingObjectType" appinfo:appliesToTypes="nc:Weapon">
+    <xs:annotation>
+      <xs:documentation>An item.</xs:documentation>
+    </xs:annotation>
+    
+  </xs:element>
+  <xs:complexType name="ThingObjectType">
+    <xs:annotation>
+      <xs:documentation>A data type for an article or thing.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="structures:ObjectType">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

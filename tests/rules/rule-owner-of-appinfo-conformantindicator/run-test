@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+. "$(dirname "$0")"/../../../lib/fn_test.bash
+test_process_args "$@"
+
+cd "$NDR_TOOLS_COMMAND_DIR"
+
+
+# Test Rule 10-68 External import indicator annotates import 
+
+test_set_stdout <<EOF
+8:successful-report:is-ctas-conformant-document
+8:successful-report:well-formed-xml
+8:successful-report:ns-well-formed
+8:successful-report:ns-valid
+8:successful-report:is-schema-doc
+8:successful-report:target-ns-is-rfc3986
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml appinfo-conf.xsd
+
+# Test Rule 10-68 External import indicator annotates import
+# This should fail, because the annotations are not on an xs:import element.
+test_set_stdout <<EOF
+6:successful-report:is-ctas-conformant-document
+6:successful-report:well-formed-xml
+6:successful-report:ns-well-formed
+6:successful-report:ns-valid
+6:successful-report:is-schema-doc
+6:successful-report:target-ns-is-rfc3986
+8:failed-assert:rule-owner-of-appinfo-conformantindicator
+9:failed-assert:rule-owner-of-appinfo-conformantindicator
+14:failed-assert:rule-owner-of-appinfo-conformantindicator
+EOF
+
+test_run "$NDR_TOOLS_ROOT_DIR"/bin/get-test-report -r ext -c xml-catalog.xml extImportInvalid.xsd
+
+test_exit
